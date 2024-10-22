@@ -7,7 +7,7 @@ import { heightPercentage,widthPercentage } from '../helpers/commons.js'
 import Button from '../components/Button.jsx'
 import { useRouter } from 'expo-router';
 
-const welcome = () => {
+ Welcome = () => {
     const route=useRouter();
     return (
         <ScreamWrapper background={Themes.colors.purpleDark}>
@@ -34,7 +34,7 @@ const welcome = () => {
                 title='Create Account' 
                 buttonStyle={{marginHorizontal:widthPercentage(3)}}
                 onPress={()=>{route.push('create_account')}}
-                backgroundColor={Themes.colors.purpleDark}
+                backgroundColor={Themes.colors.purpleLight}
                 textColor={'black'}
                 />
             </View>
@@ -43,7 +43,7 @@ const welcome = () => {
     )
 }
 
-export default welcome
+export default Welcome
 
 const styles = StyleSheet.create({
     container:{
