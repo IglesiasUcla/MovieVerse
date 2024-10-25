@@ -2,10 +2,11 @@ export const Themes={
     colors: {
 
         purpleStrong: '#6116ec', //primary color strong purple
-        purpleDark: '#262031', //secundary color dark purple
+        purpleDark: '#262031', //secondary color dark purple
         purpleLight: '#b39ddb', // tertiary color light purple
-        grayDark: "212121", // interface background color
-        grayLight:"646464", //soft gray color
+        grayDark: '#212121', // interface background color
+        grayMid: '#323232',
+        grayLight:'#646464', //soft gray color
         
     },
     fonts: {
