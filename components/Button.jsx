@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Pressable } from 'react-native'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
 import React from 'react'
 import { heightPercentage, widthPercentage } from '../helpers/commons'
 import { Themes } from '../constants/Themes'
@@ -9,14 +9,26 @@ const Button = ({
     title= '',
     onPress=()=>{},
     hasShadow = true,
-    backgroundColor,
-    textColor,
+    backgroundColor = Themes.colors.purpleStrong,  // Valor por defecto acorde a tu tema
+    textColor = 'white',  // Texto blanco por defecto en tema oscuro
 }) => {
-    const shadowStyle={}
+    // Aplicar sombra si hasShadow es verdadero
+    const shadowStyle = hasShadow ? styles.shadow : {}
+
     return (
-        <Pressable onPress={onPress} style={[styles.button, buttonStyle,
-            { backgroundColor },hasShadow && shadowStyle]}>
-            <Text style={[styles.text, textStyle,{color: textColor}]}>{title}</Text>
+        <Pressable 
+            onPress={onPress} 
+            style={[
+                styles.button, 
+                buttonStyle, 
+                { backgroundColor }, 
+                shadowStyle
+            ]}
+            accessibilityLabel={title}  // Añadimos accesibilidad básica
+        >
+            <Text style={[styles.text, textStyle, { color: textColor }]}>
+                {title}
+            </Text>
         </Pressable>
     )
 }
@@ -29,13 +41,17 @@ const styles = StyleSheet.create({
         width: widthPercentage(36),
         justifyContent: 'center',
         alignItems: 'center',
-        borderCurve: 'continuous',
         borderRadius: 10,
     },
-
     text:{
         fontSize: heightPercentage(2),
         fontWeight: Themes.fonts.medium,
-        
+    },
+    shadow:{
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 5,  // Para dispositivos Android
     }
 })

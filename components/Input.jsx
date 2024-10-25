@@ -1,53 +1,66 @@
-import { StyleSheet, Text, View,SafeAreaView,TextInput,StatusBar } from 'react-native'
-import React from 'react'
-import { heightPercentage, widthPercentage } from '../helpers/commons'
-const Input = ({
-    titleField= '',
-    guideText= '',
-}) => {
-    return (
-        <SafeAreaView style={[styles.container]}>
-        <Text style={[styles.fieldName]}>{titleField}</Text>
-        <TextInput style={[styles.input, styles.inputText]} placeholder={guideText} />
-        <StatusBar style='auto'/>
-        </SafeAreaView>
-    )
-}
+import React, { useState } from 'react';
+import { View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Themes } from '../constants/Themes.js';
+import { Ionicons } from '@expo/vector-icons';
 
-export default Input
+const Input = ({ titleField, guideText, isPassword = false }) => {
+    const [isPasswordVisible, setPasswordVisible] = useState(false);
+
+    return (
+        <View style={styles.inputContainer}>
+            {titleField && <Text style={styles.title}>{titleField}</Text>}
+            <View style={styles.inputWrapper}>
+                <TextInput
+                    style={styles.input}
+                    placeholder={guideText}
+                    placeholderTextColor={Themes.colors.grayMid}
+                    secureTextEntry={isPassword && !isPasswordVisible}  // Alternar visibilidad de la contraseña
+                />
+                {isPassword && (
+                    <TouchableOpacity
+                        style={styles.icon}
+                        onPress={() => setPasswordVisible(!isPasswordVisible)}
+                    >
+                        <Ionicons
+                            name={isPasswordVisible ? 'eye-off' : 'eye'}
+                            size={24}
+                            color={Themes.colors.grayMid}
+                        />
+                    </TouchableOpacity>
+                )}
+            </View>
+        </View>
+    );
+};
+
+export default Input;
 
 const styles = StyleSheet.create({
-    container:{
-        // flex:1,
-        alignItems: 'flex-start',
-        backgroundColor:'black',
+    inputContainer: {
+        marginBottom: 16,
+        width: '100%',
     },
-
-    fieldName:{
-        color:'white',
-        paddingLeft: 8,
-        marginLeft: 12,
-        fontSize: 14,
-    },
-
-    input:{
-        height: heightPercentage(8),
-        width: widthPercentage(73),
-        margin: 0,
-        padding: 15,
-        borderWidth: 1,
-        borderRadius: 10,
-        backgroundColor:'gray',
-        textAlign: 'left',
-        borderColor:'purple',
-        marginTop:6,
-        marginBottom:6,
-    },
-
-    inputText:{
-        color:'white',
-        marginLeft: 5,
+    title: {
+        color: 'white',
         fontSize: 16,
-    }
-
-})
+        marginBottom: 8,
+    },
+    inputWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: Themes.colors.grayLight,  
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: Themes.colors.purpleStrong,  
+    },
+    input: {
+        flex: 1,
+        height: 48,
+        paddingHorizontal: 16,
+        color: Themes.colors.grayMid,
+        fontSize: 16,
+    },
+    icon: {
+        paddingHorizontal: 12,
+    },
+});
