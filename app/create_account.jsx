@@ -1,72 +1,79 @@
-import { StyleSheet, Text, View, TextInput } from 'react-native'
-import React from 'react'
-import ScreamWrapper from '../components/ScreamWrapper'
-import { StatusBar } from 'expo-status-bar'
-import { Themes } from '../constants/Themes.js'
-import { heightPercentage,widthPercentage } from '../helpers/commons.js'
+import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import ScreamWrapper from '../components/ScreamWrapper';
+import { StatusBar } from 'expo-status-bar';
+import { Themes } from '../constants/Themes.js';
+import { heightPercentage, widthPercentage } from '../helpers/commons.js';
 import { useRouter } from 'expo-router';
-import Input from '../components/Input.jsx'
-import Button from '../components/Button.jsx'
+import Input from '../components/Input.jsx';
+import Button from '../components/Button.jsx';
 
-const create_account = () => {
-    const route=useRouter();
+const Create_account = () => {
+    const route = useRouter();
+    
     return (
-        <ScreamWrapper background={'black'}>
-            <StatusBar style='dark'/>
+        <ScreamWrapper background={Themes.colors.grayDark}>
+            <StatusBar style="light" />
             <View style={styles.container}>
-            <Text style={styles.tittle} >Create Account</Text>
+                <Text style={styles.title}>Create Account</Text>
                 <View style={styles.elements}>
                     <Input 
-                    titleField='username'
-                    guideText='your username'
+                        titleField="Username" 
+                        guideText="Your username" 
                     />
                     <Input 
-                    titleField='email'
-                    guideText='yourmail@example.com'
-                    />
-                    
-                    <Input 
-                    titleField='password'
-                    guideText='your password'
+                        titleField="Email" 
+                        guideText="yourmail@example.com" 
                     />
                     <Input 
-                    titleField='confirm password'
-                    guideText='your password confirmation'
+                        titleField="Password" 
+                        guideText="Your password"
+                        isPassword
                     />
-                    
+                    <Input 
+                        titleField="Confirm Password" 
+                        guideText="Repeat password"
+                        isPassword
+                    />
                 </View>
                 <Button 
-                title='Log In' 
-                buttonStyle={{marginHorizontal:widthPercentage(40)}}
-                onPress={()=>{route.push('welcome')}}
-                backgroundColor={Themes.colors.purpleStrong}
-                textColor={'white'}
+                    title="Sign Up" 
+                    buttonStyle={styles.button} 
+                    onPress={() => { route.push('welcome'); }} 
+                    backgroundColor={Themes.colors.purpleStrong} 
+                    textColor="white" 
                 />
             </View>
         </ScreamWrapper>
-    )
-}
+    );
+};
 
-export default create_account
+export default Create_account;
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        backgroundColor: 'black',
-        paddingHorizontal: widthPercentage(2),
+    container: {
+        flex: 1,
+        justifyContent: 'space-between',  
+        paddingHorizontal: 16,  
     },
 
-    tittle:{
+    title: {
         color: 'white',
         fontSize: heightPercentage(5),
         textAlign: 'left',
         fontWeight: Themes.fonts.extrabold,
+        marginBottom: 20,  
     },
 
-    elements:{
+    elements: {
         alignItems: 'center',
+        marginBottom: 30,  
+    },
+
+    button: {
+        marginTop: 20,  
+        width: '100%',  
+        borderRadius: 10,  
     }
 
-})
+});
