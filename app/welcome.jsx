@@ -26,7 +26,7 @@ import { useRouter } from 'expo-router';
                 <Button 
                 title='Log In' 
                 buttonStyle={{marginHorizontal:widthPercentage(3)}}
-                onPress={()=>{route.push('index')}}
+                onPress={()=>{route.push('login')}}
                 backgroundColor={Themes.colors.purpleStrong}
                 textColor={'white'}
                 />
