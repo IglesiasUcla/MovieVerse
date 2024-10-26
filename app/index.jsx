@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router'
 import Welcome from './welcome'
 import Create_account from './create_account'
 import HomePage from './homePage'
+import Test from './test'
 
 const index = () => {
     // const router= useRouter();
