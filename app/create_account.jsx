@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import React from 'react';
 import ScreamWrapper from '../components/ScreamWrapper';
 import { StatusBar } from 'expo-status-bar';
@@ -13,8 +13,11 @@ const Create_account = () => {
     
     return (
         <ScreamWrapper background={Themes.colors.grayDark}>
-            <StatusBar style="light" />
+            <StatusBar style="dark" />
             <View style={styles.container}>
+                <View>
+                    <Image style={styles.iconTop} source={require('../assets/images/Star_Icon.png')} resizeMode='contain'/>
+                </View>
                 <Text style={styles.title}>Create Account</Text>
                 <View style={styles.elements}>
                     <Input 
@@ -39,7 +42,7 @@ const Create_account = () => {
                 <Button 
                     title="Sign Up" 
                     buttonStyle={styles.button} 
-                    onPress={() => { route.push('welcome'); }} 
+                    onPress={() => { route.push('releaseData_1'); }} 
                     backgroundColor={Themes.colors.purpleStrong} 
                     textColor="white" 
                 />
@@ -55,6 +58,12 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'space-between',  
         paddingHorizontal: 16,  
+    },
+
+    iconTop: {
+        justifyContent: 'flex-end',
+        padding: 25,
+        marginLeft: 275,
     },
 
     title: {
