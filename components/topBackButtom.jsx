@@ -4,8 +4,8 @@ import { Themes } from '../constants/Themes.js';
 import { heightPercentage, widthPercentage } from '../helpers/commons.js';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-const SearchField = ({
-        searchStyle,
+const TopBack = ({
+        topBackStyle,
         textStyle,
         title= '',
         onPress=()=>{},
@@ -16,48 +16,49 @@ const SearchField = ({
         <Pressable
                 onPress={onPress}
                         style={[
-                                styles.search,
-                                searchStyle,
+                                styles.backField,
+                                topBackStyle,
                                 {backgroundColor},
 
                         ]}
                         accessibilityLabel={title}
         >
                 <Text style={[styles.text,textStyle, {color: textColor}]}>
+                        <AntDesign style={styles.iconBack} name="arrowleft" size={34} color="white" />
                         {title}
-                        <View style={styles.iconSearch}>
-                                <AntDesign name="rightcircleo" size={30} color="white" />
-                        </View>
                 </Text>
         </Pressable>
         )
         
 }
 
-export default SearchField
+export default TopBack
 
 const styles = StyleSheet.create({
-        search:{
-                
-                height: heightPercentage(12),
-                width: widthPercentage(60),
+        backField:{
+                marginTop:3,
+                paddingVertical:2,
+                height: heightPercentage(6),
+                width: '100%',
                 flexWrap: 'wrap',
                 columnGap: 40,
-                // alignItems: 'flex-end',
-                alignContent: 'space-between',
+                alignItems: 'center',
+                alignContent: 'flex-start',
+                justifyContent:'space-evenly',
                 borderRadius: 0,
+                
                 // paddingVertical:5,
         },
-        iconSearch:{
-                justifyContent:'flex-end',
-                alignSelf: 'flex-end',
-                paddingLeft: 0,
-                alignSelf: 'flex-end',
+        iconBack:{
+                alignSelf:'center',
+                paddingTop:5,
+                paddingLeft: 5,
         },
         text:{
-                fontSize: heightPercentage(7),
+                fontSize: heightPercentage(3),
                 fontWeight: Themes.fonts.medium,
-                width: widthPercentage(120),
+                paddingLeft: 20,
+                marginLeft:60,
                 alignSelf: 'flex-start',
                 alignContent: 'space-between',
         },

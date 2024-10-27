@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar'
 import { Themes } from '../constants/Themes.js';
 import SearchField from '../components/searchField.jsx';
 import { heightPercentage } from '../helpers/commons.js';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import TopBack from '../components/topBackButtom.jsx';
 import { useRouter } from 'expo-router';
 
 const ReleaseData_1 = () => {
@@ -14,18 +14,19 @@ const ReleaseData_1 = () => {
             <StatusBar style="dark" />
             {/* header */}
             <View style={styles.contentTop} >
-                {/* <AntDesign style={styles.iconArrow} name="arrowleft" size={35} color="white" /> */}
-                <Text style={styles.titleTop}>
-                    <AntDesign style={styles.iconArrow} name="arrowleft" size={35} color="white" />
-                    Release Data
-                    {/* onPress={()=> {route.push('welcome')}} */}
-                </Text> 
+                <TopBack
+                    title="Release Data" 
+                    topBackStyle={styles.topBack} 
+                    onPress={() => { route.push('welcome'); }} 
+                    backgroundColor={Themes.colors.purpleStrong} 
+                    textColor="white"
+                />
             </View>
             {/* body with options */}
                 <SearchField
                     title="2020" 
                     searchStyle={styles.search} 
-                    onPress={() => { route.push('releaseData_1'); }} 
+                    onPress={() => { route.push('releaseData_2020'); }} 
                     backgroundColor={'black'} 
                     textColor="white" 
                 />
@@ -82,6 +83,9 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         justifyContent:'flex-start',
         
+    },
+    topBack:{
+
     },
     textField:{
         fontWeight: Themes.fonts.medium,
