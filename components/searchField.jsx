@@ -39,12 +39,12 @@ export default SearchField
 const styles = StyleSheet.create({
         search:{
                 
-                height: heightPercentage(12),
+                height: heightPercentage(10),
                 width: widthPercentage(60),
-                flexWrap: 'wrap',
-                columnGap: 40,
+                // flexWrap: 'wrap',
+                // columnGap: 40,
                 // alignItems: 'flex-end',
-                alignContent: 'space-between',
+                // alignContent: 'space-between',
                 borderRadius: 0,
                 // paddingVertical:5,
         },
@@ -58,8 +58,8 @@ const styles = StyleSheet.create({
                 fontSize: heightPercentage(7),
                 fontWeight: Themes.fonts.medium,
                 width: widthPercentage(120),
-                alignSelf: 'flex-start',
-                alignContent: 'space-between',
+                // alignSelf: 'flex-start',
+                // alignContent: 'space-between',
         },
 
 })

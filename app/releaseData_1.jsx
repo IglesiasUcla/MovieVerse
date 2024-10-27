@@ -33,7 +33,7 @@ const ReleaseData_1 = () => {
                 <SearchField
                     title="2010" 
                     searchStyle={styles.search} 
-                    onPress={() => { route.push('releaseData_1'); }} 
+                    onPress={() => { route.push('releaseData_2010'); }} 
                     backgroundColor={'black'} 
                     textColor="white" 
                 />

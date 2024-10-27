@@ -36,12 +36,12 @@ export default TopBack
 
 const styles = StyleSheet.create({
         backField:{
-                marginTop:3,
+                // marginTop:3,
                 paddingVertical:2,
                 height: heightPercentage(6),
                 width: '100%',
                 flexWrap: 'wrap',
-                columnGap: 40,
+                // columnGap: 40,
                 alignItems: 'center',
                 alignContent: 'flex-start',
                 justifyContent:'space-evenly',
