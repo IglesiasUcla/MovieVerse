@@ -2,9 +2,9 @@ import { StyleSheet, Text, View, SafeAreaView, ScrollView } from 'react-native'
 import React from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { Themes } from '../constants/Themes.js';
-import SearchField from '../components/searchField.jsx';
+import SearchField from '../components/SearchField.jsx';
 import { useRouter } from 'expo-router';
-import TopBack from '../components/topBackButtom.jsx';
+import TopBack from '../components/TopBackButton.jsx';
 import { widthPercentage } from '../helpers/commons.js';
 
 const releaseData_1980 = () => {
