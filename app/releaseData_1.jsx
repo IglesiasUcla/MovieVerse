@@ -2,9 +2,9 @@ import { StyleSheet, Text, View ,SafeAreaView, Pressable} from 'react-native'
 import React from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { Themes } from '../constants/Themes.js';
-import SearchField from '../components/searchField.jsx';
+import SearchField from '../components/SearchField.jsx';
 import { heightPercentage } from '../helpers/commons.js';
-import TopBack from '../components/topBackButtom.jsx';
+import TopBack from '../components/TopBackButton.jsx';
 import { useRouter } from 'expo-router';
 
 const ReleaseData_1 = () => {
