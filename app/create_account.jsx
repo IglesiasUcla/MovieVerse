@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
 import React from 'react';
-import ScreamWrapper from '../components/ScreamWrapper';
+import ScreamWrapper from '../components/ScreenWrapper.jsx';
 import { StatusBar } from 'expo-status-bar';
 import { Themes } from '../constants/Themes.js';
 import { heightPercentage, widthPercentage } from '../helpers/commons.js';
