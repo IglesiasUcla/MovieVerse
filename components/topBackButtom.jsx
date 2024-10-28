@@ -13,21 +13,23 @@ const TopBack = ({
         textColor= 'white',
 }) => {
         return (
-        <Pressable
-                onPress={onPress}
-                        style={[
-                                styles.backField,
-                                topBackStyle,
-                                {backgroundColor},
+        <View style={[styles.topWrapper]}>
+                <Pressable
+                        onPress={onPress}
+                                style={[
+                                        styles.backField,
+                                        topBackStyle,
+                                        {backgroundColor},
 
-                        ]}
-                        accessibilityLabel={title}
-        >
-                <Text style={[styles.text,textStyle, {color: textColor}]}>
-                        <AntDesign style={styles.iconBack} name="arrowleft" size={34} color="white" />
-                        {title}
-                </Text>
-        </Pressable>
+                                ]}
+                                accessibilityLabel={title}
+                >
+                        <Text style={[styles.text,textStyle, {color: textColor}]}>
+                                <AntDesign style={styles.iconBack} name="arrowleft" size={34} color="white" />
+                                {title}
+                        </Text>
+                </Pressable>
+        </View>
         )
         
 }
@@ -35,13 +37,17 @@ const TopBack = ({
 export default TopBack
 
 const styles = StyleSheet.create({
+        topWrapper:{
+                flexDirection:'row',
+                alignItems: 'center',
+        },
         backField:{
                 // marginTop:3,
                 paddingVertical:2,
                 height: heightPercentage(6),
-                width: '100%',
+                width: widthPercentage(180),
                 flexWrap: 'wrap',
-                // columnGap: 40,
+                rowGap: 40,
                 alignItems: 'center',
                 alignContent: 'flex-start',
                 justifyContent:'space-evenly',
@@ -53,12 +59,14 @@ const styles = StyleSheet.create({
                 alignSelf:'center',
                 paddingTop:5,
                 paddingLeft: 5,
+                paddingRight: 68,
+                marginRight: 50,
         },
         text:{
                 fontSize: heightPercentage(3),
                 fontWeight: Themes.fonts.medium,
-                paddingLeft: 20,
-                marginLeft:60,
+                paddingHorizontal: 30,
+                marginLeft:90,
                 alignSelf: 'flex-start',
                 alignContent: 'space-between',
         },

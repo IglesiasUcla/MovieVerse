@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, Pressable, ScrollView} from 'react-native'
+import { StyleSheet, SafeAreaView, ScrollView } from 'react-native'
 import React from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { Themes } from '../constants/Themes.js';
@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router';
 import TopBack from '../components/topBackButtom.jsx';
 import { widthPercentage } from '../helpers/commons.js';
 
-const releaseData_2010 = () => {
+const releaseData_1970 = () => {
     const route= useRouter();
     return (
         <SafeAreaView style={styles.topBackContent}>
@@ -21,7 +21,7 @@ const releaseData_2010 = () => {
             />
             <ScrollView style={styles.wrapSearch}>
                 <SearchField
-                    title="2019" 
+                    title="1979" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
                     backgroundColor={'black'} 
@@ -29,7 +29,7 @@ const releaseData_2010 = () => {
                     textStyle={styles.textSearch}
                 />
                 <SearchField
-                    title="2018" 
+                    title="1978" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
                     backgroundColor={'black'} 
@@ -37,7 +37,7 @@ const releaseData_2010 = () => {
                     textStyle={styles.textSearch}
                 />
                 <SearchField
-                    title="2017" 
+                    title="1977" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
                     backgroundColor={'black'} 
@@ -45,7 +45,7 @@ const releaseData_2010 = () => {
                     textStyle={styles.textSearch}
                 />
                 <SearchField
-                    title="2016" 
+                    title="1976" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
                     backgroundColor={'black'} 
@@ -53,7 +53,7 @@ const releaseData_2010 = () => {
                     textStyle={styles.textSearch}
                 />
                 <SearchField
-                    title="2015" 
+                    title="1975" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
                     backgroundColor={'black'} 
@@ -61,7 +61,7 @@ const releaseData_2010 = () => {
                     textStyle={styles.textSearch}
                 />
                 <SearchField
-                    title="2014" 
+                    title="1974" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
                     backgroundColor={'black'} 
@@ -69,7 +69,7 @@ const releaseData_2010 = () => {
                     textStyle={styles.textSearch}
                 />
                 <SearchField
-                    title="2013" 
+                    title="1973" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
                     backgroundColor={'black'} 
@@ -77,7 +77,7 @@ const releaseData_2010 = () => {
                     textStyle={styles.textSearch}
                 />
                 <SearchField
-                    title="2012" 
+                    title="1972" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
                     backgroundColor={'black'} 
@@ -85,7 +85,7 @@ const releaseData_2010 = () => {
                     textStyle={styles.textSearch}
                 />
                 <SearchField
-                    title="2011" 
+                    title="1971" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
                     backgroundColor={'black'} 
@@ -93,7 +93,7 @@ const releaseData_2010 = () => {
                     textStyle={styles.textSearch}
                 />
                 <SearchField
-                    title="2010" 
+                    title="1970" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
                     backgroundColor={'black'} 
@@ -105,7 +105,7 @@ const releaseData_2010 = () => {
     )
 }
 
-export default releaseData_2010
+export default releaseData_1970
 
 const styles = StyleSheet.create({
     topBackContent:{

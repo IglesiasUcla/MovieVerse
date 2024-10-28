@@ -56,7 +56,6 @@ const releaseData_2020 = () => {
                     textColor="white" 
                 />
             </View>
-        <Text>releaseData_2020</Text>
         </SafeAreaView>
     )
 }

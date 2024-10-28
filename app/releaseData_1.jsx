@@ -40,28 +40,28 @@ const ReleaseData_1 = () => {
                 <SearchField
                     title="2000" 
                     searchStyle={styles.search} 
-                    onPress={() => { route.push('releaseData_1'); }} 
+                    onPress={() => { route.push('releaseData_2000'); }} 
                     backgroundColor={'black'} 
                     textColor="white" 
                 />
                 <SearchField
                     title="1990" 
                     searchStyle={styles.search} 
-                    onPress={() => { route.push('releaseData_1'); }} 
+                    onPress={() => { route.push('releaseData_1990'); }} 
                     backgroundColor={'black'} 
                     textColor="white" 
                 />
                 <SearchField
                     title="1980" 
                     searchStyle={styles.search} 
-                    onPress={() => { route.push('releaseData_1'); }} 
+                    onPress={() => { route.push('releaseData_1980'); }} 
                     backgroundColor={'black'} 
                     textColor="white" 
                 />
                 <SearchField
                     title="1970" 
                     searchStyle={styles.search} 
-                    onPress={() => { route.push('releaseData_1'); }} 
+                    onPress={() => { route.push('releaseData_1970'); }} 
                     backgroundColor={'black'} 
                     textColor="white" 
                 />
