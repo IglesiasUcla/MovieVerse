@@ -13,23 +13,26 @@ const SearchField = ({
         textColor= 'white',
 }) => {
         return (
-        <Pressable
-                onPress={onPress}
-                        style={[
-                                styles.search,
-                                searchStyle,
-                                {backgroundColor},
+        <View style={[styles.fieldWrapper]}>
+                <Pressable
+                        onPress={onPress}
+                                style={[
+                                        styles.search,
+                                        searchStyle,
+                                        {backgroundColor},
 
-                        ]}
-                        accessibilityLabel={title}
-        >
-                <Text style={[styles.text,textStyle, {color: textColor}]}>
-                        {title}
-                        <View style={styles.iconSearch}>
-                                <AntDesign name="rightcircleo" size={30} color="white" />
-                        </View>
-                </Text>
-        </Pressable>
+                                ]}
+                                accessibilityLabel={title}
+                >
+                                <Text style={[styles.text,textStyle, {color: textColor}]}>
+                                        {title}
+                                        <View style={styles.iconSearch}>
+                                                <AntDesign name="rightcircleo" size={30} color="white" />
+                                        </View>
+                                </Text>
+                
+                </Pressable>
+        </View>
         )
         
 }
@@ -37,10 +40,14 @@ const SearchField = ({
 export default SearchField
 
 const styles = StyleSheet.create({
+        fieldWrapper:{
+                flexDirection:'row',
+                alignItems:'center',
+        },
         search:{
                 
                 height: heightPercentage(10),
-                width: widthPercentage(60),
+                width: widthPercentage(190),
                 // flexWrap: 'wrap',
                 // columnGap: 40,
                 // alignItems: 'flex-end',
@@ -51,7 +58,7 @@ const styles = StyleSheet.create({
         iconSearch:{
                 justifyContent:'flex-end',
                 alignSelf: 'flex-end',
-                paddingLeft: 0,
+                paddingLeft: 118,
                 alignSelf: 'flex-end',
         },
         text:{
