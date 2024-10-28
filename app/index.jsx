@@ -10,7 +10,7 @@ import Test from './test'
 const index = () => {
     // const router= useRouter();
     // return <Welcome /> 
-    return <ReleaseData_1/>
+    return <Welcome/>
     // (
         // <View>
             
