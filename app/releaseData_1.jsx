@@ -6,6 +6,7 @@ import SearchField from '../components/SearchField.jsx';
 import { heightPercentage } from '../helpers/commons.js';
 import TopBack from '../components/TopBackButton.jsx';
 import { useRouter } from 'expo-router';
+import Header from '../components/Header.jsx';
 
 const ReleaseData_1 = () => {
     const route= useRouter();
@@ -13,13 +14,11 @@ const ReleaseData_1 = () => {
         <SafeAreaView style={styles.content}>
             <StatusBar style="dark" />
             {/* header */}
-            <View style={styles.contentTop} >
-                <TopBack
-                    title="Release Data" 
-                    topBackStyle={styles.topBack} 
-                    onPress={() => { route.push('welcome'); }} 
-                    backgroundColor={Themes.colors.purpleStrong} 
-                    textColor="white"
+            <View  >
+                <Header
+                    title="Release Date"
+                    leftIconName="arrow-back"       
+                    leftIconRoute={"/welcome"}
                 />
             </View>
             {/* body with options */}
