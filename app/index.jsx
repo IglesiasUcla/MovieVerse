@@ -6,11 +6,13 @@ import ReleaseData_1 from './releaseData_1'
 import Create_account from './create_account'
 import HomePage from './homePage'
 import Test from './test'
+import Login from './login'
+import Profile_user from './profile_user'
 
 const index = () => {
     // const router= useRouter();
     // return <Welcome /> 
-    return <ReleaseData_1/>
+    return <Profile_user/>
     // (
         // <View>
             

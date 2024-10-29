@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const search_movies = () => {
+const Search_movies = () => {
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -70,4 +70,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default search_movies;
+export default Search_movies;

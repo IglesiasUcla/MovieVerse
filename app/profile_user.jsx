@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const profile_user = () => {
+const Profile_user = () => {
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 15,
+    padding: 16,
     backgroundColor: '#6116EC', // Color morado #6116EC
   },
   username: {
@@ -112,4 +112,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default profile_user;
+export default Profile_user;
