@@ -12,7 +12,9 @@ import Profile_user from './profile_user'
 const index = () => {
     // const router= useRouter();
     // return <Welcome /> 
-    return <Profile_user/>
+
+    return <Welcome/>
+
     // (
         // <View>
             

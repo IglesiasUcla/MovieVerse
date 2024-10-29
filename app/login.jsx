@@ -38,7 +38,7 @@ const Login = () => {
       </View>
 
       {/* Botón de Log In */}
-      <TouchableOpacity style={styles.loginButton}>
+      <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('homePage')}>
         <Text style={styles.loginButtonText}>Log In</Text>
       </TouchableOpacity>
 
@@ -46,7 +46,7 @@ const Login = () => {
       <View style={styles.passwordRecoveryContainer}>
         <Text style={styles.forgotPasswordText}>Forgot your password? </Text>
         <Pressable>
-          <Text style={styles.passwordRecoveryText}>Password Recovery</Text>
+          <Text style={styles.passwordRecoveryText} onPress={() => navigation.navigate('create_account')}>Password Recovery</Text>
         </Pressable>
       </View>
 
@@ -54,7 +54,7 @@ const Login = () => {
       <View style={styles.footer}>
         <Text style={styles.footerText}>
           Don’t have an account?{' '}
-          <Text style={styles.createAccountText}>Create Account</Text>
+          <Text style={styles.createAccountText} onPress={() => navigation.navigate('create_account')}>Create Account</Text>
         </Text>
       </View>
     </View>
