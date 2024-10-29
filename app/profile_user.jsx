@@ -2,19 +2,20 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Themes } from '../constants/Themes';
+import Header from '../components/Header';
 
 const Profile_user = () => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity>
-          <Icon name="arrow-back" size={24} color="#FFFFFF" onPress={() => navigation.navigate('homePage')}/>
-        </TouchableOpacity>
-        <Text style={styles.username}>Username</Text>
-        <TouchableOpacity>
-          <Icon name="settings" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
+      <View>
+        <Header
+          title="Username"
+          leftIconName="arrow-back"
+          leftIconRoute={""}            //leftIconRoute={"/interface"}
+          rightIconName="settings"      //rightIconRoute={"/interface"}
+          rightIconRoute={""}
+        />
       </View>
 
       {/* Profile Information */}
@@ -50,13 +51,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#1A1A1A',
     justifyContent: 'space-between', // Espacio entre el contenido superior y la parte inferior
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 16,
-    backgroundColor: '#6116EC', // Color morado #6116EC
   },
   username: {
     color: '#FFFFFF',

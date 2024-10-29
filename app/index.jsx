@@ -8,6 +8,8 @@ import HomePage from './homePage'
 import Test from './test'
 import Login from './login'
 import Profile_user from './profile_user'
+import AddMovie from './addMovie'
+import MovieReview from './movieReview'
 
 const index = () => {
     // const router= useRouter();
