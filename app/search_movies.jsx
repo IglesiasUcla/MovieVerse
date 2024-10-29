@@ -4,8 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 
 const SearchMovies = () => {
-  const navigation = useNavigation();
-
+const navigation = useNavigation();
   return (
     <View style={styles.container}>
       {/* Header */}

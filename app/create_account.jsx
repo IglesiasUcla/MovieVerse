@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput } from 'react-native';
 import React from 'react';
 import ScreamWrapper from '../components/ScreenWrapper.jsx';
 import { StatusBar } from 'expo-status-bar';

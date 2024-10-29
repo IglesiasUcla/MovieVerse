@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Pressable, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Themes } from '../constants/Themes';
 
-const login = () => {
+const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   return (
@@ -63,7 +64,7 @@ const login = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a1a',
+    backgroundColor: Themes.colors.grayDark,
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     right: 20,
   },
   icon: {
-    color: '#8b5cf6',
+    color: Themes.colors.purpleStrong,
     fontSize: 24,
     fontWeight: 'bold',
   },
@@ -156,4 +157,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default login;
+export default Login;
