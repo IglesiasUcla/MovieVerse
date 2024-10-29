@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Themes } from '../constants/Themes';
 
 const profile_user = () => {
   return (
@@ -8,7 +9,7 @@ const profile_user = () => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity>
-          <Icon name="arrow-back" size={24} color="#FFFFFF" />
+          <Icon name="arrow-back" size={24} color="#FFFFFF" onPress={() => navigation.navigate('homePage')}/>
         </TouchableOpacity>
         <Text style={styles.username}>Username</Text>
         <TouchableOpacity>

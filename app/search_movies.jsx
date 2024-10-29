@@ -1,8 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';
 
-const search_movies = () => {
+const SearchMovies = () => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -19,12 +22,28 @@ const search_movies = () => {
       {/* Browse By Section */}
       <View style={styles.browseContainer}>
         <Text style={styles.browseTitle}>Browse By</Text>
-        {['Release Date', 'Genre', 'Most Popular', 'Highest Rated'].map((item, index) => (
-          <TouchableOpacity key={index} style={styles.optionContainer}>
-            <Text style={styles.optionText}>{item}</Text>
-            <Icon name="chevron-right" size={24} color="#FFFFFF" />
-          </TouchableOpacity>
-        ))}
+        
+        {/* Navegación a cada pantalla específica */}
+        <TouchableOpacity style={styles.optionContainer} onPress={() => navigation.navigate('searchMovies_releaseDate')}>
+          <Text style={styles.optionText}>Release Date</Text>
+          <Icon name="chevron-right" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+        
+        <TouchableOpacity style={styles.optionContainer} onPress={() => navigation.navigate('searchMovies_genre')}>
+          <Text style={styles.optionText}>Genre</Text>
+          <Icon name="chevron-right" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+        
+        <TouchableOpacity style={styles.optionContainer} onPress={() => navigation.navigate('searchMovies_mostPopular')}>
+          <Text style={styles.optionText}>Most Popular</Text>
+          <Icon name="chevron-right" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+        
+        <TouchableOpacity style={styles.optionContainer} onPress={() => navigation.navigate('searchMovies_highestRated')}>
+          <Text style={styles.optionText}>Highest Rated</Text>
+          <Icon name="chevron-right" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+        
       </View>
     </View>
   );
@@ -70,4 +89,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default search_movies;
+export default SearchMovies;
+
