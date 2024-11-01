@@ -11,7 +11,11 @@ import Login from './login'
 import Profile_user from './profile_user'
 import AddMovie from './addMovie'
 import MovieReview from './movieReview'
-
+import Change_password from './change_password'
+import Password_recovery from './password_recovery'
+import Profile_Settings from './profile_Settings'
+import TopBack from '../components/TopBackButton'
+import Header from '../components/Header'
 const index = () => {
     // const router= useRouter();
     return <Welcome /> 
