@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Pressable, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Themes } from '../constants/Themes';
+import { useRouter } from 'expo-router';
 
 const Login = () => {
+  const route=useRouter();
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   return (
@@ -46,7 +48,7 @@ const Login = () => {
       <View style={styles.passwordRecoveryContainer}>
         <Text style={styles.forgotPasswordText}>Forgot your password? </Text>
         <Pressable>
-          <Text style={styles.passwordRecoveryText} onPress={() => navigation.navigate('create_account')}>Password Recovery</Text>
+          <Text style={styles.passwordRecoveryText} onPress={() => {route.push('change_password')}}>Password Recovery</Text>
         </Pressable>
       </View>
 
@@ -54,12 +56,14 @@ const Login = () => {
       <View style={styles.footer}>
         <Text style={styles.footerText}>
           Don’t have an account?{' '}
-          <Text style={styles.createAccountText} onPress={() => navigation.navigate('create_account')}>Create Account</Text>
+          <Text style={styles.createAccountText} onPress={() => {route.push ('create_account')}}>Create Account</Text>
         </Text>
       </View>
     </View>
   );
 };
+
+export default Login;
 
 const styles = StyleSheet.create({
   container: {
@@ -157,4 +161,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+
