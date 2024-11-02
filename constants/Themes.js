@@ -8,6 +8,7 @@ export const Themes={
         grayDark: '#212121', // interface background color
         grayMid: '#323232',
         grayLight:'#646464', //soft gray color
+        screensColor: '#212121' //background color for screens  
         
     },
     fonts: {

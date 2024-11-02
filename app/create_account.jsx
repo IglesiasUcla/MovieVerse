@@ -56,7 +56,9 @@ const Create_account = () => {
                     <View style={styles.link}>
                         <Text style={styles.footerText}>
                             Already have an account? 
-                            <Text style={styles.redirectionText} onPress={() => navigation.navigate('create_account')}>Log in</Text>
+                        </Text>
+                        <Text style={styles.redirectionText} onPress={() => navigation.navigate('create_account')}>
+                            Log in
                         </Text>
                     </View>
                 </View>
@@ -123,12 +125,12 @@ const styles = StyleSheet.create({
     },
     footerText:{
         color:'#9d9d9d',
-        marginHorizontal:20,
+        marginHorizontal:10,
     },
     redirectionText:{
         color:'white',
         paddingHorizontal:10,
-        marginHorizontal:15,
+        // marginHorizontal:15,
     }
 
 });

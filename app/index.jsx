@@ -19,6 +19,9 @@ import Header from '../components/Header'
 import CreatePost_review from './createPost_review'
 import SearchMovieSearch from './searchMovieSearch'
 import PasswordRecovery2 from './passwordRecovery2'
+import HomePage_post from './homePage_post'
+import Search_posts from './search_posts'
+import Post_comments from './post_comments'
 
 const index = () => {
     // const router= useRouter();
