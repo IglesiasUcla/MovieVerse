@@ -22,6 +22,8 @@ import PasswordRecovery2 from './passwordRecovery2'
 import HomePage_post from './homePage_post'
 import Search_posts from './search_posts'
 import Post_comments from './post_comments'
+import UserPosts from './userPosts'
+import SearchMovieGenre from './searchMovieGenre'
 
 const index = () => {
     // const router= useRouter();
