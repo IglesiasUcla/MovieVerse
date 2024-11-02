@@ -17,6 +17,8 @@ import Profile_Settings from './profile_Settings'
 import TopBack from '../components/TopBackButton'
 import Header from '../components/Header'
 import CreatePost_review from './createPost_review'
+import SearchMovieSearch from './searchMovieSearch'
+import PasswordRecovery2 from './passwordRecovery2'
 
 const index = () => {
     // const router= useRouter();
