@@ -1,17 +1,19 @@
 import React from "react";
-import {Text, View, StyleSheet, TextInput,TouchableOpacity,SafeAreaView} from "react-native";
+import {Text, View, StyleSheet,TouchableOpacity,SafeAreaView} from "react-native";
 import Button from "../components/Button";
 import { Themes } from "../constants/Themes";
 import { useRouter } from 'expo-router';
 import Header from "../components/Header";
 import Input from "../components/Input";
 import ScreamWrapper from "../components/ScreenWrapper";
+import { StatusBar } from 'expo-status-bar';
 
 
 const Change_password = () =>{
     const route = useRouter();
 return(
     <ScreamWrapper background={'black'}>
+        <StatusBar style='dark'/>
          <View>
             <Header
                 title="Change Password"
