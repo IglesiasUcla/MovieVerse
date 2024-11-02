@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Pressable, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Themes } from '../constants/Themes';
+import { useRouter } from 'expo-router';
 
-const login = () => {
+const Login = () => {
+  const route=useRouter();
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   return (
@@ -45,7 +48,7 @@ const login = () => {
       <View style={styles.passwordRecoveryContainer}>
         <Text style={styles.forgotPasswordText}>Forgot your password? </Text>
         <Pressable>
-          <Text style={styles.passwordRecoveryText} onPress={() => navigation.navigate('create_account')}>Password Recovery</Text>
+          <Text style={styles.passwordRecoveryText} onPress={() => {route.push('change_password')}}>Password Recovery</Text>
         </Pressable>
       </View>
 
@@ -53,17 +56,19 @@ const login = () => {
       <View style={styles.footer}>
         <Text style={styles.footerText}>
           Don’t have an account?{' '}
-          <Text style={styles.createAccountText} onPress={() => navigation.navigate('create_account')}>Create Account</Text>
+          <Text style={styles.createAccountText} onPress={() => {route.push ('create_account')}}>Create Account</Text>
         </Text>
       </View>
     </View>
   );
 };
 
+export default Login;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a1a',
+    backgroundColor: Themes.colors.grayDark,
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
@@ -73,7 +78,7 @@ const styles = StyleSheet.create({
     right: 20,
   },
   icon: {
-    color: '#8b5cf6',
+    color: Themes.colors.purpleStrong,
     fontSize: 24,
     fontWeight: 'bold',
   },
@@ -156,4 +161,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default login;
+

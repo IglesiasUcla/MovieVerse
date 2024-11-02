@@ -27,7 +27,7 @@ const SearchField = ({
                                 <Text style={[styles.text,textStyle, {color: textColor}]}>
                                         {title}
                                         <View style={styles.iconSearch}>
-                                                <AntDesign name="rightcircleo" size={30} color="white" />
+                                                <AntDesign name="rightcircle" size={30} color="white" />
                                         </View>
                                 </Text>
                 

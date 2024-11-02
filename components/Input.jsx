@@ -13,7 +13,8 @@ const Input = ({ titleField, guideText, isPassword = false }) => {
                 <TextInput
                     style={styles.input}
                     placeholder={guideText}
-                    placeholderTextColor={Themes.colors.grayMid}
+                    placeholderTextColor={'#b0b0b0'}
+                    textAlign='left'
                     secureTextEntry={isPassword && !isPasswordVisible}  // Alternar visibilidad de la contraseña
                 />
                 {isPassword && (
@@ -24,7 +25,7 @@ const Input = ({ titleField, guideText, isPassword = false }) => {
                         <Ionicons
                             name={isPasswordVisible ? 'eye-off' : 'eye'}
                             size={24}
-                            color={Themes.colors.grayMid}
+                            color={Themes.colors.grayLight}
                         />
                     </TouchableOpacity>
                 )}
@@ -48,10 +49,9 @@ const styles = StyleSheet.create({
     inputWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: Themes.colors.grayLight,  
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: Themes.colors.purpleStrong,  
+        backgroundColor: '#333333',  
+        borderRadius: 10, 
+        
     },
     input: {
         flex: 1,
@@ -59,6 +59,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         color: Themes.colors.grayMid,
         fontSize: 16,
+        backgroundColor:'#333333',
+        borderRadius: 20,  
     },
     icon: {
         paddingHorizontal: 12,
