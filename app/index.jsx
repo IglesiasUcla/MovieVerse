@@ -15,6 +15,14 @@ import Password_recovery from './password_recovery'
 import Profile_Settings from './profile_Settings'
 import TopBack from '../components/TopBackButton'
 import Header from '../components/Header'
+import Search from './search'
+import Create_post from './create_post'
+import Post_tags from './post_tags'
+import TopBar from'../components/TopBar'
+import Input from '../components/Input'
+import Search_user from './search_user'
+
+ 
 const index = () => {
     // const router= useRouter();
     // return <Welcome /> 

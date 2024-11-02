@@ -1,14 +1,17 @@
 import React from "react";
-import {Text, View, StyleSheet,TextInput,Image} from "react-native";
+import {Text, View, StyleSheet,Image} from "react-native";
 import Button from "../components/Button";
 import { Themes } from "../constants/Themes";
 import { heightPercentage } from "../helpers/commons";
 import ScreamWrapper from "../components/ScreenWrapper";
 import Input from "../components/Input";
+import { StatusBar } from 'expo-status-bar';
+
 
 const Password_recovery = () => {
 return(
     <ScreamWrapper background='black'>
+        <StatusBar style='dark'/>
          <View style={styles.container}>
 
             <View>
