@@ -3,27 +3,20 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, useColorScheme } 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Colors } from '../constants/Colors';
 import { Themes } from '../constants/Themes';
-import { useRouter } from 'expo-router';
+import Header from '../components/Header';
 
 const Profile_user = () => {
-  const router = useRouter();
-  const colorScheme = useColorScheme();
-  const themeColors = Colors[colorScheme] || Colors.light;
-
   return (
     <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       {/* Header */}
-      <View style={[styles.headerContainer, { backgroundColor: Themes.colors.purpleDark }]}>
-        <TouchableOpacity onPress={() => router.push('/userProfile')}>
-          <Icon name="arrow-back" size={24} color={themeColors.tint} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/userProfile')}>
-          <Text style={[styles.usernameText, { color: themeColors.text }]}>Username</Text>
-        </TouchableOpacity>
-        <View style={styles.spacer} /> {/* Espacio entre el nombre y el icono */}
-        <TouchableOpacity onPress={() => router.push('/settings')}>
-          <Icon name="settings" size={24} color={themeColors.tint} />
-        </TouchableOpacity>
+      <View>
+        <Header
+          title="Username"
+          leftIconName="arrow-back"
+          leftIconRoute={""}            //leftIconRoute={"/interface"}
+          rightIconName="settings"      //rightIconRoute={"/interface"}
+          rightIconRoute={""}
+        />
       </View>
 
       {/* Profile Information */}
@@ -59,20 +52,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between', 
   },
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    backgroundColor: Themes.colors.purpleDark, // Color morado para el encabezado
-  },
-  usernameText: {
-    fontSize: 24,
-    marginHorizontal: 10,
-    fontWeight: Themes.fonts.semibold,
-  },
-  spacer: {
-    flex: 1, // Esto permite que el espacio ocupe el resto de la fila
+  username: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   profileContainer: {
     alignItems: 'center',

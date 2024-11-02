@@ -9,7 +9,7 @@ const SearchMovies = () => {
   const router = useRouter();
   const colorScheme = useColorScheme();
   const themeColors = Colors[colorScheme] || Colors.light;
-
+  
   return (
     <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       {/* Header */}
