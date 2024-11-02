@@ -1,19 +1,25 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useNavigation } from '@react-navigation/native';
+import { Colors } from '../constants/Colors';
+import { Themes } from '../constants/Themes';
+import { useRouter } from 'expo-router';
 
 const SearchMovies = () => {
-  const navigation = useNavigation();
+  const router = useRouter();
+  const colorScheme = useColorScheme();
+  const themeColors = Colors[colorScheme] || Colors.light;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity>
+      <View style={[styles.header, { backgroundColor: Themes.colors.purpleStrong }]}>
+        <TouchableOpacity onPress={() => router.back()}>
           <Icon name="arrow-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
-        <Text style={styles.title}>Search Movies</Text>
+        <TouchableOpacity onPress={() => {}} style={styles.titleContainer}>
+          <Text style={styles.title}>Search Movies</Text>
+        </TouchableOpacity>
         <TouchableOpacity>
           <Icon name="search" size={24} color="#FFFFFF" />
         </TouchableOpacity>
@@ -24,22 +30,22 @@ const SearchMovies = () => {
         <Text style={styles.browseTitle}>Browse By</Text>
         
         {/* Navegación a cada pantalla específica */}
-        <TouchableOpacity style={styles.optionContainer} onPress={() => navigation.navigate('searchMovies_releaseDate')}>
+        <TouchableOpacity style={styles.optionContainer} onPress={() => router.push('/searchMovies_releaseDate')}>
           <Text style={styles.optionText}>Release Date</Text>
           <Icon name="chevron-right" size={24} color="#FFFFFF" />
         </TouchableOpacity>
         
-        <TouchableOpacity style={styles.optionContainer} onPress={() => navigation.navigate('searchMovies_genre')}>
+        <TouchableOpacity style={styles.optionContainer} onPress={() => router.push('/searchMovies_genre')}>
           <Text style={styles.optionText}>Genre</Text>
           <Icon name="chevron-right" size={24} color="#FFFFFF" />
         </TouchableOpacity>
         
-        <TouchableOpacity style={styles.optionContainer} onPress={() => navigation.navigate('searchMovies_mostPopular')}>
+        <TouchableOpacity style={styles.optionContainer} onPress={() => router.push('/searchMovies_mostPopular')}>
           <Text style={styles.optionText}>Most Popular</Text>
           <Icon name="chevron-right" size={24} color="#FFFFFF" />
         </TouchableOpacity>
         
-        <TouchableOpacity style={styles.optionContainer} onPress={() => navigation.navigate('searchMovies_highestRated')}>
+        <TouchableOpacity style={styles.optionContainer} onPress={() => router.push('/searchMovies_highestRated')}>
           <Text style={styles.optionText}>Highest Rated</Text>
           <Icon name="chevron-right" size={24} color="#FFFFFF" />
         </TouchableOpacity>
@@ -52,19 +58,21 @@ const SearchMovies = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1A1A1A',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     padding: 15,
-    backgroundColor: '#6116EC', // Morado #6116EC
+  },
+  titleContainer: {
+    flex: 1,
+    marginLeft: 10, // Espacio entre el icono y el título
   },
   title: {
     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
+    textAlign: 'left', // Alineación a la izquierda
   },
   browseContainer: {
     padding: 20,
@@ -90,4 +98,3 @@ const styles = StyleSheet.create({
 });
 
 export default SearchMovies;
-
