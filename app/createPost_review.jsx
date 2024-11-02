@@ -1,22 +1,28 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, useColorScheme } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Colors } from '../constants/Colors';
 import { Themes } from '../constants/Themes';
+import { useRouter } from 'expo-router';
 
 const CreatePost_review = () => {
+  const router = useRouter();
+  const colorScheme = useColorScheme();
+  const themeColors = Colors[colorScheme] || Colors.light;
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity>
-          <Icon name="arrow-back" size={24} color="#FFFFFF" onPress={() => navigation.navigate('search_movies')}/>
+      <View style={[styles.header, { backgroundColor: Themes.colors.purpleStrong }]}>
+        <TouchableOpacity onPress={() => router.push('/search_movies')}>
+          <Icon name="arrow-back" size={24} color={themeColors.text} />
         </TouchableOpacity>
-        <Text style={styles.title}>Edit Review</Text>
+        <Text style={[styles.title, { color: themeColors.text }]}>Edit Review</Text>
       </View>
 
       {/* Review Content */}
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <Text style={styles.reviewText}>
+        <Text style={[styles.reviewText, { color: themeColors.text }]}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id erat nec elit tempus vehicula. 
           Pellentesque fringilla nisi id erat tristique elementum. Ut et facilisis mi. Quisque aliquam libero ac libero 
           fringilla blandit vel pellentesque sapien. Morbi feugiat erat a turpis fringilla, at varius ante condimentum. 
@@ -31,16 +37,13 @@ const CreatePost_review = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1A1A1A',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 15,
-    backgroundColor: Themes.colors.purpleStrong, // Morado #6116EC
   },
   title: {
-    color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
     marginLeft: 10,
@@ -49,7 +52,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   reviewText: {
-    color: '#FFFFFF',
     fontSize: 16,
     lineHeight: 24,
   },

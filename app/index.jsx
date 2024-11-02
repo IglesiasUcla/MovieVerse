@@ -2,6 +2,7 @@ import { View, Text, Button } from 'react-native'
 import React from 'react'
 import { useRouter } from 'expo-router'
 import Welcome from './welcome'
+import Profile_information from './profile_information'
 import ReleaseData_1 from './releaseData_1'
 import Create_account from './create_account'
 import HomePage from './homePage'
@@ -21,13 +22,20 @@ import Post_tags from './post_tags'
 import TopBar from'../components/TopBar'
 import Input from '../components/Input'
 import Search_user from './search_user'
+import CreatePost_review from './createPost_review'
+import SearchMovieSearch from './searchMovieSearch'
+import PasswordRecovery2 from './passwordRecovery2'
+import HomePage_post from './homePage_post'
+import Search_posts from './search_posts'
+import Post_comments from './post_comments'
+import UserPosts from './userPosts'
+import SearchMovieGenre from './searchMovieGenre'
 
- 
 const index = () => {
     // const router= useRouter();
-    // return <Welcome /> 
+    return <Welcome /> 
 
-    return <Welcome/>
+    // return <Profile_information/>
 
     // (
         // <View>

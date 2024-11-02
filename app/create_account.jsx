@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, Pressable } from 'react-native';
 import React from 'react';
 import ScreamWrapper from '../components/ScreenWrapper.jsx';
 import { StatusBar } from 'expo-status-bar';
@@ -7,6 +7,7 @@ import { heightPercentage, widthPercentage } from '../helpers/commons.js';
 import { useRouter } from 'expo-router';
 import Input from '../components/Input.jsx';
 import Button from '../components/Button.jsx';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const Create_account = () => {
     const route = useRouter();
@@ -38,14 +39,30 @@ const Create_account = () => {
                         guideText="Repeat password"
                         isPassword
                     />
+                    <View style={styles.checkBox}>
+                        <AntDesign name="checkcircleo" size={20} color={Themes.colors.purpleStrong}/>
+                        <Text style={styles.checkText}> I accept the terms and privacy policy</Text>
+                    </View>
                 </View>
-                <Button 
-                    title="Sign Up" 
-                    buttonStyle={styles.button} 
-                    onPress={() => { route.push('releaseData_1'); }} 
-                    backgroundColor={Themes.colors.purpleStrong} 
-                    textColor="white" 
-                />
+                {/* footer */}
+                <View style={styles.footer}>
+                    <Button 
+                        title="Log In" 
+                        buttonStyle={styles.button} 
+                        onPress={() => { route.push('releaseData_1'); }} 
+                        backgroundColor={Themes.colors.purpleStrong} 
+                        textColor="white" 
+                    />
+                    <View style={styles.link}>
+                        <Text style={styles.footerText}>
+                            Already have an account? 
+                        </Text>
+                        <Text style={styles.redirectionText} onPress={() => navigation.navigate('create_account')}>
+                            Log in
+                        </Text>
+                    </View>
+                </View>
+
             </View>
         </ScreamWrapper>
     );
@@ -83,6 +100,37 @@ const styles = StyleSheet.create({
         marginTop: 20,  
         width: '100%',  
         borderRadius: 10,  
+    },
+    footer:{
+        alignItems:'center',
+    },
+    checkBox:{
+        flexDirection:'row',
+        alignItems:'center',
+        marginVertical:10,
+    },
+    checkText:{
+        color:'white',
+        fontSize:16,
+        marginHorizontal:10,
+        
+    },
+    button:{
+        marginBottom:30,
+        width:widthPercentage(84),
+    },
+    link:{
+        flexDirection:'row',
+        marginVertical:15,
+    },
+    footerText:{
+        color:'#9d9d9d',
+        marginHorizontal:10,
+    },
+    redirectionText:{
+        color:'white',
+        paddingHorizontal:10,
+        // marginHorizontal:15,
     }
 
 });
