@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 
-const Header = ({ title, leftIconName, rightIconName, leftIconRoute, rightIconRoute }) => {
+const Header = ({ title, leftIconName, rightIconName, leftIconRoute, rightIconRoute, leftIconModule, onLeftPress}) => {
   const router = useRouter();
 
   const handleLeftPress = () => {
@@ -21,12 +21,18 @@ const Header = ({ title, leftIconName, rightIconName, leftIconRoute, rightIconRo
   return (
     <View style={styles.header}>
       {/* Icono izquierdo o espacio vacío */}
+
+      {leftIconModule && (
+        <TouchableOpacity onPress={onLeftPress}>
+          <Icon name={leftIconModule} size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+      )}
+
       {leftIconName && (
         <TouchableOpacity onPress={handleLeftPress}>
           <Icon name={leftIconName} size={24} color="#FFFFFF" />
         </TouchableOpacity>
-      )}
-      {!leftIconName && <View style={styles.iconPlaceholder} />}
+      )}  
 
       {/* Título */}
       <Text style={styles.title}>{title}</Text>
@@ -37,7 +43,6 @@ const Header = ({ title, leftIconName, rightIconName, leftIconRoute, rightIconRo
           <Icon name={rightIconName} size={24} color="#FFFFFF" />
         </TouchableOpacity>
       )}
-      {!rightIconName && <View style={styles.iconPlaceholder} />}
     </View>
   );
 };
@@ -58,9 +63,7 @@ const styles = StyleSheet.create({
     left: '35%',
     transform: [{ translateX: -50 }],
   },
-  iconPlaceholder: {
-    width: 24, // Ancho igual al tamaño del icono para mantener el espacio
-  },
+
 });
 
 export default Header;
