@@ -14,13 +14,13 @@ const SearchMovies = () => {
     <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       {/* Header */}
       <View style={[styles.header, { backgroundColor: Themes.colors.purpleStrong }]}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.push('/search')}>
           <Icon name="arrow-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={styles.titleContainer}>
+        <TouchableOpacity  style={styles.titleContainer}>
           <Text style={styles.title}>Search Movies</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/searchMovieSearch')}>
           <Icon name="search" size={24} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
@@ -30,12 +30,12 @@ const SearchMovies = () => {
         <Text style={styles.browseTitle}>Browse By</Text>
         
         {/* Navegación a cada pantalla específica */}
-        <TouchableOpacity style={styles.optionContainer} onPress={() => router.push('/searchMovies_releaseDate')}>
+        <TouchableOpacity style={styles.optionContainer} onPress={() => router.push('/releaseData_1')}>
           <Text style={styles.optionText}>Release Date</Text>
           <Icon name="chevron-right" size={24} color="#FFFFFF" />
         </TouchableOpacity>
         
-        <TouchableOpacity style={styles.optionContainer} onPress={() => router.push('/searchMovies_genre')}>
+        <TouchableOpacity style={styles.optionContainer} onPress={() => router.push('/searchMovieGenre')}>
           <Text style={styles.optionText}>Genre</Text>
           <Icon name="chevron-right" size={24} color="#FFFFFF" />
         </TouchableOpacity>
