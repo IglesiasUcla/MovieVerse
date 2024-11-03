@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, useColorScheme } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { View, StyleSheet, FlatList, useColorScheme } from 'react-native';
 import { Colors } from '../constants/Colors'; // Asegúrate de tener esta constante
 import { Themes } from '../constants/Themes';
 import { useRouter } from 'expo-router';
+import Header from '../components/Header'; // Importar el componente Header
 
 const movies = Array.from({ length: 18 }, (_, index) => ({ id: index.toString() }));
 
@@ -15,13 +15,11 @@ const SearchMovies_mostPopular = () => {
   return (
     <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.push('/search_movies')}>
-          <Icon name="arrow-back" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
-        <Text style={styles.title}>Most Popular</Text>
-        <View style={{ width: 24 }} /> {/* Espacio para alinear el título centrado */}
-      </View>
+      <Header 
+        title="Most Popular" 
+        leftIconName="arrow-back" 
+        leftIconRoute="/search_movies" // Ruta a la que navegar
+      />
 
       {/* Movie Grid */}
       <FlatList
@@ -40,19 +38,6 @@ const SearchMovies_mostPopular = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start', // Alineación a la izquierda
-    padding: 15,
-    backgroundColor: Themes.colors.purpleStrong, // Morado #6116EC
-  },
-  title: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginLeft: 10, // Espacio a la izquierda del título
   },
   grid: {
     padding: 10,
