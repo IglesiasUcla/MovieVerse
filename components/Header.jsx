@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 
-const Header = ({ title, leftIconName, rightIconName, leftIconRoute, rightIconRoute, leftIconModule, onLeftPress}) => {
+const Header = ({ title, leftIconName, rightIconName, leftIconRoute, rightIconRoute, leftIconModule, onLeftPress }) => {
   const router = useRouter();
 
   const handleLeftPress = () => {
@@ -20,8 +20,7 @@ const Header = ({ title, leftIconName, rightIconName, leftIconRoute, rightIconRo
 
   return (
     <View style={styles.header}>
-      {/* Icono izquierdo o espacio vacío */}
-
+      {/* Icono izquierdo */}
       {leftIconModule && (
         <TouchableOpacity onPress={onLeftPress}>
           <Icon name={leftIconModule} size={24} color="#FFFFFF" />
@@ -32,12 +31,12 @@ const Header = ({ title, leftIconName, rightIconName, leftIconRoute, rightIconRo
         <TouchableOpacity onPress={handleLeftPress}>
           <Icon name={leftIconName} size={24} color="#FFFFFF" />
         </TouchableOpacity>
-      )}  
+      )}
 
       {/* Título */}
       <Text style={styles.title}>{title}</Text>
 
-      {/* Icono derecho o espacio vacío */}
+      {/* Icono derecho */}
       {rightIconName && (
         <TouchableOpacity onPress={handleRightPress}>
           <Icon name={rightIconName} size={24} color="#FFFFFF" />
@@ -59,11 +58,10 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 20,
     fontWeight: 'bold',
-    position: 'absolute',
-    left: '35%',
-    transform: [{ translateX: -50 }],
+    marginLeft: 8, // Ajusta el margen para que esté justo al lado del icono de la flecha
+    flex: 1, // Permite que el título ocupe el espacio disponible entre los iconos
+    textAlign: 'left', // Alinea el texto a la izquierda
   },
-
 });
 
 export default Header;
