@@ -17,7 +17,7 @@ const Search = () => {
                 <Header
                 title="Search"
                 leftIconName="arrow-back"       
-                leftIconRoute={"/welcome"}
+                leftIconRoute={"/homePage"}
         /> 
                 </View>
                 <View style={styles.container_button}>  
