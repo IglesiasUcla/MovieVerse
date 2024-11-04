@@ -8,6 +8,7 @@ import { useRouter } from 'expo-router';
 import Input from '../components/Input.jsx';
 import Button from '../components/Button.jsx';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import CheckButton from '../components/CheckButton.jsx';
 
 const Create_account = () => {
     const route = useRouter();
@@ -39,17 +40,21 @@ const Create_account = () => {
                         guideText="Repeat password"
                         isPassword
                     />
-                    <View style={styles.checkBox}>
+                    <CheckButton
+                        isCheck
+                        textCheck="I accept the terms and privacy policy"
+                    />
+                    {/* <View style={styles.checkBox}>
                         <AntDesign name="checkcircleo" size={20} color={Themes.colors.purpleStrong}/>
                         <Text style={styles.checkText}> I accept the terms and privacy policy</Text>
-                    </View>
+                    </View> */}
                 </View>
                 {/* footer */}
                 <View style={styles.footer}>
                     <Button 
                         title="Log In" 
                         buttonStyle={styles.button} 
-                        onPress={() => { route.push('releaseData_1'); }} 
+                        onPress={() => { route.push('homePage'); }} 
                         backgroundColor={Themes.colors.purpleStrong} 
                         textColor="white" 
                     />
@@ -57,7 +62,7 @@ const Create_account = () => {
                         <Text style={styles.footerText}>
                             Already have an account? 
                         </Text>
-                        <Text style={styles.redirectionText} onPress={() => navigation.navigate('create_account')}>
+                        <Text style={styles.redirectionText} onPress={() => { route.push('login'); }}>
                             Log in
                         </Text>
                     </View>

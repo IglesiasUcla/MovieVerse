@@ -6,19 +6,19 @@ import SearchField from '../components/SearchField.jsx';
 import { useRouter } from 'expo-router';
 import TopBack from '../components/TopBackButton.jsx';
 import { widthPercentage } from '../helpers/commons.js';
+import Header from '../components/Header.jsx';
 
 const releaseData_1990 = () => {
     const route= useRouter();
     return (
         <SafeAreaView style={styles.topBackContent}>
             <StatusBar style='dark'/>
-            <TopBack
-                title="Release Data" 
-                topBackStyle={styles.topBack} 
-                onPress={() => { route.push('releaseData_1'); }} 
-                backgroundColor={Themes.colors.purpleStrong} 
-                textColor="white"
-            />
+            {/* HEADER */}
+            <Header
+                    title="Release Date"
+                    leftIconName="arrow-back"       
+                    leftIconRoute={"/releaseData_1"}
+                />
             <ScrollView style={styles.wrapSearch}>
                 <SearchField
                     title="1999" 

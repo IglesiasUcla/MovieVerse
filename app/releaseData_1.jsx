@@ -18,7 +18,7 @@ const ReleaseData_1 = () => {
                 <Header
                     title="Release Date"
                     leftIconName="arrow-back"       
-                    leftIconRoute={"/welcome"}
+                    leftIconRoute={"/homePage"}
                 />
             </View>
             {/* body with options */}

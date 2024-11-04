@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 48,
         paddingHorizontal: 16,
-        color: Themes.colors.grayMid,
+        color: 'white',
         fontSize: 16,
         backgroundColor:'#333333',
         borderRadius: 20,  
