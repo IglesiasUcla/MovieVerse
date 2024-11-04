@@ -30,6 +30,8 @@ import Search_posts from './search_posts'
 import Post_comments from './post_comments'
 import UserPosts from './userPosts'
 import SearchMovieGenre from './searchMovieGenre'
+import MyPosts from './myPosts'
+import MovieScreen from './movieScreen'
 
 const index = () => {
     // const router= useRouter();
