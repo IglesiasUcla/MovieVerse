@@ -17,7 +17,6 @@ import Profile_Settings from './profile_Settings'
 import TopBack from '../components/TopBackButton'
 import Header from '../components/Header'
 import Search from './search'
-import Create_post from './create_post'
 import Post_tags from './post_tags'
 import TopBar from'../components/TopBar'
 import Input from '../components/Input'
@@ -30,6 +29,8 @@ import Search_posts from './search_posts'
 import Post_comments from './post_comments'
 import UserPosts from './userPosts'
 import SearchMovieGenre from './searchMovieGenre'
+import MyPosts from './myPosts'
+import MovieScreen from './movieScreen'
 
 const index = () => {
     // const router= useRouter();
