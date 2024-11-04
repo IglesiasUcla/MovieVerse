@@ -14,7 +14,7 @@ const Profile_Settings = () => {
             <Header
                 title="Profile Settings"
                 leftIconName="arrow-back"       
-                leftIconRoute={"/welcome"}
+                leftIconRoute={"/profile_user"}
         /> 
         </View> 
     <View style={styles.body}>
@@ -22,14 +22,14 @@ const Profile_Settings = () => {
     <SearchField 
             title="Profile Information" 
             searchStyle={styles.search} 
-            onPress={() => { route.push(''); }} 
+            onPress={() => { route.push('profile_information'); }} 
             backgroundColor={'black'} 
             textColor="white"
             textStyle={styles.text_style} />
     <SearchField 
             title="Change Password" 
             searchStyle={styles.search} 
-            onPress={() => { route.push('Change_password'); }} 
+            onPress={() => { route.push('change_password'); }} 
             backgroundColor={'black'} 
             textColor="white" 
             textStyle={styles.text_style}/>

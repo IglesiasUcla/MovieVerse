@@ -18,7 +18,7 @@ return(
             <Header
                 title="Change Password"
                 leftIconName="arrow-back"       
-                leftIconRoute={"/welcome"}
+                leftIconRoute={"/profile_Settings"}
         />  
             <View style ={styles.container_input}>
                 <Text style={styles.descrip_text}>Your password must be a combination of 6 characters you remember. </Text>
@@ -37,14 +37,14 @@ return(
                     <Button
                         title="Cancel" 
                         buttonStyle={styles.button} 
-                        onPress={() => { route.push(''); }} 
+                        onPress={() => { route.push('profile_Settings'); }} 
                         backgroundColor={Themes.colors.purpleLight} 
                         textColor="white" 
                     />
                     <Button
                         title="Confirm" 
                         buttonStyle={styles.button} 
-                        onPress={() => { route.push(''); }} 
+                        onPress={() => { route.push('profile_user'); }} 
                         backgroundColor={Themes.colors.purpleStrong} 
                         textColor="white" 
                     />

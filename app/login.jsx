@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import { View, Text, TextInput, TouchableOpacity, Pressable, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Themes } from '../constants/Themes';
 import { useRouter } from 'expo-router';
 
 const Login = () => {
-  const route=useRouter();
+  const route = useRouter();
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   return (
@@ -31,24 +31,24 @@ const Login = () => {
         <TextInput
           placeholder="Your password"
           placeholderTextColor="#B0B0B0"
-          secureTextEntry={!passwordVisible}
+          secureTextEntry={!passwordVisible} // Invertimos el valor de passwordVisible aquí
           style={styles.passwordInput}
         />
         <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)} style={styles.iconButton}>
-          <Icon name={passwordVisible ? 'eye-slash' : 'eye'} size={24} color="white" />
+          <Icon name={passwordVisible ? 'eye' : 'eye-slash'} size={24} color="white" />
         </TouchableOpacity>
       </View>
 
       {/* Botón de Log In */}
-      <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('homePage')}>
+      <TouchableOpacity style={styles.loginButton} onPress={() => route.push('homePage')}>
         <Text style={styles.loginButtonText}>Log In</Text>
       </TouchableOpacity>
 
       {/* Texto de recuperación de contraseña */}
       <View style={styles.passwordRecoveryContainer}>
         <Text style={styles.forgotPasswordText}>Forgot your password? </Text>
-        <Pressable>
-          <Text style={styles.passwordRecoveryText} onPress={() => {route.push('change_password')}}>Password Recovery</Text>
+        <Pressable onPress={() => route.push('password_recovery')}>
+          <Text style={styles.passwordRecoveryText}>Password Recovery</Text>
         </Pressable>
       </View>
 
@@ -56,7 +56,9 @@ const Login = () => {
       <View style={styles.footer}>
         <Text style={styles.footerText}>
           Don’t have an account?{' '}
-          <Text style={styles.createAccountText} onPress={() => {route.push ('create_account')}}>Create Account</Text>
+          <Text style={styles.createAccountText} onPress={() => route.push('create_account')}>
+            Create Account
+          </Text>
         </Text>
       </View>
     </View>
@@ -135,11 +137,11 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   forgotPasswordText: {
-    color: '#ffffff', // Texto "Forgot your password?" en blanco
+    color: '#ffffff',
     fontSize: 14,
   },
   passwordRecoveryText: {
-    color: '#ffffff', // "Password Recovery" en blanco y estilo de enlace
+    color: '#ffffff',
     fontSize: 14,
     textDecorationLine: 'underline',
   },
@@ -155,10 +157,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   createAccountText: {
-    color: '#ffffff', // "Create Account" en blanco
+    color: '#ffffff',
     fontWeight: '600',
     textDecorationLine: 'underline',
   },
 });
-
-

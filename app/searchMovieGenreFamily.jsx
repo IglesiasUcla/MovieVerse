@@ -7,7 +7,7 @@ import Header from '../components/Header'; // Importar el componente Header
 
 const movies = Array.from({ length: 18 }, (_, index) => ({ id: index.toString() }));
 
-const SearchMovies_mostPopular = () => {
+const SearchMovieGenreFamily = () => {
   const router = useRouter();
   const colorScheme = useColorScheme();
   const themeColors = Colors[colorScheme] || Colors.light;
@@ -16,9 +16,9 @@ const SearchMovies_mostPopular = () => {
     <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       {/* Header */}
       <Header 
-        title="Most Popular" 
+        title="Family" 
         leftIconName="arrow-back" 
-        leftIconRoute="/search_movies" // Ruta a la que navegar
+        leftIconRoute="/searchMovieGenre" // Ruta a la que navegar
       />
 
       {/* Movie Grid */}
@@ -51,4 +51,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchMovies_mostPopular;
+export default SearchMovieGenreFamily;

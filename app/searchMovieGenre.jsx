@@ -23,7 +23,7 @@ const SearchMovieGenre = () => {
       <Header
         title="Genre"
         leftIconName="arrow-back"       
-        leftIconRoute={"/"} 
+        leftIconRoute={"/search_movies"} 
       />
       <FlatList
         data={genres}
