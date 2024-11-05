@@ -5,6 +5,7 @@ import UserPostContent from '../components/UserPostContent'
 import { Themes } from '../constants/Themes'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { heightPercentage, widthPercentage } from '../helpers/commons'
+import InputSearch from '../components/InputSearch'
 
 const Search_posts = () => {
     return (
@@ -12,18 +13,12 @@ const Search_posts = () => {
             <Header
                 title="Search Posts"
                 leftIconName="arrow-back"       
-                leftIconRoute={"/welcome"}
+                leftIconRoute={"/search"}
             />
-            <View style={styles.inputContainer}>
-                
-                <TextInput style={styles.inputSearch}
-                    placeholder='Search a post'
-                    placeholderTextColor={'#4d4d4d'}
-                    textAlign='center'
-                    fontSize={15}
-                />
-                <Ionicons name="search" size={35} color="white" />
-            </View>
+            <InputSearch
+                textSearch="search post"
+            />
+            
             <Text style={styles.titleTop}>Popular Posts</Text>
             <ScrollView style={styles.postContainer}>
                 <UserPostContent
@@ -70,21 +65,7 @@ const styles = StyleSheet.create({
         fontWeight:Themes.fonts.bold,
         paddingHorizontal:30,
     },
-    inputContainer:{
-        flexDirection:'row',
-        justifyContent:'space-between',
-        paddingVertical:10,
-        paddingHorizontal:20,
-    },
-    inputSearch:{
-        color:'white',
-        alignContent:'center',
-        backgroundColor:'gray',
-        borderRadius:18,
-        width:widthPercentage(75),
-        height:heightPercentage(6),
-        marginRight:20,
-    },
+    
     postContainer:{
         paddingVertical:15,
     }

@@ -6,25 +6,24 @@ import SearchField from '../components/SearchField.jsx';
 import { useRouter } from 'expo-router';
 import TopBack from '../components/TopBackButton.jsx';
 import { widthPercentage } from '../helpers/commons.js';
+import Header from '../components/Header.jsx';
 
 const releaseData_2000 = () => {
     const route= useRouter();
     return (
         <SafeAreaView style={styles.topBackContent}>
             <StatusBar style='dark'/>
-            <TopBack
-                title="Release Data" 
-                topBackStyle={styles.topBack} 
-                onPress={() => { route.push('releaseData_1'); }} 
-                backgroundColor={Themes.colors.purpleStrong} 
-                textColor="white"
+            <Header
+                    title="Release Date"
+                    leftIconName="arrow-back"       
+                    leftIconRoute={"/releaseData_1"}
             />
             <ScrollView style={styles.wrapSearch}>
                 <SearchField
                     title="2009" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -32,7 +31,7 @@ const releaseData_2000 = () => {
                     title="2008" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -40,7 +39,7 @@ const releaseData_2000 = () => {
                     title="2007" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -48,7 +47,7 @@ const releaseData_2000 = () => {
                     title="2006" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -56,7 +55,7 @@ const releaseData_2000 = () => {
                     title="2005" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -64,7 +63,7 @@ const releaseData_2000 = () => {
                     title="2004" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -72,7 +71,7 @@ const releaseData_2000 = () => {
                     title="2003" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -80,7 +79,7 @@ const releaseData_2000 = () => {
                     title="2002" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -88,7 +87,7 @@ const releaseData_2000 = () => {
                     title="2001" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -96,7 +95,7 @@ const releaseData_2000 = () => {
                     title="2000" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -110,7 +109,7 @@ export default releaseData_2000
 const styles = StyleSheet.create({
     topBackContent:{
         flex:1,
-        backgroundColor: 'black',
+        backgroundColor: Themes.colors.screensColor,
     },
     topBack:{
 

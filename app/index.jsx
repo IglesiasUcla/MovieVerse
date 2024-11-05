@@ -32,10 +32,12 @@ import UserPosts from './userPosts'
 import SearchMovieGenre from './searchMovieGenre'
 import MyPosts from './myPosts'
 import MovieScreen from './movieScreen'
+import Other_user_information from './other_user_information'
+import Activity_favorite_movies from './activity_favorite_movies'
 
 const index = () => {
     // const router= useRouter();
-    return <Welcome /> 
+    return <Welcome/> 
 
     // return <Profile_information/>
 
