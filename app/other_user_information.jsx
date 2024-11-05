@@ -6,18 +6,17 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { heightPercentage,widthPercentage } from '../helpers/commons';
 import Button from '../components/Button';
+import Header from '../components/Header';
 
 const Other_user_information = () => {
     return (
         <SafeAreaView style={styles.container}>
             {/* header */}
             <View>
-                <TopBack
-                    title="Username" 
-                    topBackStyle={styles.topBack} 
-                    onPress={() => { route.push('releaseData_1'); }} 
-                    backgroundColor={Themes.colors.purpleStrong} 
-                    textColor="white"
+                <Header
+                    title="Username"
+                    leftIconName="arrow-back"       
+                    leftIconRoute={"/search_user"}
                 />
             </View>
             {/* body */}
@@ -94,7 +93,7 @@ const styles = StyleSheet.create({
     infoLine:{
         width:widthPercentage(60),
         height: heightPercentage(1),
-        backgroundColor: Themes.colors.purpleStrong,
+        backgroundColor: Themes.colors.purpleLight,
         borderRadius:10,
         marginVertical: 5,
     },

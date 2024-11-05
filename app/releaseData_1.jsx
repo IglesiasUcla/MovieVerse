@@ -18,7 +18,7 @@ const ReleaseData_1 = () => {
                 <Header
                     title="Release Date"
                     leftIconName="arrow-back"       
-                    leftIconRoute={"/homePage"}
+                    leftIconRoute={"/search_movies"}
                 />
             </View>
             {/* body with options */}
@@ -26,42 +26,42 @@ const ReleaseData_1 = () => {
                     title="2020" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push('releaseData_2020'); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                 />
                 <SearchField
                     title="2010" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push('releaseData_2010'); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                 />
                 <SearchField
                     title="2000" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push('releaseData_2000'); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                 />
                 <SearchField
                     title="1990" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push('releaseData_1990'); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                 />
                 <SearchField
                     title="1980" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push('releaseData_1980'); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                 />
                 <SearchField
                     title="1970" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push('releaseData_1970'); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                 />
             
@@ -73,7 +73,7 @@ export default ReleaseData_1
 
 const styles = StyleSheet.create({
     content:{
-        backgroundColor:'black',
+        backgroundColor:Themes.colors.screensColor,
         flex: 1,
     },
     contentTop:{
