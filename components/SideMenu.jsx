@@ -1,13 +1,15 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { View, Text, Pressable, StyleSheet, Animated, TouchableOpacity } from 'react-native';
 import { Themes } from '../constants/Themes';
 import { Ionicons } from '@expo/vector-icons';
 import { widthPercentage, heightPercentage } from '../helpers/commons';
 import { useRouter } from 'expo-router';
+import { DiscardChangesPopup } from './Popup';
 
 const SideMenu = ({ visible, onClose, onSelectOption, activeOption = 'Popular' }) => {
   const route = useRouter();
   const slideAnim = useRef(new Animated.Value(-widthPercentage(60))).current;
+  const [showDiscardPopup, setShowDiscardPopup] = useState(false);
 
   useEffect(() => {
     Animated.timing(slideAnim, {
@@ -30,7 +32,7 @@ const SideMenu = ({ visible, onClose, onSelectOption, activeOption = 'Popular' }
       {/* Menú animado */}
       <Animated.View style={[styles.menuContainer, { transform: [{ translateX: slideAnim }] }]}>
         <View style={styles.menuHeader}>
-          <Ionicons name="person-circle" size={80} color="gray" />
+          <Ionicons name="person-circle-outline" size={80} color="#6200EE" />
           <Text style={styles.menuTitle}>Username</Text>
         </View>
 
@@ -39,15 +41,15 @@ const SideMenu = ({ visible, onClose, onSelectOption, activeOption = 'Popular' }
           <Ionicons name="flame" size={24} color={isActive('Popular') ? Themes.colors.purpleLight : 'gray'} style={[styles.icon, isActive('Popular') && styles.activeMenuIcon]} />
           <Text style={[styles.menuItemText, isActive('Popular') && styles.activeMenuItemText]}>Popular</Text>
         </Pressable>
-        <Pressable onPress={() => { route.push(''); onSelectOption('Search'); }} style={[styles.menuItem, isActive('Search') && styles.activeMenuItem]}>
+        <Pressable onPress={() => { route.push('search'); onSelectOption('Search'); }} style={[styles.menuItem, isActive('Search') && styles.activeMenuItem]}>
           <Ionicons name="search" size={24} color={isActive('Search') ? Themes.colors.purpleLight : 'gray'} style={[styles.icon, isActive('Search') && styles.activeMenuIcon]} />
           <Text style={[styles.menuItemText, isActive('Search') && styles.activeMenuItemText]}>Search</Text>
         </Pressable>
-        <Pressable onPress={() => { route.push(''); onSelectOption('Profile'); }} style={[styles.menuItem, isActive('Profile') && styles.activeMenuItem]}>
+        <Pressable onPress={() => { route.push('profile_user'); onSelectOption('Profile'); }} style={[styles.menuItem, isActive('Profile') && styles.activeMenuItem]}>
           <Ionicons name="person" size={24} color={isActive('Profile') ? Themes.colors.purpleLight : 'gray'} style={[styles.icon, isActive('Profile') && styles.activeMenuIcon]} />
           <Text style={[styles.menuItemText, isActive('Profile') && styles.activeMenuItemText]}>Profile</Text>
         </Pressable>
-        <Pressable onPress={() => { route.push(''); onSelectOption('Posts'); }} style={[styles.menuItem, isActive('Posts') && styles.activeMenuItem]}>
+        <Pressable onPress={() => { route.push('myPosts'); onSelectOption('Posts'); }} style={[styles.menuItem, isActive('Posts') && styles.activeMenuItem]}>
           <Ionicons name="document-text" size={24} color={isActive('Posts') ? Themes.colors.purpleLight : 'gray'} style={[styles.icon, isActive('Posts') && styles.activeMenuIcon]} />
           <Text style={[styles.menuItemText, isActive('Posts') && styles.activeMenuItemText]}>Posts</Text>
         </Pressable>
@@ -55,12 +57,25 @@ const SideMenu = ({ visible, onClose, onSelectOption, activeOption = 'Popular' }
           <Ionicons name="heart" size={24} color={isActive('Activity') ? Themes.colors.purpleLight : 'gray'} style={[styles.icon, isActive('Activity') && styles.activeMenuIcon]} />
           <Text style={[styles.menuItemText, isActive('Activity') && styles.activeMenuItemText]}>Activity</Text>
         </Pressable>
-        <Pressable onPress={() => { route.push(''); onSelectOption('Log out'); }} style={[styles.menuItem, isActive('Log out') && styles.activeMenuItem]}>
+        <Pressable onPress={() => setShowDiscardPopup(true)} style={[styles.menuItem, isActive('Log out') && styles.activeMenuItem]}>
           <Ionicons name="log-out" size={24} color={isActive('Log out') ? Themes.colors.purpleLight : 'gray'} style={[styles.icon, isActive('Log out') && styles.activeMenuIcon]} />
           <Text style={[styles.menuItemText, isActive('Log out') && styles.activeMenuItemText]}>Log out</Text>
         </Pressable>
       </Animated.View>
+
+      <DiscardChangesPopup
+        visible={showDiscardPopup}
+        onCancel={() => setShowDiscardPopup(false)} // Cierra el popup al cancelar
+        onDiscard={() => {route.push('welcome')}}
+        title={'Log Out'}
+        text={'Are you sure you want to Log Out?'}
+        purpleButton={'Log Out'}
+      />
+
     </View>
+
+    
+
   );
 };
 
