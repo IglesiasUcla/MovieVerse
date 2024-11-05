@@ -1,28 +1,55 @@
 import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { Themes } from '../constants/Themes';
+import { useRouter } from 'expo-router';
+import RatingFavorite from '../components/RatingFavorite';
+import { Ionicons } from '@expo/vector-icons';
 
 const MovieScreen = ({ navigation }) => {
   const [showFullSynopsis, setShowFullSynopsis] = useState(false);
+  const scrollY = new Animated.Value(0);
+  const route=useRouter()
+
+  const synopsisHeight = useState(new Animated.Value(52))[0];
 
   const toggleSynopsis = () => {
+    Animated.timing(synopsisHeight, {
+      toValue: showFullSynopsis ? 52 : 120, // Cambia la altura
+      duration: 350, // Duración de la animación
+      useNativeDriver: false
+    }).start();
     setShowFullSynopsis(!showFullSynopsis);
   };
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <AntDesign name="arrowleft" size={24} color="white" />
+      </TouchableOpacity>
+
+      <Animated.ScrollView
+          onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: true }
+        )}>
         {/* Imagen de la película como header */}
-        <View style={styles.headerImageContainer}>
-          <Image
+        <Animated.View style={styles.headerImageContainer}>
+          <Animated.Image
             source={{ uri: 'https://image.tmdb.org/t/p/w500/path_to_movie_image.jpg' }}
-            style={styles.headerImage}
+            style={[
+              styles.headerImage,
+              {
+                opacity: scrollY.interpolate({
+                  inputRange: [0, 200],
+                  outputRange: [1, 0],
+                  extrapolate: 'clamp'
+                })
+              }
+            ]}
           />
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <AntDesign name="arrowleft" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
+        </Animated.View>
 
         {/* Información de la película */}
         <View style={styles.movieInfoContainer}>
@@ -31,40 +58,42 @@ const MovieScreen = ({ navigation }) => {
           <Text style={styles.movieDetails}>2018  •  150 min</Text>
 
           <View style={styles.synopsisContainer}>
-            <Text style={styles.synopsisText}>
-              {showFullSynopsis ? 
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac. Morbi id laoreet nisi, ac vulputate arcu. Donec et placerat turpis, viverra condimentum lorem. Maecenas ut quam rhoncus, auctor elit et, tincidunt lectus. Aenean eu facilisis ex..." : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id erat nec elit tempus vehicula..."}
-            </Text>
+          <Animated.View style={{ height: synopsisHeight }}>
+              <Text style={styles.synopsisText}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac.
+              Morbi id laoreet nisi, ac vulputate arcu. Donec et placerat turpis,
+              viverra condimentum lorem. Maecenas ut quam rhoncus, auctor elit et, tincidunt lectus. Aenean eu facilisis ex.
+              </Text>
+            </Animated.View>
             <TouchableOpacity onPress={toggleSynopsis}>
-              <Text style={styles.moreDots}>...</Text>
+              <Text style={styles.moreDots}>•••</Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.divider} />
 
           {/* Rating */}
+          <View style={styles.overallContainer}>
+
           <View style={styles.ratingContainer}>
             <Text style={styles.ratingLabel}>Overall Rating</Text>
-            <Text style={styles.ratingScore}>4.0</Text>
+            <Text style={styles.ratingScore}>4.4</Text>
+
+            <View >
+            <RatingFavorite style={styles.starsContainer}
+                rating={4.4}
+                showFavorite={false}
+                starSize={32}    // Ajusta el tamaño si es necesario
+            />
+            </View>
+
+          </View>
+
+          <View style={styles.rateButtonContainer}>
             <TouchableOpacity style={styles.rateButton}>
               <Text style={styles.rateButtonText}>Rate this movie</Text>
             </TouchableOpacity>
           </View>
-        
-          <View>
-            <View style={styles.starsContainer}>
-            {[...Array(5)].map((_, index) => (
-                <Text
-                    key={index}
-                    style={[
-                        styles.star,
-                        { color: index < 4 ? '#6200EE' : '#C0C0C0' }
-                    ]}
-                >
-                    ✦
-                </Text>
-            ))}
-            </View>
 
           </View>
 
@@ -73,48 +102,93 @@ const MovieScreen = ({ navigation }) => {
           {/* Posts de los usuarios */}
           <Text style={styles.postsTitle}>Posts</Text>
           <View style={styles.postContainer}>
-            <AntDesign name="user" size={24} color="white" />
+          <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
             <View style={styles.postContent}>
-              <Text style={styles.postUser}>User’s post</Text>
-              <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</Text>
+              <View style={styles.usernameContainer}>
+                <Text style={styles.postUser}>User’s post</Text>
+                <View style={styles.userRating}>
+                  <RatingFavorite
+                    rating={5}
+                    isFavorite={true}
+                    starSize={16}    // Ajusta el tamaño si es necesario
+                    iconSize={12}    // Ajusta el tamaño si es necesario
+                  />
+                </View>
+              </View>
+              <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac.</Text>
             </View>
-            <AntDesign name="heart" size={20} color="#6200EE" />
           </View>
           {/* Agrega más posts según sea necesario */}
           <View style={styles.postContainer}>
-            <AntDesign name="user" size={24} color="white" />
+            <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
             <View style={styles.postContent}>
-              <Text style={styles.postUser}>User’s post</Text>
-              <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</Text>
+              <View style={styles.usernameContainer}>
+                <Text style={styles.postUser}>User’s post</Text>
+                <View style={styles.userRating}>
+                  <RatingFavorite
+                    rating={4.5}
+                    isFavorite={true}
+                    starSize={16}    // Ajusta el tamaño si es necesario
+                    iconSize={12}    // Ajusta el tamaño si es necesario
+                  />
+                </View>
+              </View>
+              <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac.</Text>
             </View>
-            <AntDesign name="heart" size={20} color="#6200EE" />
           </View>
           <View style={styles.postContainer}>
-            <AntDesign name="user" size={24} color="white" />
+          <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
             <View style={styles.postContent}>
-              <Text style={styles.postUser}>User’s post</Text>
-              <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</Text>
+              <View style={styles.usernameContainer}>
+                <Text style={styles.postUser}>User’s post</Text>
+                <View style={styles.userRating}>
+                  <RatingFavorite
+                    rating={4.3}
+                    isFavorite={false}
+                    starSize={16}    // Ajusta el tamaño si es necesario
+                    iconSize={12}    // Ajusta el tamaño si es necesario
+                  />
+                </View>
+              </View>
+              <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac.</Text>
             </View>
-            <AntDesign name="heart" size={20} color="#6200EE" />
           </View>
           <View style={styles.postContainer}>
-            <AntDesign name="user" size={24} color="white" />
+          <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
             <View style={styles.postContent}>
-              <Text style={styles.postUser}>User’s post</Text>
-              <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</Text>
+              <View style={styles.usernameContainer}>
+                <Text style={styles.postUser}>User’s post</Text>
+                <View style={styles.userRating}>
+                  <RatingFavorite
+                    rating={4.4}
+                    isFavorite={true}
+                    starSize={16}    // Ajusta el tamaño si es necesario
+                    iconSize={12}    // Ajusta el tamaño si es necesario
+                  />
+                </View>
+              </View>
+              <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac.</Text>
             </View>
-            <AntDesign name="heart" size={20} color="#6200EE" />
           </View>
           <View style={styles.postContainer}>
-            <AntDesign name="user" size={24} color="white" />
+          <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
             <View style={styles.postContent}>
-              <Text style={styles.postUser}>User’s post</Text>
-              <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</Text>
+              <View style={styles.usernameContainer}>
+                <Text style={styles.postUser}>User’s post</Text>
+                <View style={styles.userRating}>
+                  <RatingFavorite
+                    rating={4.6}
+                    isFavorite={true}
+                    starSize={16}    // Ajusta el tamaño si es necesario
+                    iconSize={12}    // Ajusta el tamaño si es necesario
+                  />
+                </View>
+              </View>
+              <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac.</Text>
             </View>
-            <AntDesign name="heart" size={20} color="#6200EE" />
           </View>
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
 
       {/* Botón flotante */}
       <TouchableOpacity style={styles.floatingButton} onPress={() => console.log("Rate this movie")}>
@@ -146,6 +220,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
     borderRadius: 50,
     padding: 5,
+    zIndex: 1000,
   },
   movieInfoContainer: {
     padding: 16,
@@ -169,7 +244,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   synopsisContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
   },
   synopsisText: {
@@ -178,31 +253,36 @@ const styles = StyleSheet.create({
   },
   moreDots: {
     color: '#6200EE',
-    marginLeft: 5,
+    fontSize: 20,
+    marginTop: -8+4,
+    marginBottom: -12+4,
   },
   ratingContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
-    marginTop: 0,
   },
   ratingLabel: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 18,
   },
   ratingScore: {
     color: '#FFF',
     fontSize: 20,
     fontWeight: 'bold',
-    marginLeft: 8,
   },
   starsContainer: {
     flexDirection: 'row',
+    zIndex: 1000,
+  },
+  rateButtonContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
   },
   rateButton: {
     backgroundColor: '#6200EE',
     padding: 10,
     borderRadius: 5,
-    marginLeft: 16+16+16,
   },
   rateButtonText: {
     color: 'white',
@@ -229,6 +309,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
   },
+  userRating: {
+    marginLeft: 8,
+  },
   postText: {
     color: 'white',
     fontSize: 14,
@@ -248,7 +331,19 @@ const styles = StyleSheet.create({
   },
   star: {
     fontSize: 32,
-    marginRight: 4,
+    marginRight: 6,
+  },
+  overallContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  usernameContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  userPic: {
+    marginTop: -32,
   },
 });
 
