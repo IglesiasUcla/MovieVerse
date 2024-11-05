@@ -3,10 +3,12 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Themes } from '../constants/Themes';
 import Header from '../components/Header';
+import { StatusBar } from 'expo-status-bar';
 
 const Profile_user = () => {
   return (
     <View style={styles.container}>
+      <StatusBar style='dark' />
       {/* Header */}
       <View>
         <Header
@@ -49,7 +51,7 @@ const Profile_user = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1A1A1A',
+    backgroundColor: Themes.colors.grayDark,
     justifyContent: 'space-between', // Espacio entre el contenido superior y la parte inferior
   },
   username: {

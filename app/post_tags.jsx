@@ -2,18 +2,19 @@ import React from 'react'
 import Header from "../components/Header";
 import { StyleSheet, View, SafeAreaView, Text} from 'react-native'
 import { StatusBar } from 'expo-status-bar';
+import { Themes } from "../constants/Themes";
 
 
 const Post_tags = () =>{
   return(
     <SafeAreaView style={styles.container}>
-        
+         <StatusBar style='dark'/>
             <View>
-                <StatusBar style='dark'/>
+               
                 <Header
                     title="Add tags"
                     leftIconName="arrow-back"       
-                    leftIconRoute={"/welcome"} /> 
+                    leftIconRoute={"profile_user/"} /> 
             </View>
             <View>
                 <Text style={styles.a_texto}> Enter tags separates by commas</Text>
@@ -28,7 +29,7 @@ export default Post_tags
 
 const styles = StyleSheet.create({
    container: {
-        backgroundColor : 'black',
+        backgroundColor : Themes.colors.grayDark,
         flex : 1,
     },
     a_texto: {
@@ -37,9 +38,12 @@ const styles = StyleSheet.create({
     },
     b_texto:{
          color: '#ffff',
+         
     },
     color:{
-        backgroundColor: '#D3D3D3'
+        backgroundColor: '#D3D3D3',
+        marginTop: 1,
+        height: 1
     }
 
 })

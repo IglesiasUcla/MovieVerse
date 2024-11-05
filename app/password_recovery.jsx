@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, Image } from "react-native";
+import { Text, View, StyleSheet, Image,SafeAreaView } from "react-native";
 import { useRouter } from "expo-router"; // Importar useRouter
 import Button from "../components/Button";
 import { Themes } from "../constants/Themes";
@@ -11,9 +11,9 @@ const Password_recovery = () => {
     const router = useRouter(); // Inicializar el router
 
     return (
-        <ScreamWrapper background='black'>
+        <SafeAreaView style={styles.container}>
             <StatusBar style='dark' />
-            <View style={styles.container}>
+            <View style={styles.body} >
                 <View>
                     <Image style={styles.iconTop} source={require('../assets/images/Star_Icon.png')} resizeMode='contain' />
                 </View>
@@ -41,7 +41,7 @@ const Password_recovery = () => {
                     />
                 </View>
             </View>
-        </ScreamWrapper>
+        </SafeAreaView>
     )
 }
 
@@ -50,7 +50,7 @@ export default Password_recovery;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'black'
+        backgroundColor:Themes.colors.screensColor,
     },
     title: {
         color: '#ffff',
@@ -79,4 +79,8 @@ const styles = StyleSheet.create({
         padding: 25,
         marginLeft: 275,
     },
+    body:{
+        marginVertical: 50,
+    paddingHorizontal: 20,
+    }
 });

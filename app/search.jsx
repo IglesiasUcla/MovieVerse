@@ -10,10 +10,10 @@ const Search = () => {
     const router = useRouter(); 
     return(
         <SafeAreaView style={styles.container}>
-            
-    
+            <StatusBar style='dark'/> 
+
             <View>
-                <StatusBar style='dark'/>
+               
                 <Header
                 title="Search"
                 leftIconName="arrow-back"       
@@ -25,7 +25,7 @@ const Search = () => {
                         <Button
                             title="Movies" 
                             buttonStyle={styles.button} 
-                            onPress={() => { route.push(''); }} 
+                            onPress={() => { router.push('movieScreen'); }} 
                             backgroundColor={Themes.colors.purpleStrong} 
                             textColor="white" 
                         />
@@ -34,7 +34,7 @@ const Search = () => {
                         <Button
                             title="Posts" 
                             buttonStyle={styles.button} 
-                            onPress={() => { route.push(''); }} 
+                            onPress={() => { router.push(''); }} 
                             backgroundColor={Themes.colors.purpleStrong} 
                             textColor="white" 
                         />
@@ -43,7 +43,7 @@ const Search = () => {
                         <Button
                             title="Users" 
                             buttonStyle={styles.button} 
-                            onPress={() => { route.push(''); }} 
+                            onPress={() => { router.push('profile_user'); }} 
                             backgroundColor={Themes.colors.purpleStrong} 
                             textColor="white" 
                         />
@@ -57,7 +57,7 @@ export default Search
 
 const styles = StyleSheet.create({
     container:{
-        backgroundColor : 'black',
+        backgroundColor:Themes.colors.grayDark,
         flex : 1,
 
 },
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     },
     container_button:{
     justifyContent: 'center',
-    marginVertical: 100,
+    marginVertical: 150,
     },
 
 })

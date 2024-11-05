@@ -14,14 +14,8 @@ import MovieReview from './movieReview'
 import Change_password from './change_password'
 import Password_recovery from './password_recovery'
 import Profile_Settings from './profile_Settings'
-import TopBack from '../components/TopBackButton'
-import Header from '../components/Header'
-import SearchField from '../components/SearchField'
 import Search from './search'
 import Post_tags from './post_tags'
-import TopBar from'../components/TopBar'
-import Input from '../components/Input'
-import Search_user from './search_user'
 import CreatePost_review from './createPost_review'
 import SearchMovieSearch from './searchMovieSearch'
 import PasswordRecovery2 from './passwordRecovery2'
@@ -32,10 +26,12 @@ import UserPosts from './userPosts'
 import SearchMovieGenre from './searchMovieGenre'
 import MyPosts from './myPosts'
 import MovieScreen from './movieScreen'
+import Search_user from './search_user'
+
 
 const index = () => {
     // const router= useRouter();
-    return <Welcome /> 
+    return <Search_user/> 
 
     // return <Profile_information/>
 
