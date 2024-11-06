@@ -27,6 +27,26 @@ const DiscardChangesPopup = ({ visible, onCancel, onDiscard,
   </Modal>
 );
 
+const DiscardChangesPopup1 = ({ visible, onDiscard,
+  title = 'Discard Changes', 
+  text = 'Are you sure you want to Discard Changes?', 
+  purpleButton = 'Discard', 
+ }) => (
+ <Modal transparent visible={visible} animationType="fade">
+   <View style={styles.overlay}>
+     <View style={styles.popupContainer}>
+       <Text style={styles.title}>{title}</Text>
+       <Text style={styles.message}>{text}</Text>
+       <View style={styles.buttonContainer}>
+         <TouchableOpacity onPress={onDiscard} style={styles.discardButton}>
+           <Text style={styles.discardText}>{purpleButton}</Text>
+         </TouchableOpacity>
+       </View>
+     </View>
+   </View>
+ </Modal>
+);
+
 // Pop-up de selección de foto
 const PhotoSelectionPopup = ({ visible, onClose, onTakePhoto, onSelectPhoto }) => (
   <Modal transparent visible={visible} animationType="fade">
@@ -119,4 +139,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { DiscardChangesPopup, PhotoSelectionPopup };
+export { DiscardChangesPopup, DiscardChangesPopup1, PhotoSelectionPopup };

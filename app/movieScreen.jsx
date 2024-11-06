@@ -283,6 +283,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#6200EE',
     padding: 10,
     borderRadius: 5,
+    marginLeft: 16,
   },
   rateButtonText: {
     color: 'white',

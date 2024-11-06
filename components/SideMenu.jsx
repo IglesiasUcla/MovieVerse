@@ -51,7 +51,7 @@ const SideMenu = ({ visible, onClose, onSelectOption, activeOption = 'Popular' }
         </Pressable>
         <Pressable onPress={() => { route.push('myPosts'); onSelectOption('Posts'); }} style={[styles.menuItem, isActive('Posts') && styles.activeMenuItem]}>
           <Ionicons name="document-text" size={24} color={isActive('Posts') ? Themes.colors.purpleLight : 'gray'} style={[styles.icon, isActive('Posts') && styles.activeMenuIcon]} />
-          <Text style={[styles.menuItemText, isActive('Posts') && styles.activeMenuItemText]}>Posts</Text>
+          <Text style={[styles.menuItemText, isActive('Posts') && styles.activeMenuItemText]}>My Posts</Text>
         </Pressable>
         <Pressable onPress={() => { route.push('activity_liked_posts'); onSelectOption('Activity'); }} style={[styles.menuItem, isActive('Activity') && styles.activeMenuItem]}>
           <Ionicons name="heart" size={24} color={isActive('Activity') ? Themes.colors.purpleLight : 'gray'} style={[styles.icon, isActive('Activity') && styles.activeMenuIcon]} />
@@ -59,7 +59,7 @@ const SideMenu = ({ visible, onClose, onSelectOption, activeOption = 'Popular' }
         </Pressable>
         <Pressable onPress={() => setShowDiscardPopup(true)} style={[styles.menuItem, isActive('Log out') && styles.activeMenuItem]}>
           <Ionicons name="log-out" size={24} color={isActive('Log out') ? Themes.colors.purpleLight : 'gray'} style={[styles.icon, isActive('Log out') && styles.activeMenuIcon]} />
-          <Text style={[styles.menuItemText, isActive('Log out') && styles.activeMenuItemText]}>Log out</Text>
+          <Text style={[styles.menuItemText, isActive('Log out') && styles.activeMenuItemText]}>Log Out</Text>
         </Pressable>
       </Animated.View>
 
@@ -71,11 +71,7 @@ const SideMenu = ({ visible, onClose, onSelectOption, activeOption = 'Popular' }
         text={'Are you sure you want to Log Out?'}
         purpleButton={'Log Out'}
       />
-
-    </View>
-
-    
-
+    </View>   
   );
 };
 

@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from '../components/Header';
+import { useRouter } from 'expo-router';
 
 const SearchMovieSearch = () => {
   const [search, setSearch] = useState('');
+  const route = useRouter();
 
   const movies = [
     { id: 1, title: 'Movie A', year: '2019', poster: 'https://link-to-poster1.com' },
@@ -24,7 +26,7 @@ const SearchMovieSearch = () => {
       <Header
         title="Search a movie"
         leftIconName="arrow-back"       
-        leftIconRoute={"/"}
+        leftIconRoute={"search_movies"}
     />
 
       {/* Search Input */}
@@ -42,7 +44,7 @@ const SearchMovieSearch = () => {
       {/* Movie List */}
       <ScrollView contentContainerStyle={styles.movieList}>
         {movies.map((movie) => (
-          <TouchableOpacity key={movie.id} style={styles.movieItem}>
+          <TouchableOpacity key={movie.id} style={styles.movieItem} onPress={() => { route.push('movieScreen')}} >
             <Image source={{ uri: movie.poster }} style={styles.poster} />
             <View style={styles.movieInfo}>
               <Text style={styles.movieTitle}>{movie.title}</Text>

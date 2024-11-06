@@ -4,8 +4,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from '../components/Header';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Themes } from '../constants/Themes';
-import { DiscardChangesPopup, PhotoSelectionPopup } from '../components/Popup';
+import { DiscardChangesPopup, DiscardChangesPopup1, PhotoSelectionPopup } from '../components/Popup';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 const MovieReview = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
@@ -14,8 +15,10 @@ const MovieReview = ({ navigation }) => {
   const [favorite, setFavorite] = useState(false);
   const [image, setImage] = useState(null);
   const [showDiscardPopup, setShowDiscardPopup] = useState(false);
+  const [showDiscardPopup1, setShowDiscardPopup1] = useState(false);
   const [showPhotoSelectionPopup, setShowPhotoSelectionPopup] = useState(false);
   const [spoiler, setSpoiler] = useState(false);
+  const route = useRouter();
 
   const handleRatingPress = (index) => {
     setRating(index + 1);
@@ -24,15 +27,20 @@ const MovieReview = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <Header leftIconModule="close" title="I watched"  rightIconName="check" onLeftPress={() => setShowDiscardPopup(true)}  />
+      <Header leftIconModule="close" title="I watched"  rightIconModule="check" onLeftPress={() => setShowDiscardPopup(true)} onRightPress={() => setShowDiscardPopup1(true)} />
       
       <DiscardChangesPopup
         visible={showDiscardPopup}
         onCancel={() => setShowDiscardPopup(false)} // Cierra el popup al cancelar
-        onDiscard={() => {
-        setShowDiscardPopup(false);
-        navigation.goBack(); // Navega hacia atrás si se descartan los cambios
-         }}
+        onDiscard={() => {route.push('homePage')}}
+      />
+
+      <DiscardChangesPopup1
+        visible={showDiscardPopup1}
+        onDiscard={() => {route.push('homePage')}}
+        title={'Success'}
+        text={'Your post has been published and added to my posts'}
+        purpleButton={'Okay'}
       />
 
       {/* Movie Info */}
@@ -90,7 +98,7 @@ const MovieReview = ({ navigation }) => {
       <View style={styles.divider} />
 
       {/* Review Input (Navigation to review screen) */}
-      <TouchableOpacity onPress={() => navigation.navigate('ReviewScreen')}>
+      <TouchableOpacity onPress={()=>{route.push('createPost_review')}}>
         <View style={styles.textContainerReview}>
           <Text style={styles.placeholderText}>Add review...</Text>
         </View>
@@ -99,7 +107,7 @@ const MovieReview = ({ navigation }) => {
       <View style={styles.divider} />
 
       {/* Tags Input (Navigation to tags screen) */}
-      <TouchableOpacity onPress={() => navigation.navigate('TagsScreen')}>
+      <TouchableOpacity onPress={()=>{route.push('post_tags')}}>
         <View style={styles.textContainer}>
           <Text style={styles.placeholderText}>Add tags...</Text>
         </View>
