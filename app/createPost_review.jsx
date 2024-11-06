@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, useColorScheme } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, useColorScheme } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Colors } from '../constants/Colors';
 import { Themes } from '../constants/Themes';
@@ -9,6 +9,7 @@ const CreatePost_review = () => {
   const router = useRouter();
   const colorScheme = useColorScheme();
   const themeColors = Colors[colorScheme] || Colors.light;
+  const [reviewText, setReviewText] = useState('');
 
   return (
     <View style={[styles.container, { backgroundColor: themeColors.background }]}>
@@ -22,13 +23,15 @@ const CreatePost_review = () => {
 
       {/* Review Content */}
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <Text style={[styles.reviewText, { color: themeColors.text }]}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id erat nec elit tempus vehicula. 
-          Pellentesque fringilla nisi id erat tristique elementum. Ut et facilisis mi. Quisque aliquam libero ac libero 
-          fringilla blandit vel pellentesque sapien. Morbi feugiat erat a turpis fringilla, at varius ante condimentum. 
-          Mauris quis ultricies diam. Etiam in hendrerit odio. Vivamus cursus lacus quis purus laoreet, eu tristique nisl 
-          sollicitudin. Fusce velit magna, mollis eu mi nec, porta viverra risus. Sed a metus cursus lectus faucibus eleifend.
-        </Text>
+        <TextInput
+          style={[styles.reviewText, { color: themeColors.text }]}
+          multiline
+          numberOfLines={6}
+          placeholder="Write your review here..."
+          placeholderTextColor={themeColors.placeholder}
+          value={reviewText}
+          onChangeText={setReviewText}
+        />
       </ScrollView>
     </View>
   );
@@ -54,6 +57,10 @@ const styles = StyleSheet.create({
   reviewText: {
     fontSize: 16,
     lineHeight: 24,
+    padding: 10,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
   },
 });
 
