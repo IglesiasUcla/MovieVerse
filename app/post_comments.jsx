@@ -12,13 +12,13 @@ const Post_comments = () => {
             <Header
                 title="User's Posts"
                 leftIconName="arrow-back"       
-                leftIconRoute={"/welcome"}
+                leftIconRoute={"search_posts"}
             />
             {/* tabs button */}
             <View style={styles.buttomContainer}>
                 <View>
                     <Pressable 
-                        onPress={() => { route.push(''); }}
+                        onPress={() => route.push('post')}
                     >
                         <Text style={styles.label}>Post</Text>
                     </Pressable>
@@ -26,7 +26,7 @@ const Post_comments = () => {
                 </View>
                 <View style={styles.labelContent}>
                     <Pressable 
-                            onPress={() => { route.push(''); }}
+                            onPress={() => console.log('pressed') }
                     >
                             <Text style={styles.label}>Comments</Text>
                     </Pressable>
@@ -36,6 +36,10 @@ const Post_comments = () => {
                 <PostComment
                     userName="userName"
                     postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
+                />
+                <PostComment
+                    userName="userName"
+                    postReview="Lorem ipsum sit amet consectetur adipisicing elit"
                 />
                 <PostComment
                     userName="userName"

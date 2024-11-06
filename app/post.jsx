@@ -25,7 +25,7 @@ export default function Post() {
 
             <View style={[styles.tabContainer, { backgroundColor: Themes.colors.purpleStrong }]}>
                 {/* Botón de "Post" (activo, no navega) */}
-                <TouchableOpacity onPress={() => router.push('/user_post')}>
+                <TouchableOpacity onPress={() => router.push('/post')}>
                     <Text style={styles.tabActive}>Post</Text>
                 </TouchableOpacity>
                 
