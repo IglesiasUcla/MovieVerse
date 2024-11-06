@@ -63,7 +63,7 @@ const MyPosts = ({ navigation }) => {
       <Header
         leftIconName="arrow-back"
         title="My posts"
-        leftIconRoute={"/"}
+        leftIconRoute={"/homePage"}
       />
 
         <View style={styles.topDivider} />
