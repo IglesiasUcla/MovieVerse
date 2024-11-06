@@ -7,14 +7,16 @@ import Header from "../components/Header";
 import Input from "../components/Input";
 import ScreamWrapper from "../components/ScreenWrapper";
 import { StatusBar } from 'expo-status-bar';
+import { theme } from "react-native-tailwindcss";
 
 
 const Change_password = () =>{
     const route = useRouter();
 return(
-    <ScreamWrapper background={'black'}>
+    <SafeAreaView style={styles.container}>
         <StatusBar style='dark'/>
          <View>
+            
             <Header
                 title="Change Password"
                 leftIconName="arrow-back"       
@@ -22,6 +24,10 @@ return(
         />  
             <View style ={styles.container_input}>
                 <Text style={styles.descrip_text}>Your password must be a combination of 6 characters you remember. </Text>
+                <Input 
+                        titleField="Current Password"
+                        guideText="Your Password"
+                        isPassword/>
                     <Input
                         titleField="New Password"
                         guideText="New Password"
@@ -52,7 +58,7 @@ return(
         
         </View>
         
-    </ScreamWrapper>
+    </SafeAreaView>
     );
 };
 
@@ -61,7 +67,7 @@ export default Change_password
 const styles = StyleSheet.create ({
 container :{
     flex: 1,
-    backgroundColor : 'black', 
+    backgroundColor : Themes.colors.screensColor,
  },
 descrip_text:{
     color: '#ffff',
@@ -71,17 +77,20 @@ descrip_text:{
 },
 container_button:{
     flexDirection: 'row',
-    paddingHorizontal: 20,
+    paddingHorizontal: 5,
     marginVertical: 20,
 },
 button:{
     marginTop: 10,
     width: '40%',           // ancho del boton
-    borderRadius: 10,
-    marginHorizontal: 20,
+    borderRadius: 15,
+    marginHorizontal: 22,
 },
 container_input: {
     marginVertical: 25,
+    paddingHorizontal: 20,
+
 }
+
 
 })
