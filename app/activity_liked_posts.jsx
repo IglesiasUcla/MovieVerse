@@ -12,7 +12,9 @@ const Activity_liked_posts = () => {
   // Función para cambiar de pestaña y navegar a la pantalla correspondiente
   const onTabChange = (tab) => {
     setCurrentTab(tab);
-  if (tab === 'activity_favorite_movies') {
+    if (tab === 'activity_liked_posts') {
+      router.push('/activity_liked_posts'); // Navega a la pantalla de Liked Posts
+    } else if (tab === 'activity_favorite_movies') {
       router.push('/activity_favorite_movies'); // Navega a la pantalla de Favorite Movies
     }
   };
