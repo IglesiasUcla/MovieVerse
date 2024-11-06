@@ -3,8 +3,10 @@ import React from 'react'
 import { Themes } from '../constants/Themes'
 import Header from '../components/Header'
 import FavoriteMovieContent from '../components/FavoriteMovieContent'
+import { useRouter } from 'expo-router'
 
 const Activity_favorite_movies = () => {
+    const route= useRouter();
     return (
         <View style={styles.container}>
             <Header
@@ -16,7 +18,7 @@ const Activity_favorite_movies = () => {
             <View style={styles.buttomContainer}>
                 <View>
                     <Pressable 
-                        onPress={() => { route.push(''); }}
+                        onPress={() => { route.push('activity_liked_posts'); }}
                     >
                         <Text style={styles.label}>Liked Post</Text>
                     </Pressable>
@@ -24,7 +26,7 @@ const Activity_favorite_movies = () => {
                 </View>
                 <View style={styles.labelContent}>
                     <Pressable 
-                            onPress={() => { route.push(''); }}
+                            // onPress={() => { route.push(''); }}
                     >
                             <Text style={styles.label}>Favorite Movies</Text>
                     </Pressable>

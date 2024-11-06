@@ -7,7 +7,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import RatingFavorite from './RatingFavorite';
 
-const UserPostContent = ({movieTitle,movieYear,userName,postReview,ratingValue}) => {
+const UserPostSpoilers = ({movieTitle,movieYear,userName,ratingValue}) => {
     return (
         <View style={styles.containerPost}>
                     <View style={styles.postHeader}>
@@ -30,21 +30,27 @@ const UserPostContent = ({movieTitle,movieYear,userName,postReview,ratingValue})
                         <View style={styles.movieCover}>
                             {/* <FontAwesome6 name="image" size={90} color={Themes.colors.purpleStrong} /> */}
                         </View>
-                        <Text style={styles.postDescription}>
-                            {postReview}
-                        </Text>
+                        {/* spoiler section */}
+                        <View style={styles.spoilerContainer}>
+                            <View style={styles.spoilerIcon}>
+                                <FontAwesome6 name="face-surprise" size={60} color={Themes.colors.purpleStrong} />
+                            </View>
+                            <Text style={styles.postDescription}>
+                                Post with Spoiler
+                            </Text>
+                        </View>
                     </View>
         </View>
     )
 }
 
-export default UserPostContent;
+export default UserPostSpoilers;
 
 const styles = StyleSheet.create({
     containerPost:{
         borderWidth:1,
         borderBottomColor:Themes.colors.purpleDetail,
-        paddingTop:10,
+        paddingTop:5,
         paddingBottom:10,
     },
     postHeader:{
@@ -102,13 +108,24 @@ const styles = StyleSheet.create({
     },
     postDescription:{
         color:'white',
-        fontSize:15,
+        fontSize:18,
         fontWeight:Themes.fonts.minimus,
         width: '60%',
-        textAlign:'justify',
+        textAlign:'center',
     },
     starsContainer: {
         flexDirection: 'row',
         zIndex: 1000,
+    },
+    spoilerContainer:{
+        flexDirection:'column',
+        justifyContent:'center',
+        alignItems:'center',
+        width:'60%',
+        paddingVertical:10,
+    },
+    spoilerIcon:{
+        marginVertical:10,
+        marginBottom:20,
     },
 })

@@ -6,6 +6,7 @@ import { Themes } from '../constants/Themes'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { heightPercentage, widthPercentage } from '../helpers/commons'
 import InputSearch from '../components/InputSearch'
+import UserPostSpoilers from '../components/UserPostSpoilers'
 
 const Search_posts = () => {
     return (
@@ -21,30 +22,54 @@ const Search_posts = () => {
             
             <Text style={styles.titleTop}>Popular Posts</Text>
             <ScrollView style={styles.postContainer}>
+                {/* normal post */}
                 <UserPostContent
                     movieTitle="Movie title"
+                    movieYear="2020"
+                    ratingValue={5}
                     userName="userName"
                     postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
                 />
                 <UserPostContent
                     movieTitle="Movie title"
+                    movieYear="2020"
+                    ratingValue={3}
                     userName="userName"
                     postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
                 />
                 <UserPostContent
                     movieTitle="Movie title"
+                    movieYear="2020"
+                    ratingValue={1}
+                    userName="userName"
+                    postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
+                />
+                {/* post with spoiler */}
+                <UserPostSpoilers
+                    movieTitle="Movie title"
+                    movieYear="2020"
+                    ratingValue={5}
+                    userName="userName"
+                />
+                <UserPostContent
+                    movieTitle="Movie title"
+                    movieYear="2020"
+                    ratingValue={4}
                     userName="userName"
                     postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
                 />
                 <UserPostContent
                     movieTitle="Movie title"
+                    movieYear="2020"
+                    ratingValue={2}
                     userName="userName"
                     postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
                 />
-                <UserPostContent
+                <UserPostSpoilers
                     movieTitle="Movie title"
+                    movieYear="2020"
+                    ratingValue={2}
                     userName="userName"
-                    postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
                 />
             </ScrollView>
         
