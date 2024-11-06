@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const { fonts } = Themes;
 
-export default function UserPost() {
+export default function Post() {
     const router = useRouter();
     const colorScheme = useColorScheme();
     const colors = Colors[colorScheme]; // Selecciona colores dependiendo del modo (light o dark)
