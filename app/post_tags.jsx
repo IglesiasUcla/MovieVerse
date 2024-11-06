@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Header from "../components/Header";
+import Header from "../components/Header";  // Importa el Header
 import { StyleSheet, View, SafeAreaView, Text, TextInput, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Themes } from "../constants/Themes";
@@ -33,13 +33,12 @@ const Post_tags = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style='dark' />
-      <View>
-        <Header
-          title="Add tags"
-          leftIconName="arrow-back"
-          leftIconRoute={"movieReview/"} 
-        />
-      </View>
+      {/* Aquí está el Header con los estilos correctamente aplicados */}
+      <Header
+        title="Add tags"
+        leftIconName="arrow-back"
+        leftIconRoute="movieReview"  // Redirige a movieReview cuando se hace clic en el icono de retroceso
+      />
       <View>
         <Text style={styles.a_texto}>Enter tags separated by commas</Text>
         <Text style={styles.infoText}>Remember to start each tag with a <Text style={styles.hashtag}>#</Text></Text>
@@ -81,10 +80,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   infoText: {
-    color: 'white', // Color blanco
+    color: 'white',  // Color blanco
     marginVertical: 5,
     fontSize: 16,  // Tamaño de letra más grande
-    fontWeight: 'bold', // Para hacerlo más destacado
+    fontWeight: 'bold',  // Para hacerlo más destacado
   },
   hashtag: {
     color: Themes.colors.purpleStrong,
