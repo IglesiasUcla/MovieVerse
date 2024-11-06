@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
 import React from 'react'
 import { Themes } from '../constants/Themes'
 import { heightPercentage, widthPercentage } from '../helpers/commons'
@@ -6,10 +6,14 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import RatingFavorite from './RatingFavorite';
+import { useRouter } from 'expo-router';
 
 const UserPostSpoilers = ({movieTitle,movieYear,userName,ratingValue}) => {
+    const route= useRouter();
     return (
-        <View style={styles.containerPost}>
+        <Pressable 
+        style={styles.containerPost}
+        onPress={()=>route.push('post')}>
                     <View style={styles.postHeader}>
                         <Text style={styles.movieTitle}> {movieTitle}</Text>
                         <Text style={styles.movieYear}>{movieYear}</Text>
@@ -40,7 +44,7 @@ const UserPostSpoilers = ({movieTitle,movieYear,userName,ratingValue}) => {
                             </Text>
                         </View>
                     </View>
-        </View>
+        </Pressable>
     )
 }
 
