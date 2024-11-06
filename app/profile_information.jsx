@@ -68,24 +68,30 @@ const Profile_information = () => {
                     <Text style={styles.footerAvatarText}>Avatar</Text>
                     <View style={styles.footerItems}>
                         <View style={styles.avatarIcon}>
-                            <FontAwesome5 name="user-circle" size={100} color={Themes.colors.purpleStrong} />
+                            <TouchableOpacity>
+                                <FontAwesome5 name="user-circle" size={100} color={Themes.colors.purpleStrong} />
+                            </TouchableOpacity>
                         </View>
                         <View style={styles.iconsContainer}>
-                            <FontAwesome style={styles.icons} name="cloud-upload" size={30} color={Themes.colors.purpleStrong} />
+                            <TouchableOpacity>
+                                <FontAwesome style={styles.icons} name="cloud-upload" size={30} color={Themes.colors.purpleStrong} />
+                            </TouchableOpacity>
+                            <TouchableOpacity>
                             <AntDesign style={styles.icons} name="delete" size={30} color={Themes.colors.purpleStrong} />
+                            </TouchableOpacity>
                         </View>
                         <View style={styles.containerButton}>
                             <Button
                                 title="Cancel" 
                                 buttonStyle={styles.button} 
-                                onPress={() => { route.push(); }} 
+                                onPress={console.log('cancel')} 
                                 backgroundColor={Themes.colors.purpleLight} 
                                 textColor="white" 
                             />
                             <Button
                                 title="Save" 
                                 buttonStyle={styles.button} 
-                                onPress={() => { route.push(); }} 
+                                onPress={console.log('save')} 
                                 backgroundColor={Themes.colors.purpleStrong} 
                                 textColor="white" 
                             />
