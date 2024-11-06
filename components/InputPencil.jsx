@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
         width:'60%',
         // paddingLeft:widthPercentage(40),
         textAlign:'auto',
+        color:'white',
         
     },
 })
