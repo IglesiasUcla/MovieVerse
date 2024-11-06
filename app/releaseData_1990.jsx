@@ -24,7 +24,7 @@ const releaseData_1990 = () => {
                     title="1999" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -32,7 +32,7 @@ const releaseData_1990 = () => {
                     title="1998" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -40,7 +40,7 @@ const releaseData_1990 = () => {
                     title="1997" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -48,7 +48,7 @@ const releaseData_1990 = () => {
                     title="1996" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -56,7 +56,7 @@ const releaseData_1990 = () => {
                     title="1995" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -64,7 +64,7 @@ const releaseData_1990 = () => {
                     title="1994" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -72,7 +72,7 @@ const releaseData_1990 = () => {
                     title="1993" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -80,7 +80,7 @@ const releaseData_1990 = () => {
                     title="1992" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -88,7 +88,7 @@ const releaseData_1990 = () => {
                     title="1991" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -96,7 +96,7 @@ const releaseData_1990 = () => {
                     title="1990" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -110,7 +110,7 @@ export default releaseData_1990
 const styles = StyleSheet.create({
     topBackContent:{
         flex:1,
-        backgroundColor: 'black',
+        backgroundColor: Themes.colors.screensColor,
     },
     topBack:{
 

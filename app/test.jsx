@@ -5,6 +5,7 @@ import { widthPercentage } from '../helpers/commons';
 import Button from '../components/Button.jsx';
 import SideMenu from '../components/SideMenu.jsx';
 import TopBack from '../components/TopBackButton.jsx';
+import RatingFavorite from '../components/RatingFavorite.jsx';
 
 const Test = () => {
     const [menuVisible, setMenuVisible] = useState(false);
@@ -34,6 +35,12 @@ const Test = () => {
                     console.log('Selected option:', option);
                     setMenuVisible(false);
                 }}
+            />
+            <RatingFavorite
+                rating={4}
+                isFavorite={true}
+                starSize={64}    // Ajusta el tamaño si es necesario
+                iconSize={12}    // Ajusta el tamaño si es necesario
             />
         </View>
     );

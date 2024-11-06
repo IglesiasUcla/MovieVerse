@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from '../components/Header';
 import { Themes } from '../constants/Themes';
 import { Ionicons } from '@expo/vector-icons';
+import RatingFavorite from '../components/RatingFavorite';
 
 const MyPosts = ({ navigation }) => {
   const posts = [
@@ -81,18 +81,11 @@ const MyPosts = ({ navigation }) => {
             
             {/* Rating and Favorite Icons */}
             <View style={styles.ratingFavoriteContainer}>
-              <View style={styles.starContainer}>
-                {[...Array(5)].map((_, starIndex) => (
-                  <Text key={starIndex} style={[styles.star, { color: starIndex < post.rating ? '#6116ec' : 'gray' }]}>
-                    ✦
-                  </Text>
-                ))}
-              </View>
-              <Icon
-                name="favorite"
-                size={12}
-                color={post.isFavorite ? '#b39ddb' : 'gray'}
-                style={styles.favoriteIcon}
+              <RatingFavorite
+                rating={post.rating}
+                isFavorite={post.isFavorite}
+                starSize={14} 
+                iconSize={12} 
               />
             </View>
 
@@ -140,7 +133,7 @@ const styles = StyleSheet.create({
   ratingFavoriteContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+
   },
   starContainer: {
     flexDirection: 'row',
@@ -160,7 +153,9 @@ const styles = StyleSheet.create({
   poster: {
     width: 60,
     height: 90,
-    marginRight: 16,
+    marginRight: 8,
+    marginLeft: 8,
+    backgroundColor: 'gray',
   },
   description: {
     color: '#AAA',

@@ -1,10 +1,12 @@
-import { StyleSheet, Text, View,ScrollView} from 'react-native'
+import { StyleSheet, Text, View,ScrollView,Pressable} from 'react-native'
 import React from 'react'
 import { Themes } from '../constants/Themes'
 import Header from '../components/Header'
 import PostComment from '../components/PostComment'
+import { useRouter } from 'expo-router'
 
 const Post_comments = () => {
+    const route = useRouter();
     return (
         <View style={styles.container}>
             <Header
@@ -12,14 +14,24 @@ const Post_comments = () => {
                 leftIconName="arrow-back"       
                 leftIconRoute={"/welcome"}
             />
+            {/* tabs button */}
             <View style={styles.buttomContainer}>
                 <View>
-                    <Text style={styles.label}>Post</Text>
+                    <Pressable 
+                        onPress={() => { route.push(''); }}
+                    >
+                        <Text style={styles.label}>Post</Text>
+                    </Pressable>
+                    
                 </View>
                 <View style={styles.labelContent}>
-                    <Text style={styles.label}> Comments</Text>
+                    <Pressable 
+                            onPress={() => { route.push(''); }}
+                    >
+                            <Text style={styles.label}>Comments</Text>
+                    </Pressable>
                 </View>
-            </View>
+            </View> 
             <ScrollView style={styles.commentsContainer}>
                 <PostComment
                     userName="userName"

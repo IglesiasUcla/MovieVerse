@@ -4,18 +4,22 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Themes } from '../constants/Themes';
 
 // Pop-up de confirmación de descarte
-const DiscardChangesPopup = ({ visible, onCancel, onDiscard }) => (
+const DiscardChangesPopup = ({ visible, onCancel, onDiscard,
+   title = 'Discard Changes', 
+   text = 'Are you sure you want to Discard Changes?', 
+   purpleButton = 'Discard', 
+  }) => (
   <Modal transparent visible={visible} animationType="fade">
     <View style={styles.overlay}>
       <View style={styles.popupContainer}>
-        <Text style={styles.title}>Discard changes</Text>
-        <Text style={styles.message}>Are you sure? Changes will be lost.</Text>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.message}>{text}</Text>
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={onCancel} style={styles.cancelButton}>
             <Text style={styles.cancelText}>Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={onDiscard} style={styles.discardButton}>
-            <Text style={styles.discardText}>Discard</Text>
+            <Text style={styles.discardText}>{purpleButton}</Text>
           </TouchableOpacity>
         </View>
       </View>

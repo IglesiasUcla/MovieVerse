@@ -9,6 +9,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import InputPencil from '../components/InputPencil';
 
 const Profile_information = () => {
     return (
@@ -18,7 +19,7 @@ const Profile_information = () => {
                 <Header
                     title="Profile Information"
                     leftIconName="arrow-back"       
-                    leftIconRoute={"/welcome"}
+                    leftIconRoute={"/profile_Settings"}
                 />
             </View>
             <View style={styles.containerWrapper}>
@@ -26,61 +27,26 @@ const Profile_information = () => {
                     <Text style={styles.titleBody}> Signed in as user </Text>
                 </View>
                 <View style={styles.containerBody}>
-                    <View style={styles.fieldBody}>
-                        <Text style={styles.textDescription}>Name</Text>
-                        <View style={styles.textField}>
-                            <TextInput 
-                                style={styles.dataField} 
-                                placeholder=" your name"
-                                placeholderTextColor={Themes.colors.grayMid}
-                            />
-                            <MaterialCommunityIcons name="pencil-outline" size={24} color={Themes.colors.purpleStrong} />
-                        </View>
-                    </View>
-                    <View style={styles.fieldBody}>
-                        <Text style={styles.textDescription}>Phone</Text>
-                        <View style={styles.textField}>
-                            <TextInput 
-                                style={styles.dataField} 
-                                placeholder="your phone number"
-                                placeholderTextColor={Themes.colors.grayMid}
-                            />
-                            <MaterialCommunityIcons name="pencil-outline" size={24} color={Themes.colors.purpleStrong} />
-                        </View>
-                    </View>
-                    <View style={styles.fieldBody}>
-                        <Text style={styles.textDescription}>Email</Text>
-                        <View style={styles.textField}>
-                            <TextInput 
-                                style={styles.dataField} 
-                                placeholder="your email"
-                                placeholderTextColor={Themes.colors.grayMid}
-                            />
-                            <MaterialCommunityIcons name="pencil-outline" size={24} color={Themes.colors.purpleStrong} />
-                        </View>
-                    </View>
-                    <View style={styles.fieldBody}>
-                        <Text style={styles.textDescription}>Address</Text>
-                        <View style={styles.textField}>
-                            <TextInput 
-                                style={styles.dataField} 
-                                placeholder="your address"
-                                placeholderTextColor={Themes.colors.grayMid}
-                            />
-                            <MaterialCommunityIcons name="pencil-outline" size={24} color={Themes.colors.purpleStrong} />
-                        </View>
-                    </View>
-                    <View style={styles.fieldBody}>
-                        <Text style={styles.textDescription}>Bio</Text>
-                        <View style={styles.textField}>
-                            <TextInput 
-                                style={styles.dataField} 
-                                placeholder="tell us something about you"
-                                placeholderTextColor={Themes.colors.grayMid}
-                            />
-                            <MaterialCommunityIcons name="pencil-outline" size={24} color={Themes.colors.purpleStrong} />
-                        </View>
-                    </View>
+                    <InputPencil
+                        title="Name"
+                        textEdit="your name"
+                    />
+                    <InputPencil
+                        title="Phone"
+                        textEdit="your phone number"
+                    />
+                    <InputPencil
+                        title="Email"
+                        textEdit="your email"
+                    />
+                    <InputPencil
+                        title="Address"
+                        textEdit="your address"
+                    />
+                    <InputPencil
+                        title="Bio"
+                        textEdit="something about you"
+                    />
                 </View>
                 {/* favorites movies */}
                 <View style={styles.favoriteMovies}>
@@ -113,7 +79,7 @@ const Profile_information = () => {
                                 title="Cancel" 
                                 buttonStyle={styles.button} 
                                 onPress={() => { route.push(); }} 
-                                backgroundColor={Themes.colors.grayLight} 
+                                backgroundColor={Themes.colors.purpleLight} 
                                 textColor="white" 
                             />
                             <Button
@@ -136,7 +102,7 @@ export default Profile_information
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:'black',
+        backgroundColor:Themes.colors.screensColor,
         justifyContent:'space-between',
     },
     containerWrapper:{

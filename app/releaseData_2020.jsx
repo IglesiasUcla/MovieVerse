@@ -6,53 +6,52 @@ import SearchField from '../components/SearchField.jsx';
 import { useRouter } from 'expo-router';
 import TopBack from '../components/TopBackButton.jsx';
 import { widthPercentage } from '../helpers/commons.js';
+import Header from '../components/Header.jsx';
 
 const releaseData_2020 = () => {
     const route= useRouter();
     return (
         <SafeAreaView style={styles.topBackContent}>
             <StatusBar style='dark'/>
-            <TopBack
-                title="Release Data" 
-                topBackStyle={styles.topBack} 
-                onPress={() => { route.push('releaseData_1'); }} 
-                backgroundColor={Themes.colors.purpleStrong} 
-                textColor="white"
+            <Header
+                    title="Release Date"
+                    leftIconName="arrow-back"       
+                    leftIconRoute={"/releaseData_1"}
             />
             <View>
                 <SearchField
                     title="2024" 
                     searchStyle={styles.search} 
-                    onPress={() => { route.push('releaseData_1'); }} 
-                    backgroundColor={'black'} 
+                    onPress={() => { route.push('underConstruction'); }} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                 />
                 <SearchField
                     title="2023" 
                     searchStyle={styles.search} 
-                    onPress={() => { route.push('releaseData_1'); }} 
-                    backgroundColor={'black'} 
+                    onPress={() => { route.push('underConstruction'); }} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                 />
                 <SearchField
                     title="2022" 
                     searchStyle={styles.search} 
-                    onPress={() => { route.push('releaseData_1'); }} 
-                    backgroundColor={'black'} 
+                    onPress={() => { route.push('underConstruction'); }} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                 />
                 <SearchField
                     title="2021" 
                     searchStyle={styles.search} 
-                    onPress={() => { route.push('releaseData_1'); }} 
-                    backgroundColor={'black'} 
+                    onPress={() => { route.push('underConstruction'); }} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                 />
                 <SearchField
                     title="2020" 
                     searchStyle={styles.search} 
-                    onPress={() => { route.push('releaseData_1'); }} 
-                    backgroundColor={'black'} 
+                    onPress={() => { route.push('underConstruction'); }} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                 />
             </View>
@@ -65,7 +64,7 @@ export default releaseData_2020
 const styles = StyleSheet.create({
     topBackContent:{
         flex:1,
-        backgroundColor: 'black',
+        backgroundColor: Themes.colors.screensColor,
     },
     topBack:{
 

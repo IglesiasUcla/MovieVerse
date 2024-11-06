@@ -14,7 +14,7 @@ const CreatePost_review = () => {
     <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       {/* Header */}
       <View style={[styles.header, { backgroundColor: Themes.colors.purpleStrong }]}>
-        <TouchableOpacity onPress={() => router.push('/search_movies')}>
+        <TouchableOpacity onPress={() => router.push('/movieReview')}>
           <Icon name="arrow-back" size={24} color={themeColors.text} />
         </TouchableOpacity>
         <Text style={[styles.title, { color: themeColors.text }]}>Edit Review</Text>

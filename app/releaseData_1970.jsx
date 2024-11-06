@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar'
 import { Themes } from '../constants/Themes.js';
 import SearchField from '../components/SearchField.jsx';
 import { useRouter } from 'expo-router';
-import TopBack from '../components/TopBackButton.jsx';
+import Header from '../components/Header.jsx';
 import { widthPercentage } from '../helpers/commons.js';
 
 const releaseData_1970 = () => {
@@ -12,19 +12,17 @@ const releaseData_1970 = () => {
     return (
         <SafeAreaView style={styles.topBackContent}>
             <StatusBar style='dark'/>
-            <TopBack
-                title="Release Data" 
-                topBackStyle={styles.topBack} 
-                onPress={() => { route.push('releaseData_1'); }} 
-                backgroundColor={Themes.colors.purpleStrong} 
-                textColor="white"
+            <Header
+                    title="Release Date"
+                    leftIconName="arrow-back"       
+                    leftIconRoute={"/releaseData_1"}
             />
             <ScrollView style={styles.wrapSearch}>
                 <SearchField
                     title="1979" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -32,7 +30,7 @@ const releaseData_1970 = () => {
                     title="1978" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -40,7 +38,7 @@ const releaseData_1970 = () => {
                     title="1977" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -48,7 +46,7 @@ const releaseData_1970 = () => {
                     title="1976" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -56,7 +54,7 @@ const releaseData_1970 = () => {
                     title="1975" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -64,7 +62,7 @@ const releaseData_1970 = () => {
                     title="1974" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={'Themes.colors.screensColor'} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -72,7 +70,7 @@ const releaseData_1970 = () => {
                     title="1973" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -80,7 +78,7 @@ const releaseData_1970 = () => {
                     title="1972" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -88,7 +86,7 @@ const releaseData_1970 = () => {
                     title="1971" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -96,7 +94,7 @@ const releaseData_1970 = () => {
                     title="1970" 
                     searchStyle={styles.search} 
                     onPress={() => { route.push(); }} 
-                    backgroundColor={'black'} 
+                    backgroundColor={Themes.colors.screensColor} 
                     textColor="white" 
                     textStyle={styles.textSearch}
                 />
@@ -110,7 +108,7 @@ export default releaseData_1970
 const styles = StyleSheet.create({
     topBackContent:{
         flex:1,
-        backgroundColor: 'black',
+        backgroundColor: Themes.colors.screensColor,
     },
     topBack:{
 

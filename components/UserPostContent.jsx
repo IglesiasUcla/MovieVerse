@@ -32,7 +32,7 @@ export default UserPostContent;
 const styles = StyleSheet.create({
     containerPost:{
         borderWidth:1,
-        borderBottomColor:'gray',
+        borderBottomColor:Themes.colors.purpleDetail,
         paddingTop:10,
     },
     postHeader:{
