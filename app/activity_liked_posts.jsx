@@ -25,7 +25,7 @@ const Activity_liked_posts = () => {
       <Header
         title="Activity"
         leftIconName="arrow-back"
-        onLeftIconPress={() => router.back()} // Regresa a la pantalla anterior
+        leftIconRoute="/homePage"// Regresa a la pantalla anterior
       />
 
       {/* Contenedor de pestañas */}

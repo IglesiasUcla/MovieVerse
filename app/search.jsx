@@ -25,7 +25,7 @@ const Search = () => {
                         <Button
                             title="Movies" 
                             buttonStyle={styles.button} 
-                            onPress={() => { router.push('movieScreen'); }} 
+                            onPress={() => { router.push('search_movies'); }} 
                             backgroundColor={Themes.colors.purpleStrong} 
                             textColor="white" 
                         />
@@ -34,7 +34,7 @@ const Search = () => {
                         <Button
                             title="Posts" 
                             buttonStyle={styles.button} 
-                            onPress={() => { router.push(''); }} 
+                            onPress={() => { router.push('homePage_post'); }} 
                             backgroundColor={Themes.colors.purpleStrong} 
                             textColor="white" 
                         />
@@ -43,7 +43,7 @@ const Search = () => {
                         <Button
                             title="Users" 
                             buttonStyle={styles.button} 
-                            onPress={() => { router.push('profile_user'); }} 
+                            onPress={() => { router.push('search_user'); }} 
                             backgroundColor={Themes.colors.purpleStrong} 
                             textColor="white" 
                         />

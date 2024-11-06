@@ -5,7 +5,7 @@ import { Themes } from '../constants/Themes';
 import { Colors } from '../constants/Colors';
 import Header from '../components/Header';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import RatingFavorite from '../components/RatingFavorite'; // Importa el componente RatingFavorite
 
 const { fonts } = Themes;
 
@@ -52,11 +52,10 @@ export default function Post() {
                     <View style={styles.movieInfoContainer}>
                         <Text style={[styles.movieTitle, { color: colors.text }]}>Hereditary</Text>
                         <Text style={[styles.movieYear, { color: Themes.colors.purpleDetail }]}>2018</Text>
-                        <View style={styles.starsContainer}>
-                            {Array.from({ length: 5 }).map((_, index) => (
-                                <Text key={index} style={[styles.star, { color: Themes.colors.purpleLight }]}>★</Text>
-                            ))}
-                        </View>
+
+                        {/* Integración del componente RatingFavorite */}
+                        <RatingFavorite rating={4.6} isFavorite={true} />
+
                         <Text style={[styles.date, { color: Themes.colors.purpleDetail }]}>Watched May 11, 2024</Text>
                     </View>
 
@@ -93,7 +92,7 @@ export default function Post() {
                             name="user-circle"
                             size={40}
                             color={Themes.colors.purpleStrong}
-                            style={styles.likeUser} // Se agrega margen entre los iconos
+                            style={styles.likeUser}
                         />
                     ))}
                 </View>
@@ -102,24 +101,10 @@ export default function Post() {
     );
 }
 
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 16,
-    },
-    backButton: {
-        fontSize: 24,
-        color: 'white',
-        marginRight: 8,
-    },
-    title: {
-        fontSize: 18,
-        fontWeight: fonts.bold,
-        color: 'white',
     },
     tabContainer: {
         flexDirection: 'row',
@@ -149,9 +134,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginRight: 16,
     },
-    movieInfo: {
-        marginTop: 8,  // Da un pequeño espacio entre el nombre de usuario y la información de la película
-    },
     movieTitle: {
         fontSize: 18,
         fontWeight: fonts.semibold,
@@ -176,7 +158,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 200,
         borderRadius: 8,
-        backgroundColor: Themes.colors.grayMid, // Fondo para el recuadro de imagen de cine
+        backgroundColor: Themes.colors.grayMid,
     },
     actions: {
         flexDirection: 'row',
@@ -187,9 +169,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginRight: 16,
-    },
-    likeIcon: {
-        fontSize: 24,
     },
     likeCount: {
         marginLeft: 8,
@@ -208,37 +187,39 @@ const styles = StyleSheet.create({
     likesContainer: {
         flexDirection: 'row',
         marginTop: 22,
-        flexWrap: 'wrap',  // Permite que los iconos se acomoden en varias líneas si es necesario
+        flexWrap: 'wrap',
     },
     likeUser: {
         width: 40,
         height: 40,
         borderRadius: 20,
         backgroundColor: Themes.colors.grayDark,
-        marginRight: 12, // Esto agrega la separación entre los iconos
-        marginBottom: 8, // Añade separación vertical entre las filas de iconos
+        marginRight: 12,
+        marginBottom: 8,
     },
     movieAndPosterContainer: {
-        flexDirection: 'row',  // Coloca la información y el poster en fila horizontal
+        flexDirection: 'row',
         marginTop: 16,
     },
     movieInfoContainer: {
-        flex: 1,  // Hace que ocupe el espacio disponible
-        marginRight: 16,  // Deja espacio entre la información y el poster
+        flex: 1,
+        marginRight: 16,
     },
     posterContainer: {
-        width: 120, // Tamaño del poster
-        height: 180, // Lo hacemos vertical
+        width: 120,
+        height: 180,
         borderRadius: 8,
-        overflow: 'hidden',  // Asegura que la imagen no se desborde
-        backgroundColor: Themes.colors.grayMid,  // Fondo gris para simular el poster
+        overflow: 'hidden',
+        backgroundColor: Themes.colors.grayMid,
         justifyContent: 'center',
         alignItems: 'center',
     },
     posterImage: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#ddd',  // Esto puede ser una imagen de fondo si quieres
+        backgroundColor: '#ddd',
         borderRadius: 8,
     },
 });
+
+
