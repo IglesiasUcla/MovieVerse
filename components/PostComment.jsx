@@ -1,15 +1,17 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity  } from 'react-native'
 import React from 'react'
 import { Themes } from '../constants/Themes'
 import { heightPercentage, widthPercentage } from '../helpers/commons'
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import { Ionicons } from '@expo/vector-icons'; 
 
-const PostComment = ({userName,postReview}) => {
+const PostComment = ({userName,postReview,onPressUser}) => {
     return (
         <View style={styles.containerPost}>
                     <View style={styles.postHeader}>
                         <View style={styles.userInfo}>
-                            <FontAwesome5 name="user-circle" size={40} color={Themes.colors.purpleStrong} />
+                        <TouchableOpacity onPress={onPressUser}>
+                            <Ionicons name="person-circle-outline" size={24} color={Themes.colors.purpleStrong} />
+                        </TouchableOpacity>
                             <Text style={styles.username}>{userName}</Text>
                         </View>    
                     </View>

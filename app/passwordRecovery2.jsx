@@ -40,7 +40,7 @@ const PasswordRecovery2 = () => {
       </TouchableOpacity>
 
       {/* Botón "Continue" */}
-      <TouchableOpacity style={styles.continueButton}>
+      <TouchableOpacity style={styles.continueButton} onPress={() => route.push('welcome')}>
         <Text style={styles.continueButtonText}>Continue</Text>
       </TouchableOpacity>
     </View>
