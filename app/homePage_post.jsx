@@ -7,15 +7,16 @@ import TopBar from '../components/TopBar';
 import { StatusBar } from 'react-native';
 
 const HomePage_post = () => {
+    const route= useRouter();
     return (
         <View style={styles.container}>
             <StatusBar style="dark" />
             <TopBar
                 title='Popular' 
                 currentTab="posts" 
-                onTabChange={(tab) => console.log('Switching to:', tab)} 
+                onTabChange={() => route.push('homePage')} 
                 onMenuPress={() => console.log('Menu pressed')} 
-                onSearchPress={() => console.log('Search pressed')} 
+                onSearchPress={() => route.push('search')} 
             />
             <View style={styles.body}>
                 <Text style={styles.titleTop}>Popular Posts</Text>
