@@ -1,12 +1,16 @@
-import { StyleSheet, Text, View, TouchableOpacity  } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity,Pressable  } from 'react-native'
 import React from 'react'
 import { Themes } from '../constants/Themes'
 import { heightPercentage, widthPercentage } from '../helpers/commons'
 import { Ionicons } from '@expo/vector-icons'; 
+import { useRouter } from 'expo-router';
 
 const PostComment = ({userName,postReview,onPressUser}) => {
+    const route= useRouter();
     return (
-        <View style={styles.containerPost}>
+        <Pressable 
+        style={styles.containerPost}
+        onPress={() => route.push('other_user_information')}>
                     <View style={styles.postHeader}>
                         <View style={styles.userInfo}>
                         <TouchableOpacity onPress={onPressUser}>
@@ -20,7 +24,7 @@ const PostComment = ({userName,postReview,onPressUser}) => {
                             {postReview}
                         </Text>
                     </View>
-        </View>
+        </Pressable>
     )
 }
 
