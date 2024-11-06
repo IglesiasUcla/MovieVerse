@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 
-const Header = ({ title, leftIconName, rightIconName, leftIconRoute, rightIconRoute, leftIconModule, onLeftPress }) => {
+const Header = ({ title, leftIconName, rightIconName, leftIconRoute, rightIconRoute, leftIconModule, rightIconModule, onLeftPress, onRightPress }) => {
   const router = useRouter();
 
   const handleLeftPress = () => {
@@ -40,6 +40,12 @@ const Header = ({ title, leftIconName, rightIconName, leftIconRoute, rightIconRo
       {rightIconName && (
         <TouchableOpacity onPress={handleRightPress}>
           <Icon name={rightIconName} size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+      )}
+
+      {rightIconModule && (
+        <TouchableOpacity onPress={onRightPress}>
+          <Icon name={rightIconModule} size={24} color="#FFFFFF" />
         </TouchableOpacity>
       )}
     </View>
