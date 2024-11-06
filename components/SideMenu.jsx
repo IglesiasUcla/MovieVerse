@@ -37,7 +37,7 @@ const SideMenu = ({ visible, onClose, onSelectOption, activeOption = 'Popular' }
         </View>
 
         {/* Opciones del menú */}
-        <Pressable onPress={() => { route.push(''); onSelectOption('Popular'); }} style={[styles.menuItem, isActive('Popular') && styles.activeMenuItem]}>
+        <Pressable onPress={() => { route.push('homePage'); onSelectOption('Popular'); }} style={[styles.menuItem, isActive('Popular') && styles.activeMenuItem]}>
           <Ionicons name="flame" size={24} color={isActive('Popular') ? Themes.colors.purpleLight : 'gray'} style={[styles.icon, isActive('Popular') && styles.activeMenuIcon]} />
           <Text style={[styles.menuItemText, isActive('Popular') && styles.activeMenuItemText]}>Popular</Text>
         </Pressable>
@@ -53,7 +53,7 @@ const SideMenu = ({ visible, onClose, onSelectOption, activeOption = 'Popular' }
           <Ionicons name="document-text" size={24} color={isActive('Posts') ? Themes.colors.purpleLight : 'gray'} style={[styles.icon, isActive('Posts') && styles.activeMenuIcon]} />
           <Text style={[styles.menuItemText, isActive('Posts') && styles.activeMenuItemText]}>Posts</Text>
         </Pressable>
-        <Pressable onPress={() => { route.push(''); onSelectOption('Activity'); }} style={[styles.menuItem, isActive('Activity') && styles.activeMenuItem]}>
+        <Pressable onPress={() => { route.push('activity_liked_posts'); onSelectOption('Activity'); }} style={[styles.menuItem, isActive('Activity') && styles.activeMenuItem]}>
           <Ionicons name="heart" size={24} color={isActive('Activity') ? Themes.colors.purpleLight : 'gray'} style={[styles.icon, isActive('Activity') && styles.activeMenuIcon]} />
           <Text style={[styles.menuItemText, isActive('Activity') && styles.activeMenuItemText]}>Activity</Text>
         </Pressable>
