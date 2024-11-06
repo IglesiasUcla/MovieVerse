@@ -4,6 +4,8 @@ import { useRouter } from 'expo-router';
 import { Themes } from '../constants/Themes';
 import { Colors } from '../constants/Colors';
 import Header from '../components/Header';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const { fonts } = Themes;
 
@@ -38,8 +40,13 @@ export default function UserPost() {
             <View style={styles.postContent}>
                 <View style={styles.userInfo}>
                     {/* Recuadro en lugar de imagen */}
-                    <View style={styles.userPlaceholder} />
-                    <View>
+                    <View style={styles.avatarContainer}>
+                        <FontAwesome name="user-circle" size={40} color={Themes.colors.purpleStrong} />
+                        {/* Nombre de usuario al lado del icono */}
+                        <Text style={[styles.movieTitle, { color: colors.text, marginLeft: 8 }]}>User</Text>
+                    </View>
+                    {/* Contenido debajo del icono y nombre */}
+                    <View style={styles.movieInfo}>
                         <Text style={[styles.movieTitle, { color: colors.text }]}>Hereditary</Text>
                         <Text style={[styles.movieYear, { color: Themes.colors.purpleDetail }]}>2018</Text>
                         <View style={styles.starsContainer}>
@@ -59,7 +66,7 @@ export default function UserPost() {
 
                 <View style={styles.actions}>
                     <TouchableOpacity style={styles.likeButton}>
-                        <Text style={[styles.likeIcon, { color: Themes.colors.purpleStrong }]}>❤️</Text>
+                        <FontAwesome name="heart" size={30} color={Themes.colors.purpleDetail} style={styles.heartIcon} solid />
                         <Text style={[styles.likeCount, { color: colors.text }]}>999 Likes</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.tagButton}>
@@ -70,9 +77,16 @@ export default function UserPost() {
                     </TouchableOpacity>
                 </View>
 
+                {/* Separación entre los iconos */}
                 <View style={styles.likesContainer}>
-                    {Array.from({ length: 6 }).map((_, index) => (
-                        <View key={index} style={styles.likeUser} />
+                    {Array.from({ length: 8 }).map((_, index) => (
+                        <FontAwesome
+                            key={index}
+                            name="user-circle"
+                            size={40}
+                            color={Themes.colors.purpleStrong}
+                            style={styles.likeUser} // Se agrega margen entre los iconos
+                        />
                     ))}
                 </View>
             </View>
@@ -122,12 +136,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 16,
     },
-    userPlaceholder: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        backgroundColor: Themes.colors.purpleDetail, // Color de fondo para el recuadro
+    avatarContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
         marginRight: 16,
+    },
+    movieInfo: {
+        marginTop: 8,  // Da un pequeño espacio entre el nombre de usuario y la información de la película
     },
     movieTitle: {
         fontSize: 18,
@@ -184,13 +199,15 @@ const styles = StyleSheet.create({
     },
     likesContainer: {
         flexDirection: 'row',
-        marginTop: 16,
+        marginTop: 22,
+        flexWrap: 'wrap',  // Permite que los iconos se acomoden en varias líneas si es necesario
     },
     likeUser: {
-        width: 30,
-        height: 30,
-        borderRadius: 15,
-        backgroundColor: Themes.colors.purpleDetail,
-        marginRight: 8,
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: Themes.colors.grayDark,
+        marginRight: 12, // Esto agrega la separación entre los iconos
+        marginBottom: 8, // Añade separación vertical entre las filas de iconos
     },
 });
