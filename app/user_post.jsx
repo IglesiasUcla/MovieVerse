@@ -11,7 +11,6 @@ const { fonts } = Themes;
 
 export default function UserPost() {
     const router = useRouter();
-    const fonts = Themes.fonts;
     const colorScheme = useColorScheme();
     const colors = Colors[colorScheme]; // Selecciona colores dependiendo del modo (light o dark)
 
@@ -45,8 +44,12 @@ export default function UserPost() {
                         {/* Nombre de usuario al lado del icono */}
                         <Text style={[styles.movieTitle, { color: colors.text, marginLeft: 8 }]}>User</Text>
                     </View>
-                    {/* Contenido debajo del icono y nombre */}
-                    <View style={styles.movieInfo}>
+                </View>
+
+                {/* Contenedor de película y poster en fila horizontal */}
+                <View style={styles.movieAndPosterContainer}>
+                    {/* Información de la película a la izquierda */}
+                    <View style={styles.movieInfoContainer}>
                         <Text style={[styles.movieTitle, { color: colors.text }]}>Hereditary</Text>
                         <Text style={[styles.movieYear, { color: Themes.colors.purpleDetail }]}>2018</Text>
                         <View style={styles.starsContainer}>
@@ -55,6 +58,11 @@ export default function UserPost() {
                             ))}
                         </View>
                         <Text style={[styles.date, { color: Themes.colors.purpleDetail }]}>Watched May 11, 2024</Text>
+                    </View>
+
+                    {/* Recuadro del poster a la derecha */}
+                    <View style={styles.posterContainer}>
+                        <View style={styles.posterImage} />
                     </View>
                 </View>
 
@@ -209,5 +217,28 @@ const styles = StyleSheet.create({
         backgroundColor: Themes.colors.grayDark,
         marginRight: 12, // Esto agrega la separación entre los iconos
         marginBottom: 8, // Añade separación vertical entre las filas de iconos
+    },
+    movieAndPosterContainer: {
+        flexDirection: 'row',  // Coloca la información y el poster en fila horizontal
+        marginTop: 16,
+    },
+    movieInfoContainer: {
+        flex: 1,  // Hace que ocupe el espacio disponible
+        marginRight: 16,  // Deja espacio entre la información y el poster
+    },
+    posterContainer: {
+        width: 120, // Tamaño del poster
+        height: 180, // Lo hacemos vertical
+        borderRadius: 8,
+        overflow: 'hidden',  // Asegura que la imagen no se desborde
+        backgroundColor: Themes.colors.grayMid,  // Fondo gris para simular el poster
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    posterImage: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#ddd',  // Esto puede ser una imagen de fondo si quieres
+        borderRadius: 8,
     },
 });
