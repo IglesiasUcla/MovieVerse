@@ -10,8 +10,10 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import InputPencil from '../components/InputPencil';
+import { useRouter } from 'expo-router';
 
 const Profile_information = () => {
+    const route= useRouter();
     return (
         <SafeAreaView style={styles.container}>
             {/* header */}
@@ -84,14 +86,14 @@ const Profile_information = () => {
                             <Button
                                 title="Cancel" 
                                 buttonStyle={styles.button} 
-                                onPress={console.log('cancel')} 
+                                onPress={() => route.push('profile_Settings')} 
                                 backgroundColor={Themes.colors.purpleLight} 
                                 textColor="white" 
                             />
                             <Button
                                 title="Save" 
                                 buttonStyle={styles.button} 
-                                onPress={console.log('save')} 
+                                onPress={() => route.push('profile_user')} 
                                 backgroundColor={Themes.colors.purpleStrong} 
                                 textColor="white" 
                             />
