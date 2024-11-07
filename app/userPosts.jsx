@@ -62,7 +62,7 @@ const UserPosts = ({ navigation }) => {
       <Header
         leftIconName="arrow-back"
         title="User's posts"
-        leftIconRoute={"/"}
+        leftIconRoute={"/other_user_information"}
       />
 
         <View style={styles.topDivider} />

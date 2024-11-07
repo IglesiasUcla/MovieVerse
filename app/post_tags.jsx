@@ -32,7 +32,7 @@ const Post_tags = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style='dark' />
+      
       {/* Aquí está el Header con los estilos correctamente aplicados */}
       <Header
         title="Add tags"
