@@ -31,7 +31,7 @@ const Post_tags = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       
       {/* Aquí está el Header con los estilos correctamente aplicados */}
       <Header
@@ -39,7 +39,7 @@ const Post_tags = () => {
         leftIconName="arrow-back"
         leftIconRoute="movieReview"  // Redirige a movieReview cuando se hace clic en el icono de retroceso
       />
-      <View>
+      <View style={styles.bodyTags}>
         <Text style={styles.a_texto}>Enter tags separated by commas</Text>
         <Text style={styles.infoText}>Remember to start each tag with a <Text style={styles.hashtag}>#</Text></Text>
 
@@ -62,7 +62,7 @@ const Post_tags = () => {
           <Text style={styles.saveButtonText}>Save</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -72,7 +72,10 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Themes.colors.grayDark,
     flex: 1,
-    padding: 20,
+    // padding: 20,
+  },
+  bodyTags:{
+    padding:20,
   },
   a_texto: {
     color: '#fff',
@@ -90,7 +93,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   input: {
-    backgroundColor: Themes.colors.grayLight,
+    backgroundColor: Themes.colors.grayMid,
     color: 'white',
     borderRadius: 10,
     padding: 10,
