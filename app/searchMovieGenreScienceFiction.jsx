@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, useColorScheme } from 'react-native';
+import { View, StyleSheet, FlatList, useColorScheme, StatusBar } from 'react-native';
 import { Colors } from '../constants/Colors'; // Asegúrate de tener esta constante
 import { Themes } from '../constants/Themes';
 import { useRouter } from 'expo-router';
@@ -14,6 +14,7 @@ const SearchMovieGenreScienceFiction = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: themeColors.background }]}>
+      <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
       {/* Header */}
       <Header 
         title="Science Fiction" 
