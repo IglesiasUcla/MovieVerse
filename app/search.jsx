@@ -34,7 +34,7 @@ const Search = () => {
                         <Button
                             title="Posts" 
                             buttonStyle={styles.button} 
-                            onPress={() => { router.push('homePage_post'); }} 
+                            onPress={() => { router.push('search_posts'); }} 
                             backgroundColor={Themes.colors.purpleStrong} 
                             textColor="white" 
                         />
