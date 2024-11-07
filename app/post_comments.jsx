@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,ScrollView,Pressable} from 'react-native'
+import { StyleSheet, Text, View,ScrollView,Pressable, StatusBar} from 'react-native'
 import React from 'react'
 import { Themes } from '../constants/Themes'
 import Header from '../components/Header'
@@ -9,6 +9,7 @@ const Post_comments = () => {
     const route = useRouter();
     return (
         <View style={styles.container}>
+            <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
             <Header
                 title="User's Post"
                 leftIconName="arrow-back"       
