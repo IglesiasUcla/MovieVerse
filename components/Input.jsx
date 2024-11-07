@@ -23,7 +23,7 @@ const Input = ({ titleField, guideText, isPassword = false }) => {
                         onPress={() => setPasswordVisible(!isPasswordVisible)}
                     >
                         <Ionicons
-                            name={isPasswordVisible ? 'eye-off' : 'eye'}
+                            name={isPasswordVisible ? 'eye' : 'eye-off'}
                             size={24}
                             color={Themes.colors.grayLight}
                         />

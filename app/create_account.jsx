@@ -28,7 +28,7 @@ const Create_account = () => {
                     />
                     <Input 
                         titleField="Email" 
-                        guideText="yourmail@example.com" 
+                        guideText="Your email" 
                     />
                     <Input 
                         titleField="Password" 
