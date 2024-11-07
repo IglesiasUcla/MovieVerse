@@ -7,8 +7,10 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { heightPercentage,widthPercentage } from '../helpers/commons';
 import Button from '../components/Button';
 import Header from '../components/Header';
+import { useRouter } from 'expo-router';
 
 const Other_user_information = () => {
+    const route= useRouter();
     return (
         <SafeAreaView style={styles.container}>
             {/* header */}
@@ -29,9 +31,8 @@ const Other_user_information = () => {
                 <View style={styles.infoLine} />
                 <View style={styles.buttonContainer}>
                     <Button
-                        title="View Posts" 
                         buttonStyle={styles.button} 
-                        onPress={() => { route.push(); }} 
+                        onPress={() => { route.push('userPosts'); }} 
                         backgroundColor={Themes.colors.purpleStrong} 
                         textColor="white"
                     />

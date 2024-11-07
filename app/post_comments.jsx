@@ -10,7 +10,7 @@ const Post_comments = () => {
     return (
         <View style={styles.container}>
             <Header
-                title="User's Posts"
+                title="User's Post"
                 leftIconName="arrow-back"       
                 leftIconRoute={"search_posts"}
             />
@@ -34,32 +34,32 @@ const Post_comments = () => {
             </View> 
             <ScrollView style={styles.commentsContainer}>
                 <PostComment
-                    userName="userName"
-                    postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
+                    userName="User"
+                    postReview="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id erat nec elit tempus vehicula. Pellentesque fringilla nisi id erat."
                 />
                 <PostComment
-                    userName="userName"
-                    postReview="Lorem ipsum sit amet consectetur adipisicing elit"
+                    userName="User"
+                    postReview="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id erat nec elit tempus vehicula. Pellentesque fringilla nisi id erat."
                 />
                 <PostComment
-                    userName="userName"
-                    postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
+                    userName="User"
+                    postReview="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id erat nec elit tempus vehicula. Pellentesque fringilla nisi id erat."
                 />
                 <PostComment
-                    userName="userName"
-                    postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
+                    userName="User"
+                    postReview="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id erat nec elit tempus vehicula. Pellentesque fringilla nisi id erat."
                 />
                 <PostComment
-                    userName="userName"
-                    postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
+                    userName="User"
+                    postReview="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id erat nec elit tempus vehicula. Pellentesque fringilla nisi id erat."
                 />
                 <PostComment
-                    userName="userName"
-                    postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
+                    userName="User"
+                    postReview="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id erat nec elit tempus vehicula. Pellentesque fringilla nisi id erat."
                 />
                 <PostComment
-                    userName="userName"
-                    postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
+                    userName="User"
+                    postReview="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id erat nec elit tempus vehicula. Pellentesque fringilla nisi id erat."
                 />
             </ScrollView>
         </View>
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         backgroundColor:Themes.colors.purpleStrong,
         justifyContent:'space-around',
+        borderBottomColor: '#887c9f',
     },
     labelContent:{
         borderBottomColor:Themes.colors.purpleLight,
@@ -93,6 +94,7 @@ const styles = StyleSheet.create({
     },
     commentsContainer:{
         paddingVertical:10,
+        borderBottomColor: '#887c9f',
     }
 
 })

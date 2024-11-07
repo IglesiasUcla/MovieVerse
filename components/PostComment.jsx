@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     containerPost:{
         alignItems:'flex-start',
         borderWidth:1,
-        borderBottomColor:'gray',
+        borderBottomColor:'#887c9f',
         paddingTop:10,
     },
     postHeader:{
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     },
     username:{
         color:'white',
-        fontSize:20,
+        fontSize:18,
         fontWeight:Themes.fonts.medium,
         marginLeft:20,
     },
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     },
     postDescription:{
         color:'white',
-        fontSize:15,
+        fontSize:14,
         fontWeight:Themes.fonts.minimus,
         width: '100%',
         textAlign:'justify',

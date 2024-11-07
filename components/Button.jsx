@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native'
+import { StyleSheet, Text, View, Pressable, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { heightPercentage, widthPercentage } from '../helpers/commons'
 import { Themes } from '../constants/Themes'
@@ -16,7 +16,7 @@ const Button = ({
     const shadowStyle = hasShadow ? styles.shadow : {}
 
     return (
-        <Pressable 
+        <TouchableOpacity
             onPress={onPress} 
             style={[
                 styles.button, 
@@ -29,7 +29,7 @@ const Button = ({
             <Text style={[styles.text, textStyle, { color: textColor }]}>
                 {title}
             </Text>
-        </Pressable>
+        </TouchableOpacity>
     )
 }
 
