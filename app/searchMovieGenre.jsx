@@ -16,7 +16,7 @@ const SearchMovieGenre = () => {
 
   const handleGenrePress = (genre) => {
     console.log(`Selected genre: ${genre}`);
-    router.push(`/genre/${genre}`); 
+    router.push(`searchMovieGenre${genre}`); 
   };
 
   return (
