@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, StatusBar, Pressable } from 'react-native';
 import Header from '../components/Header';
 import { Themes } from '../constants/Themes';
 import { Ionicons } from '@expo/vector-icons';
@@ -62,6 +62,7 @@ const MyPosts = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
       {/* Header */}
       <Header
         leftIconName="arrow-back"

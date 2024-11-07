@@ -8,7 +8,7 @@ import { StatusBar } from 'expo-status-bar';
 const Profile_user = () => {
   return (
     <View style={styles.container}>
-      <StatusBar style='dark' />
+      <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
       {/* Header */}
       <View>
         <Header

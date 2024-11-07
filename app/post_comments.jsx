@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,ScrollView,Pressable} from 'react-native'
+import { StyleSheet, Text, View,ScrollView,Pressable, StatusBar} from 'react-native'
 import React from 'react'
 import { Themes } from '../constants/Themes'
 import Header from '../components/Header'
@@ -9,6 +9,7 @@ const Post_comments = () => {
     const route = useRouter();
     return (
         <View style={styles.container}>
+            <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
             <Header
                 title="User's Post"
                 leftIconName="arrow-back"       
@@ -81,7 +82,6 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         backgroundColor:Themes.colors.purpleStrong,
         justifyContent:'space-around',
-        borderBottomColor: '#887c9f',
     },
     labelContent:{
         borderBottomColor:Themes.colors.purpleLight,
@@ -94,7 +94,6 @@ const styles = StyleSheet.create({
     },
     commentsContainer:{
         paddingVertical:10,
-        borderBottomColor: '#887c9f',
     }
 
 })

@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import Header from '../components/Header';
+import { Themes } from '../constants/Themes';
 
 const genres = [
   'Action', 'Adventure', 'Animation', 'Comedy', 'Crime',
@@ -20,6 +21,7 @@ const SearchMovieGenre = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
       <Header
         title="Genre"
         leftIconName="arrow-back"       

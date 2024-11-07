@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,SafeAreaView,ScrollView,TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View,SafeAreaView,ScrollView,TouchableOpacity, StatusBar } from 'react-native'
 import React from 'react'
 import TopBack from '../components/TopBackButton'
 import { Themes } from '../constants/Themes'
@@ -13,6 +13,7 @@ const Other_user_information = () => {
     const route= useRouter();
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
             {/* header */}
             <View>
                 <Header

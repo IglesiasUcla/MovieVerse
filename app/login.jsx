@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; 
-import { View, Text, TextInput, TouchableOpacity, Pressable, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Pressable, StyleSheet,StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Themes } from '../constants/Themes';
 import { useRouter } from 'expo-router';
@@ -9,7 +9,9 @@ const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   return (
+
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor={Themes.colors.grayDark} />
       {/* Icono decorativo */}
       <View style={styles.iconContainer}>
         <Text style={styles.icon}>✦</Text>
@@ -77,12 +79,11 @@ const styles = StyleSheet.create({
   iconContainer: {
     position: 'absolute',
     top: 40,
-    right: 20
-,
+    right: 20,
   },
   icon: {
     color: Themes.colors.purpleStrong,
-    fontSize: 50,
+    fontSize: 24,
     fontWeight: 'bold',
   },
   title: {
