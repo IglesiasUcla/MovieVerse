@@ -35,6 +35,7 @@ const Other_user_information = () => {
                         onPress={() => { route.push('userPosts'); }} 
                         backgroundColor={Themes.colors.purpleStrong} 
                         textColor="white"
+                        title='View posts'
                     />
                 </View>
             </View>

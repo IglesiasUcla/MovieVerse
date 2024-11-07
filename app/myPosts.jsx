@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Pressable } from 'react-native';
 import Header from '../components/Header';
 import { Themes } from '../constants/Themes';
 import { Ionicons } from '@expo/vector-icons';
 import RatingFavorite from '../components/RatingFavorite';
+import { useRouter } from 'expo-router';
 
-const MyPosts = ({ navigation }) => {
+const MyPosts = () => {
+  const route=useRouter()
+
   const posts = [
     {
       title: 'Movie A',
@@ -71,13 +74,15 @@ const MyPosts = ({ navigation }) => {
       <ScrollView>
         {posts.map((post, index) => (
           <View key={index} style={styles.postContainer}>
+            <Pressable style={styles.test} onPress={() => route.push('movieScreen')}>
             <View style={styles.titleContainer}>
               <Text style={styles.movieTitle}>{post.title}</Text>
               <Text style={styles.movieYear}>{post.year}</Text>
-              <TouchableOpacity style={styles.editButton}>
+              <TouchableOpacity onPress={() => route.push('movieReview')} style={styles.editButton}>
                 <Ionicons name="pencil" size={20} color="#6116ec" />
               </TouchableOpacity>
             </View>
+            </Pressable>
             
             {/* Rating and Favorite Icons */}
             <View style={styles.ratingFavoriteContainer}>
@@ -90,10 +95,12 @@ const MyPosts = ({ navigation }) => {
             </View>
 
             {/* Movie Poster and Description */}
+            <Pressable onPress={() => route.push('post')} >
             <View style={styles.contentContainer}>
               <Image source={{ uri: post.posterUri }} style={styles.poster} />
               <Text style={styles.description}>{post.description}</Text>
             </View>
+            </Pressable>
 
             {/* Divider */}
             <View style={styles.divider} />
@@ -109,6 +116,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Themes.colors.grayDark,
   },
+  test: {
+    alignSelf: 'flex-start',
+  },
   postContainer: {
     paddingHorizontal: 16,
   },
@@ -118,7 +128,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+
   },
   movieTitle: {
     color: '#FFFFFF',

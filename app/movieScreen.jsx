@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, Animated } from 'react-native';
+import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, Animated, Pressable } from 'react-native';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { Themes } from '../constants/Themes';
 import { useRouter } from 'expo-router';
 import RatingFavorite from '../components/RatingFavorite';
 import { Ionicons } from '@expo/vector-icons';
 
-const MovieScreen = ({ navigation }) => {
+const MovieScreen = () => {
   const [showFullSynopsis, setShowFullSynopsis] = useState(false);
   const scrollY = new Animated.Value(0);
   const route=useRouter()
 
-  const synopsisHeight = useState(new Animated.Value(52))[0];
+  const synopsisHeight = useState(new Animated.Value(60))[0];
 
   const toggleSynopsis = () => {
     Animated.timing(synopsisHeight, {
-      toValue: showFullSynopsis ? 52 : 120, // Cambia la altura
+      toValue: showFullSynopsis ? 60 : 120, // Cambia la altura
       duration: 350, // Duración de la animación
       useNativeDriver: false
     }).start();
@@ -25,7 +25,7 @@ const MovieScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
 
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+      <TouchableOpacity style={styles.backButton} onPress={() => route.back()}>
         <AntDesign name="arrowleft" size={24} color="white" />
       </TouchableOpacity>
 
@@ -53,9 +53,19 @@ const MovieScreen = ({ navigation }) => {
 
         {/* Información de la película */}
         <View style={styles.movieInfoContainer}>
-          <Text style={styles.movieTitle}>The Pianist</Text>
-          <Text style={styles.movieDirector}>Directed by <Text style={styles.bold}>Roman Polanski</Text></Text>
-          <Text style={styles.movieDetails}>2018  •  150 min</Text>
+        <View style={styles.movieDetailsRow}>
+            <View style={styles.movieTextContainer}>
+              <Text style={styles.movieTitle}>The Pianist</Text>
+              <Text style={styles.movieDirector}>
+                Directed by <Text style={styles.bold}>Roman Polanski</Text>
+              </Text>
+              <Text style={styles.movieDetails}>2018 • 150 min</Text>
+            </View>
+            <Image
+              source={{ uri: 'https://image.tmdb.org/t/p/w500/path_to_movie_image.jpg' }}
+              style={styles.movieThumbnail}
+            />
+          </View>
 
           <View style={styles.synopsisContainer}>
           <Animated.View style={{ height: synopsisHeight }}>
@@ -90,7 +100,7 @@ const MovieScreen = ({ navigation }) => {
           </View>
 
           <View style={styles.rateButtonContainer}>
-            <TouchableOpacity style={styles.rateButton}>
+            <TouchableOpacity style={styles.rateButton} onPress={() => route.push('movieReview')} >
               <Text style={styles.rateButtonText}>Rate this movie</Text>
             </TouchableOpacity>
           </View>
@@ -101,8 +111,13 @@ const MovieScreen = ({ navigation }) => {
 
           {/* Posts de los usuarios */}
           <Text style={styles.postsTitle}>Posts</Text>
+          <Pressable onPress={() => route.push('post')}>
           <View style={styles.postContainer}>
-          <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
+          <Pressable style={styles.test} onPress={() => route.push('other_user_information')} >
+         
+            <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
+            
+          </Pressable>
             <View style={styles.postContent}>
               <View style={styles.usernameContainer}>
                 <Text style={styles.postUser}>User’s post</Text>
@@ -118,9 +133,15 @@ const MovieScreen = ({ navigation }) => {
               <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac.</Text>
             </View>
           </View>
+          </Pressable>
           {/* Agrega más posts según sea necesario */}
+          <Pressable onPress={() => route.push('post')}>
           <View style={styles.postContainer}>
+          <Pressable style={styles.test} onPress={() => route.push('other_user_information')} >
+         
             <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
+            
+          </Pressable>
             <View style={styles.postContent}>
               <View style={styles.usernameContainer}>
                 <Text style={styles.postUser}>User’s post</Text>
@@ -136,8 +157,14 @@ const MovieScreen = ({ navigation }) => {
               <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac.</Text>
             </View>
           </View>
+          </Pressable>
+          <Pressable onPress={() => route.push('post')}>
           <View style={styles.postContainer}>
-          <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
+          <Pressable style={styles.test} onPress={() => route.push('other_user_information')} >
+         
+            <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
+            
+          </Pressable>
             <View style={styles.postContent}>
               <View style={styles.usernameContainer}>
                 <Text style={styles.postUser}>User’s post</Text>
@@ -153,8 +180,14 @@ const MovieScreen = ({ navigation }) => {
               <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac.</Text>
             </View>
           </View>
+          </Pressable>
+          <Pressable onPress={() => route.push('post')}>
           <View style={styles.postContainer}>
-          <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
+          <Pressable style={styles.test} onPress={() => route.push('other_user_information')} >
+         
+            <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
+            
+          </Pressable>
             <View style={styles.postContent}>
               <View style={styles.usernameContainer}>
                 <Text style={styles.postUser}>User’s post</Text>
@@ -170,8 +203,14 @@ const MovieScreen = ({ navigation }) => {
               <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac.</Text>
             </View>
           </View>
+          </Pressable>
+          <Pressable onPress={() => route.push('post')}>
           <View style={styles.postContainer}>
-          <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
+          <Pressable style={styles.test} onPress={() => route.push('other_user_information')} >
+         
+            <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
+            
+          </Pressable>
             <View style={styles.postContent}>
               <View style={styles.usernameContainer}>
                 <Text style={styles.postUser}>User’s post</Text>
@@ -187,11 +226,12 @@ const MovieScreen = ({ navigation }) => {
               <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac.</Text>
             </View>
           </View>
+          </Pressable>
         </View>
       </Animated.ScrollView>
 
       {/* Botón flotante */}
-      <TouchableOpacity style={styles.floatingButton} onPress={() => console.log("Rate this movie")}>
+      <TouchableOpacity style={styles.floatingButton} onPress={() => route.push('movieReview')}>
         <AntDesign name="plus" size={24} color="white" />
       </TouchableOpacity>
     </View>
@@ -204,9 +244,12 @@ const styles = StyleSheet.create({
     backgroundColor: Themes.colors.grayDark,
   },
   headerImageContainer: {
-    height: 200,
+    height: 170,
     position: 'relative',
     backgroundColor: Themes.colors.grayLight,
+  },
+  test: {
+    alignSelf: 'flex-start',
   },
   headerImage: {
     width: '100%',
@@ -226,6 +269,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   movieTitle: {
+    marginTop: -24,
     fontSize: 24,
     color: 'white',
     fontWeight: 'bold',
@@ -234,6 +278,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     marginVertical: 5,
+    marginTop: 16,
   },
   bold: {
     fontWeight: 'bold',
@@ -248,6 +293,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   synopsisText: {
+    marginTop: 8,
     color: 'white',
     flex: 1,
   },
@@ -344,7 +390,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   userPic: {
-    marginTop: -32,
+    marginTop: 0,
+  },
+  movieDetailsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  movieThumbnail: {
+    width: 80,
+    height: 120,
+    backgroundColor: 'gray',
+    marginHorizontal: 12,
   },
 });
 
