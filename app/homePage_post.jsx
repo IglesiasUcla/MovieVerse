@@ -10,6 +10,7 @@ const HomePage_post = () => {
     const route= useRouter();
     return (
         <View style={styles.container}>
+            <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
             <StatusBar style="dark" />
             <TopBar
                 title='Popular' 
