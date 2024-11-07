@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,SafeAreaView,ScrollView,TouchableOpacity,TextInput} from 'react-native'
+import { StyleSheet, Text, View,SafeAreaView,ScrollView,TouchableOpacity,TextInput, StatusBar} from 'react-native'
 import React from 'react'
 import { Themes } from '../constants/Themes'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -16,6 +16,7 @@ const Profile_information = () => {
     const route= useRouter();
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
             {/* header */}
             <View>
                 <Header
