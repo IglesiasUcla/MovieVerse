@@ -1,10 +1,13 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from '../components/Header';
 import { Themes } from '../constants/Themes';
+import RatingFavorite from '../components/RatingFavorite';
+import { useRouter } from 'expo-router';
 
-const UserPosts = ({ navigation }) => {
+const UserPosts = () => {
+  const route = useRouter();
   const posts = [
     {
       title: 'Movie A',
@@ -19,7 +22,7 @@ const UserPosts = ({ navigation }) => {
       year: '2016',
       posterUri: 'https://link-to-lalaland-poster.com',
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id erat nec elit tempus vehicula. Pellentesque fringilla nisi id erat.',
-      rating: 5,
+      rating: 4.5,
       isFavorite: true,
     },
     {
@@ -62,7 +65,7 @@ const UserPosts = ({ navigation }) => {
       <Header
         leftIconName="arrow-back"
         title="User's posts"
-        leftIconRoute={"/"}
+        leftIconRoute={"other_user_information"}
       />
 
         <View style={styles.topDivider} />
@@ -70,32 +73,30 @@ const UserPosts = ({ navigation }) => {
       <ScrollView>
         {posts.map((post, index) => (
           <View key={index} style={styles.postContainer}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.movieTitle}>{post.title}</Text>
-              <Text style={styles.movieYear}>{post.year}</Text>
-            </View>
-            
+            <Pressable style={styles.titleContainer} onPress={()=>{route.push('movieScreen')}}>
+              <View style={styles.titleContainer}>
+                <Text style={styles.movieTitle}>{post.title}</Text>
+                <Text style={styles.movieYear}>{post.year}</Text>
+              </View>
+            </Pressable>
             {/* Rating and Favorite Icons */}
             <View style={styles.ratingFavoriteContainer}>
-              <View style={styles.starContainer}>
-                {[...Array(5)].map((_, starIndex) => (
-                  <Text key={starIndex} style={[styles.star, { color: starIndex < post.rating ? '#6116ec' : 'gray' }]}>
-                    ✦
-                  </Text>
-                ))}
-              </View>
-              <Icon
-                name="favorite"
-                size={12}
-                color={post.isFavorite ? '#b39ddb' : 'gray'}
-                style={styles.favoriteIcon}
+            <RatingFavorite
+                rating={post.rating}
+                isFavorite={post.isFavorite}
+                starSize={14} 
+                iconSize={12} 
               />
             </View>
 
             {/* Movie Poster and Description */}
             <View style={styles.contentContainer}>
-              <Image source={{ uri: post.posterUri }} style={styles.poster} />
-              <Text style={styles.description}>{post.description}</Text>
+              <Pressable style={styles.poster} onPress={()=>{route.push('movieScreen')}}>
+                <Image source={{ uri: post.posterUri }} />
+              </Pressable>
+              <Pressable style={styles.description} onPress={()=>{route.push('post')}}>
+                <Text style={styles.description}>{post.description}</Text>
+              </Pressable>
             </View>
 
             {/* Divider */}
@@ -118,7 +119,8 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 4,
+    alignSelf: 'flex-start',
   },
   movieTitle: {
     color: '#FFFFFF',
@@ -133,7 +135,6 @@ const styles = StyleSheet.create({
   ratingFavoriteContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
   },
   starContainer: {
     flexDirection: 'row',
@@ -151,9 +152,12 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   poster: {
-    width: 60,
-    height: 90,
-    marginRight: 16,
+    width: 60+8,
+    height: 90+8,
+    marginRight: 8,
+    marginLeft: 6,
+    backgroundColor: 'gray',
+    
   },
   description: {
     color: '#AAA',
@@ -170,6 +174,9 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: Themes.colors.purpleDetail,
     marginVertical: 8,
+  },
+  test: {
+    alignSelf: 'flex-start',
   },
 });
 
