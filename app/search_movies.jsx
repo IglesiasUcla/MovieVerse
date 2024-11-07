@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, useColorScheme, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Colors } from '../constants/Colors';
 import { Themes } from '../constants/Themes';
@@ -12,6 +12,8 @@ const SearchMovies = () => {
   
   return (
     <View style={[styles.container, { backgroundColor: themeColors.background }]}>
+            <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
+
       {/* Header */}
       <View style={[styles.header, { backgroundColor: Themes.colors.purpleStrong }]}>
         <TouchableOpacity onPress={() => router.push('/search')}>
