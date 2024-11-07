@@ -28,9 +28,9 @@ const CreatePost_review = () => {
         <TextInput
           style={[styles.reviewText, { color: themeColors.text }]}
           multiline
-          numberOfLines={6}
+          numberOfLines={1}
           placeholder="Write your review here..."
-          placeholderTextColor={themeColors.placeholder}
+          placeholderTextColor='#FFF'
           value={reviewText}
           onChangeText={setReviewText}
         />

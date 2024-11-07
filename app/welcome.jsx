@@ -11,7 +11,7 @@ import { useRouter } from 'expo-router';
     const route=useRouter();
     return (
         <ScreamWrapper background={Themes.colors.purpleDark}>
-            <StatusBar style='dark' />
+            <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleDark} />
             {/* logo */}
             <View style={styles.container}>
                 <Image style={styles.log} source={require('../assets/images/logo-m.png')} resizeMode='contain'/>

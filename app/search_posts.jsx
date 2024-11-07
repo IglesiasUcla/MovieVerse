@@ -7,10 +7,12 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { heightPercentage, widthPercentage } from '../helpers/commons'
 import InputSearch from '../components/InputSearch'
 import UserPostSpoilers from '../components/UserPostSpoilers'
+import { StatusBar } from 'react-native';
 
 const Search_posts = () => {
     return (
         <View style={styles.container}>
+            <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
             <Header
                 title="Search Posts"
                 leftIconName="arrow-back"       
