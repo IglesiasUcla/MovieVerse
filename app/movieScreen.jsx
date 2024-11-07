@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, Animated, Pressable } from 'react-native';
+import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, Animated, Pressable, StatusBar } from 'react-native';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { Themes } from '../constants/Themes';
 import { useRouter } from 'expo-router';
@@ -24,7 +24,7 @@ const MovieScreen = () => {
 
   return (
     <View style={styles.container}>
-
+<StatusBar barStyle="light-content" backgroundColor={Themes.colors.grayDark} />
       <TouchableOpacity style={styles.backButton} onPress={() => route.back()}>
         <AntDesign name="arrowleft" size={24} color="white" />
       </TouchableOpacity>
