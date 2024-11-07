@@ -10,7 +10,7 @@ const Post_comments = () => {
     return (
         <View style={styles.container}>
             <Header
-                title="User's Posts"
+                title="User's Post"
                 leftIconName="arrow-back"       
                 leftIconRoute={"search_posts"}
             />
