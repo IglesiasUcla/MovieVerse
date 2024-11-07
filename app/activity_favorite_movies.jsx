@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar'
 
 const Activity_favorite_movies = () => {
-    const [currentTab, setCurrentTab] = useState('activity_liked_posts');
+    const [currentTab, setCurrentTab] = useState('activity_favorite_movies');
     const router = useRouter();
 
     // Función para cambiar de pestaña y navegar a la pantalla correspondiente
