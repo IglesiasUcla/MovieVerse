@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { Themes } from '../constants/Themes';
 import Header from '../components/Header';
 import LikedMovieContent from '../components/LikedMovieContent';
+import { StatusBar } from 'expo-status-bar';
 
 const Activity_liked_posts = () => {
   const [currentTab, setCurrentTab] = useState('activity_liked_posts');
@@ -22,6 +23,7 @@ const Activity_liked_posts = () => {
   return (
     <View style={styles.container}>
       {/* Encabezado */}
+      <StatusBar style="dark"/>
       <Header
         title="Activity"
         leftIconName="arrow-back"

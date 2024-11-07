@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, Pressable, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react'
 import { Themes } from '../constants/Themes'
 import { heightPercentage, widthPercentage } from '../helpers/commons'
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -8,7 +8,8 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import RatingFavorite from './RatingFavorite';
 import { useRouter } from 'expo-router';
 
-const UserPostContent = ({movieTitle,movieYear,userName,postReview,ratingValue}) => {
+const UserPostContent = ({movieTitle,movieYear,userName,postReview,ratingValue,isFavorite = false }) => {
+    const [isFavoriteVisible,setFavoriteVisible] = useState(false);
     const route = useRouter();
     return (
         <Pressable 
@@ -28,7 +29,19 @@ const UserPostContent = ({movieTitle,movieYear,userName,postReview,ratingValue})
                             showFavorite={false}
                             starSize={28}    // Ajusta el tamaño si es necesario
                         />
-                        <FontAwesome style={styles.favoriteContainer} name="star" size={28} color={Themes.colors.purpleStrong} />
+                        {isFavorite && (
+                            <TouchableOpacity
+                            onPress={() =>setFavoriteVisible(!isFavoriteVisible)}
+                            >
+                                <FontAwesome 
+                                style={styles.favoriteContainer} 
+                                name="star" size={28} 
+                                color={isFavoriteVisible ? Themes.colors.purpleStrong : Themes.colors.grayMid} 
+                                />
+                            </TouchableOpacity>
+                        )
+                        }
+                        
                     </View>
                     <View style={styles.postInfo}>
                         <View style={styles.movieCover}>

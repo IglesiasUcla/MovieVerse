@@ -29,6 +29,7 @@ const Search_posts = () => {
                     ratingValue={5}
                     userName="userName"
                     postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
+                    isFavorite
                 />
                 <UserPostContent
                     movieTitle="Movie title"
@@ -36,6 +37,7 @@ const Search_posts = () => {
                     ratingValue={3}
                     userName="userName"
                     postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
+                    isFavorite
                 />
                 <UserPostContent
                     movieTitle="Movie title"
@@ -43,6 +45,7 @@ const Search_posts = () => {
                     ratingValue={1}
                     userName="userName"
                     postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
+                    isFavorite
                 />
                 {/* post with spoiler */}
                 <UserPostSpoilers
@@ -57,6 +60,7 @@ const Search_posts = () => {
                     ratingValue={4}
                     userName="userName"
                     postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
+                    isFavorite
                 />
                 <UserPostContent
                     movieTitle="Movie title"
@@ -64,6 +68,7 @@ const Search_posts = () => {
                     ratingValue={2}
                     userName="userName"
                     postReview="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur accusantium a eum deleniti officia esse? Hic consectetur aspernatur sit in recusandae,"
+                    isFavorite
                 />
                 <UserPostSpoilers
                     movieTitle="Movie title"
