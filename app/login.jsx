@@ -77,11 +77,12 @@ const styles = StyleSheet.create({
   iconContainer: {
     position: 'absolute',
     top: 40,
-    right: 20,
+    right: 20
+,
   },
   icon: {
     color: Themes.colors.purpleStrong,
-    fontSize: 24,
+    fontSize: 50,
     fontWeight: 'bold',
   },
   title: {
