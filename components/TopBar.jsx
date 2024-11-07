@@ -16,11 +16,6 @@ const TopBar = ({ title = '', currentTab = 'movies', onTabChange = () => {}, onS
     setMenuVisible(false); // Cerrar el menú
   };
 
-  const handleOptionSelect = (option) => {
-    console.log('Selected option:', option);
-    setMenuVisible(false); // Cerrar el menú después de seleccionar una opción
-  };
-
   return (
     <>
       <View style={styles.container}>
@@ -41,11 +36,17 @@ const TopBar = ({ title = '', currentTab = 'movies', onTabChange = () => {}, onS
 
         {/* Campo de tabs (Movies y Posts) */}
         <View style={styles.tabsContainer}>
-          <Pressable onPress={() => onTabChange('movies')} style={[styles.tab, currentTab === 'movies' && styles.activeTab]}>
+          <Pressable onPress={() => currentTab !== 'movies' && onTabChange('movies')} style={styles.tab}>
             <Text style={[styles.tabText, currentTab === 'movies' && styles.activeTabText]}>Movies</Text>
+            <View style={styles.tabIndicatorContainer}>
+              {currentTab === 'movies' && <View style={styles.activeTab} />}
+            </View>
           </Pressable>
-          <Pressable onPress={() => onTabChange('posts')} style={[styles.tab, currentTab === 'posts' && styles.activeTab]}>
+          <Pressable onPress={() => currentTab !== 'posts' && onTabChange('posts')} style={styles.tab}>
             <Text style={[styles.tabText, currentTab === 'posts' && styles.activeTabText]}>Posts</Text>
+            <View style={styles.tabIndicatorContainer}>
+              {currentTab === 'posts' && <View style={styles.activeTab} />}
+            </View>
           </Pressable>
         </View>
       </View>
@@ -53,7 +54,7 @@ const TopBar = ({ title = '', currentTab = 'movies', onTabChange = () => {}, onS
       {/* Menú desplegable */}
       <SideMenu 
           visible={menuVisible} 
-          onClose={() => setMenuVisible(false)} 
+          onClose={handleMenuClose} 
           onSelectOption={(option) => {
               console.log('Selected option:', option);
               setMenuVisible(false);
@@ -79,18 +80,16 @@ const styles = StyleSheet.create({
   menuTitleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 0, 
   },
   titleText: {
     color: 'white',
     fontSize: heightPercentage(3),
     fontWeight: Themes.fonts.extrabold,
     marginLeft: widthPercentage(3),
-    marginTop: 0, 
   },
   tabsContainer: {
     position: 'absolute',
-    bottom: heightPercentage(1), 
+    bottom: -4, 
     left: 0,
     right: 0,
     flexDirection: 'row',
@@ -99,10 +98,18 @@ const styles = StyleSheet.create({
   tab: {
     marginHorizontal: widthPercentage(4),
     paddingBottom: heightPercentage(0.5),
+    width: widthPercentage(25), // Ancho fijo
+    alignItems: 'center', // Centrar el texto y el indicador en el mismo lugar
+  },
+  tabIndicatorContainer: {
+    height: 3, // Altura fija para el contenedor del indicador
+    marginTop: 2,
   },
   activeTab: {
-    borderBottomWidth: 3,
-    borderColor: Themes.colors.purpleLight,
+    width: widthPercentage(25), // Tamaño fijo de la barra inferior
+    height: '100%',
+    backgroundColor: Themes.colors.purpleLight,
+    borderRadius: 2,
   },
   tabText: {
     color: 'white',

@@ -31,14 +31,6 @@ const Other_user_information = () => {
                 <View style={styles.infoLine} />
                 <View style={styles.buttonContainer}>
                     <Button
-                        title="Follow" 
-                        buttonStyle={styles.button} 
-                        onPress={() => console.log('followed')} 
-                        backgroundColor={Themes.colors.purpleStrong} 
-                        textColor="white"
-                    />
-                    <Button
-                        title="View Post" 
                         buttonStyle={styles.button} 
                         onPress={() => { route.push('userPosts'); }} 
                         backgroundColor={Themes.colors.purpleStrong} 
@@ -70,7 +62,7 @@ export default Other_user_information
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:'black',
+        backgroundColor:'#212121',
         justifyContent:'space-between',
     },
     topBack:{
