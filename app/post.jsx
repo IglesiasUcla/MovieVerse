@@ -5,6 +5,7 @@ import { Themes } from '../constants/Themes';
 import { Colors } from '../constants/Colors';
 import Header from '../components/Header';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Ionicons } from '@expo/vector-icons'; 
 import RatingFavorite from '../components/RatingFavorite'; // Importa el componente RatingFavorite
 
 const { fonts } = Themes;
@@ -40,7 +41,7 @@ export default function Post() {
                 <View style={styles.userInfo}>
                     {/* Recuadro en lugar de imagen */}
                     <View style={styles.avatarContainer}>
-                        <FontAwesome name="user-circle" size={40} color={Themes.colors.purpleStrong} />
+                    <Ionicons name="person-circle-outline" size={24} color={Themes.colors.purpleStrong} />
                         {/* Nombre de usuario al lado del icono */}
                         <Text style={[styles.movieTitle, { color: colors.text, marginLeft: 8 }]}>User</Text>
                     </View>
@@ -86,14 +87,16 @@ export default function Post() {
 
                 {/* Separación entre los iconos */}
                 <View style={styles.likesContainer}>
-                    {Array.from({ length: 8 }).map((_, index) => (
-                        <FontAwesome
-                            key={index}
-                            name="user-circle"
-                            size={40}
-                            color={Themes.colors.purpleStrong}
-                            style={styles.likeUser}
+                    {Array.from({ length: 6 }).map((_, index) => (
+                        <Ionicons 
+                        name="person-circle-outline" 
+                        key={index}
+                        size={40} 
+                        color={Themes.colors.purpleStrong} 
+                        style={styles.likeUser}
                         />
+                        
+                            
                     ))}
                 </View>
             </View>
