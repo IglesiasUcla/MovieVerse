@@ -32,6 +32,8 @@ const Post_tags = () => {
 
   return (
     <View style={styles.container}>
+            <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
+
       
       {/* Aquí está el Header con los estilos correctamente aplicados */}
       <Header

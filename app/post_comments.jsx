@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         backgroundColor:Themes.colors.purpleStrong,
         justifyContent:'space-around',
-        borderBottomColor: '#887c9f',
     },
     labelContent:{
         borderBottomColor:Themes.colors.purpleLight,
@@ -94,7 +93,6 @@ const styles = StyleSheet.create({
     },
     commentsContainer:{
         paddingVertical:10,
-        borderBottomColor: '#887c9f',
     }
 
 })

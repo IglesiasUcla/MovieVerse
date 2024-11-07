@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, useColorScheme } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, useColorScheme, StatusBar } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Themes } from '../constants/Themes';
 import { Colors } from '../constants/Colors';
@@ -17,6 +17,8 @@ export default function Post() {
 
     return (
         <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
+                  <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
+
             {/* Encabezado */}
             <Header
                 title="User’s Post"
