@@ -24,7 +24,7 @@ const MovieScreen = () => {
 
   return (
     <View style={styles.container}>
-<StatusBar barStyle="light-content" backgroundColor={Themes.colors.grayDark} />
+      <StatusBar barStyle="light-content" backgroundColor={Themes.colors.grayLight} />
       <TouchableOpacity style={styles.backButton} onPress={() => route.back()}>
         <AntDesign name="arrowleft" size={24} color="white" />
       </TouchableOpacity>
