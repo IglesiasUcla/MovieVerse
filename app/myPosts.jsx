@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, StatusBar, Pressable } from 'react-native';
 import Header from '../components/Header';
 import { Themes } from '../constants/Themes';
 import { Ionicons } from '@expo/vector-icons';
 import RatingFavorite from '../components/RatingFavorite';
 import { useRouter } from 'expo-router';
+import { DiscardChangesPopup, DiscardChangesPopup1, PhotoSelectionPopup } from '../components/Popup';
 
 const MyPosts = () => {
   const route=useRouter()
+  const [showDiscardPopup, setShowDiscardPopup] = useState(false);
 
   const posts = [
     {
@@ -79,7 +81,7 @@ const MyPosts = () => {
             <View style={styles.titleContainer}>
               <Text style={styles.movieTitle}>{post.title}</Text>
               <Text style={styles.movieYear}>{post.year}</Text>
-              <TouchableOpacity onPress={() => route.push('movieReview')} style={styles.editButton}>
+              <TouchableOpacity onPress={() => setShowDiscardPopup(true)} style={styles.editButton}>
                 <Ionicons name="pencil" size={20} color="#6116ec" />
               </TouchableOpacity>
             </View>
@@ -108,7 +110,17 @@ const MyPosts = () => {
           </View>
         ))}
       </ScrollView>
+      <DiscardChangesPopup
+        visible={showDiscardPopup}
+        onCancel={() => setShowDiscardPopup(false)} 
+        onDiscard={() => {route.push('movieReview')}}
+        title='Edit post'
+        text='Would you like to edit your post?'
+        purpleButton='Yes'
+      />
     </View>
+
+    
   );
 };
 

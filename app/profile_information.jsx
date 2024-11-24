@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View,SafeAreaView,ScrollView,TouchableOpacity,TextInput, StatusBar} from 'react-native'
-import React from 'react'
+import React, { useState } from 'react';
 import { Themes } from '../constants/Themes'
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { heightPercentage,widthPercentage } from '../helpers/commons';
 import Button from '../components/Button';
 import Header from '../components/Header';
@@ -11,14 +10,18 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import InputPencil from '../components/InputPencil';
 import { useRouter } from 'expo-router';
+import { DiscardChangesPopup, DiscardChangesPopup1, PhotoSelectionPopup } from '../components/Popup';
 
 const Profile_information = () => {
     const route= useRouter();
+    const [showDiscardPopup, setShowDiscardPopup] = useState(false);
+    const [showPhotoSelectionPopup, setShowPhotoSelectionPopup] = useState(false);
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
             {/* header */}
             <View>
+                
                 <Header
                     title="Profile Information"
                     leftIconName="arrow-back"       
@@ -26,6 +29,7 @@ const Profile_information = () => {
                 />
             </View>
             <View style={styles.containerWrapper}>
+                
                 <View >
                     <Text style={styles.titleBody}> Signed in as user </Text>
                 </View>
@@ -68,6 +72,27 @@ const Profile_information = () => {
                     </View>
                 {/* footer */}
                 <View style={styles.footer}>
+                <DiscardChangesPopup
+                    visible={showDiscardPopup}
+                    onCancel={() => setShowDiscardPopup(false)} // Cierra el popup al cancelar
+                    onDiscard={() => {route.push('')}}
+                    title='Erase avatar'
+                    text='Would you like to erase your profile picture?'
+                    purpleButton='Yes'
+                />
+
+                <PhotoSelectionPopup
+                    visible={showPhotoSelectionPopup}
+                    onClose={() => setShowPhotoSelectionPopup(false)}
+                    onTakePhoto={() => {
+                    // Lógica para tomar foto
+                    setShowPhotoSelectionPopup(false);
+                    }}
+                    onSelectPhoto={() => {
+                    // Lógica para seleccionar foto
+                    setShowPhotoSelectionPopup(false);
+                     }}
+                />
                     <Text style={styles.footerAvatarText}>Avatar</Text>
                     <View style={styles.footerItems}>
                         <View style={styles.avatarIcon}>
@@ -76,10 +101,10 @@ const Profile_information = () => {
                             </TouchableOpacity>
                         </View>
                         <View style={styles.iconsContainer}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => setShowPhotoSelectionPopup(true)} >
                                 <FontAwesome style={styles.icons} name="cloud-upload" size={30} color={Themes.colors.purpleStrong} />
                             </TouchableOpacity>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => setShowDiscardPopup(true)} >
                             <AntDesign style={styles.icons} name="delete" size={30} color={Themes.colors.purpleStrong} />
                             </TouchableOpacity>
                         </View>
@@ -102,6 +127,7 @@ const Profile_information = () => {
                     </View>
                 </View>
             </View>
+            
         </SafeAreaView>
     )
 }
