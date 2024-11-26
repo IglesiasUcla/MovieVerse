@@ -1,26 +1,90 @@
-import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, Animated, Pressable, StatusBar } from 'react-native';
-import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Animated, Pressable, StatusBar, ActivityIndicator } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 import { Themes } from '../constants/Themes';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import RatingFavorite from '../components/RatingFavorite';
 import { Ionicons } from '@expo/vector-icons';
+import { getMovieDetails } from '../helpers/tmdbApi';
 
 const MovieScreen = () => {
   const [showFullSynopsis, setShowFullSynopsis] = useState(false);
+  const [synopsisHeight] = useState(new Animated.Value(52)); // Estado animado para la altura de la sinopsis
   const scrollY = new Animated.Value(0);
-  const route=useRouter()
+  const route = useRouter()
+  const { movieId } = useLocalSearchParams(); // Uso de useLocalSearchParams para obtener movieId
+  const [movie, setMovie] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const synopsisHeight = useState(new Animated.Value(60))[0];
+
+  // Fetching detalles de la película
+  useEffect(() => {
+    const fetchMovieDetails = async () => {
+      try {
+        console.log(`Requesting movie details for ID: ${movieId}`); // Log para confirmar el ID solicitado
+        const data = await getMovieDetails(movieId);
+        console.log("Movie details response:", data); // Log para revisar el objeto de la API
+        setMovie(data); // Almacena los datos de la película
+      } catch (error) {
+        console.error("Error fetching movie details:", error);
+        setError("Failed to fetch movie details. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMovieDetails();
+  }, [movieId]);
+  
+  // Verificación de errores o datos vacíos
+  if (loading) {
+    return <ActivityIndicator size="large" color="#6200EE" style={styles.loader} />;
+  }
+  
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>{error}</Text>
+        <TouchableOpacity onPress={() => route.back()} style={styles.backButtonError}>
+          <AntDesign name="arrowleft" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+    );
+  }
+  
+  // Condición adicional para asegurar que `movie` tiene datos válidos
+  if (!movie || Object.keys(movie).length === 0) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Movie details not available.</Text>
+        <TouchableOpacity onPress={() => route.back()} style={styles.backButtonError}>
+          <AntDesign name="arrowleft" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   const toggleSynopsis = () => {
+    // Animación para expandir o contraer la sinopsis
     Animated.timing(synopsisHeight, {
-      toValue: showFullSynopsis ? 60 : 120, // Cambia la altura
+      toValue: showFullSynopsis ? 52 : 132,  // Cambia la altura (expandir o contraer)
       duration: 350, // Duración de la animación
-      useNativeDriver: false
+      useNativeDriver: false, // Usar el driver nativo
     }).start();
-    setShowFullSynopsis(!showFullSynopsis);
+    
+    setShowFullSynopsis(!showFullSynopsis); // Cambia el estado de visibilidad
   };
+
+  const posterUri = movie.poster_path
+  ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
+  : 'https://via.placeholder.com/500x750.png?text=No+Image';
+
+  const backdropUri = movie.backdrop_path
+  ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
+  : 'https://via.placeholder.com/500x750.png?text=No+Image';
+
+  let rating = movie.vote_average / 2;
+  rating = rating.toFixed(1);
 
   return (
     <View style={styles.container}>
@@ -37,7 +101,7 @@ const MovieScreen = () => {
         {/* Imagen de la película como header */}
         <Animated.View style={styles.headerImageContainer}>
           <Animated.Image
-            source={{ uri: 'https://image.tmdb.org/t/p/w500/path_to_movie_image.jpg' }}
+            source={{ uri: backdropUri }}
             style={[
               styles.headerImage,
               {
@@ -55,30 +119,32 @@ const MovieScreen = () => {
         <View style={styles.movieInfoContainer}>
         <View style={styles.movieDetailsRow}>
             <View style={styles.movieTextContainer}>
-              <Text style={styles.movieTitle}>The Pianist</Text>
+              <Text style={styles.movieTitle}>{movie.title}</Text>
               <Text style={styles.movieDirector}>
-                Directed by <Text style={styles.bold}>Roman Polanski</Text>
+                Directed by <Text style={styles.bold}>DIRECTOR</Text>
               </Text>
-              <Text style={styles.movieDetails}>2018 • 150 min</Text>
+              <Text style={styles.movieDetails}>{movie.release_date} • {movie.runtime} min</Text>
             </View>
             <Image
-              source={{ uri: 'https://image.tmdb.org/t/p/w500/path_to_movie_image.jpg' }}
+              source={{ uri: posterUri }}
               style={styles.movieThumbnail}
             />
           </View>
 
-          <View style={styles.synopsisContainer}>
-          <Animated.View style={{ height: synopsisHeight }}>
-              <Text style={styles.synopsisText}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac.
-              Morbi id laoreet nisi, ac vulputate arcu. Donec et placerat turpis,
-              viverra condimentum lorem. Maecenas ut quam rhoncus, auctor elit et, tincidunt lectus. Aenean eu facilisis ex.
-              </Text>
-            </Animated.View>
-            <TouchableOpacity onPress={toggleSynopsis}>
-              <Text style={styles.moreDots}>•••</Text>
-            </TouchableOpacity>
-          </View>
+      {/* Sinopsis */}
+      <View style={styles.synopsisContainer}>
+        <Animated.View style={{ height: synopsisHeight }}>
+          <Text style={styles.synopsisText}>
+            {movie.overview || "No synopsis available."}
+          </Text>
+        </Animated.View>
+
+        <TouchableOpacity onPress={toggleSynopsis} style={styles.ex}>
+          <Text style={styles.moreText}>
+            {showFullSynopsis ? "" : "•••"}
+          </Text>
+        </TouchableOpacity>
+      </View>
 
           <View style={styles.divider} />
 
@@ -87,11 +153,11 @@ const MovieScreen = () => {
 
           <View style={styles.ratingContainer}>
             <Text style={styles.ratingLabel}>Overall Rating</Text>
-            <Text style={styles.ratingScore}>4.4</Text>
+            <Text style={styles.ratingScore}>{rating}</Text>
 
             <View >
             <RatingFavorite style={styles.starsContainer}
-                rating={4.4}
+                rating={rating}
                 showFavorite={false}
                 starSize={32}    // Ajusta el tamaño si es necesario
             />
@@ -400,9 +466,25 @@ const styles = StyleSheet.create({
   movieThumbnail: {
     width: 80,
     height: 120,
-    backgroundColor: 'gray',
     marginHorizontal: 12,
   },
+  synopsisContainer: {
+    marginTop: 8,
+  },
+  synopsisText: {
+    fontSize: 14,
+    color: 'white',
+  },
+  ex: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  moreText: {
+    color: Themes.colors.purpleDetail,
+    fontSize: 20,
+    alignItems: 'center',
+  }
 });
 
 export default MovieScreen;
