@@ -1,26 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, FlatList, Pressable, StatusBar } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, FlatList, Pressable, StatusBar, Image } from 'react-native';
 import { Themes } from '../constants/Themes';
 import { widthPercentage, heightPercentage } from '../helpers/commons';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import TopBar from '../components/TopBar';
+import { getPopularMovies } from '../helpers/tmdbApi';
 
 const HomePage = () => {
     const route = useRouter();
+    const [movies, setMovies] = useState([]); // Inicializamos con un arreglo vacío
+    const [loading, setLoading] = useState(true); // Estado para manejar el loading
 
-    // Datos de ejemplo para el carrusel (estos vendrán de la API)
-    const [movies, setMovies] = useState([
-        { id: '1', title: 'Movie 1' },
-        { id: '2', title: 'Movie 2' },
-        { id: '3', title: 'Movie 3' },
-        { id: '4', title: 'Movie 4' },
-    ]);
+    // Llamar a la API al montar el componente
+    useEffect(() => {
+        const fetchMovies = async () => {
+            try {
+                const fetchedMovies = await getPopularMovies();
+                setMovies(fetchedMovies); // Actualizamos el estado con los datos reales
+            } catch (error) {
+                console.error('Error fetching movies:', error);
+            } finally {
+                setLoading(false); // Desactivamos el loading
+            }
+        };
 
-    // Función para renderizar cada película en el carrusel {/* onPress={() => route.push(`/movie/${item.id}`) */}
+        fetchMovies();
+    }, []);
+
+    // Renderizar cada película en el carrusel
     const renderMoviePoster = ({ item }) => (
-        <Pressable onPress={() => route.push(`movieScreen`)} style={styles.moviePosterContainer}> 
-            <View style={styles.moviePoster} />
+        <Pressable
+            onPress={() => route.push(`${item.id}`)} // Aquí puedes pasar `item.id` si la ruta necesita el ID de la película
+            style={styles.moviePosterContainer}
+        >
+            <Image
+                source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` }} // URL para los carteles de TMDB
+                style={styles.moviePoster}
+                resizeMode="cover"
+            />
         </Pressable>
     );
 
@@ -28,27 +46,32 @@ const HomePage = () => {
         <View style={styles.container}>
             <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
             <TopBar
-                title='Popular' 
-                currentTab="movies" 
-                onTabChange={()=>{route.push('homePage_post')}}
-                onMenuPress={() => console.log('Menu pressed')} 
-                onSearchPress={()=>{route.push('search')}} 
+                title="Popular"
+                currentTab="movies"
+                onTabChange={() => route.push('homePage_post')}
+                onMenuPress={() => console.log('Menu pressed')}
+                onSearchPress={() => route.push('search')}
             />
 
-            <Pressable onPress={()=>{route.push('searchMovies_mostPopular')}} style={styles.titleContainer} >
+            <Pressable onPress={() => route.push('searchMovies_mostPopular')} style={styles.titleContainer}>
                 <Text style={styles.titleText}>Popular Movies</Text>
             </Pressable>
 
-            {/* Carrusel de Películas usando FlatList */}
-            <FlatList
-                style={styles.flatlist}
-                horizontal
-                data={movies}
-                renderItem={renderMoviePoster}
-                keyExtractor={(item) => item.id}
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.carouselContent}
-            />
+            {/* Mostrar un mensaje de carga mientras se obtienen las películas */}
+            {loading ? (
+                <Text style={styles.loadingText}>Loading movies...</Text>
+            ) : (
+                // Carrusel de Películas usando FlatList
+                <FlatList
+                    style={styles.flatlist}
+                    horizontal
+                    data={movies}
+                    renderItem={renderMoviePoster}
+                    keyExtractor={(item) => item.id.toString()} // Aseguramos que el key sea un string
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.carouselContent}
+                />
+            )}
 
             {/* Botón flotante */}
             <TouchableOpacity style={styles.floatingButton} onPress={() => route.push('addMovie')}>
@@ -79,15 +102,14 @@ const styles = StyleSheet.create({
     carouselContent: {
         alignSelf: 'flex-start',
         paddingLeft: 16,
-        paddingRight: 16, // Espacio derecho para el último elemento
+        paddingRight: 16,
     },
     moviePosterContainer: {
-        marginRight: 8, // Espacio entre carteles
+        marginRight: 8,
     },
     moviePoster: {
         width: widthPercentage(40),
         height: heightPercentage(30),
-        backgroundColor: 'gray',
         borderRadius: 10,
     },
     floatingButton: {
@@ -97,6 +119,12 @@ const styles = StyleSheet.create({
         backgroundColor: Themes.colors.purpleStrong,
         borderRadius: 50,
         padding: 16,
+    },
+    loadingText: {
+        color: 'white',
+        fontSize: heightPercentage(2),
+        textAlign: 'center',
+        marginTop: heightPercentage(20),
     },
 });
 

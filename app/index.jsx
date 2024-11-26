@@ -25,7 +25,7 @@ import Post_comments from './post_comments'
 import UserPosts from './userPosts'
 import SearchMovieGenre from './searchMovieGenre'
 import MyPosts from './myPosts'
-import MovieScreen from './movieScreen'
+import MovieScreen from './[movieId]'
 import Other_user_information from './other_user_information'
 import Activity_favorite_movies from './activity_favorite_movies'
 
