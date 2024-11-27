@@ -33,5 +33,68 @@ export const getMovieDetails = async (movieId) => {
   }
 };
 
+export const getMovieDirector = async (movieId) => {
+  try {
+    console.log('Requesting movie credits for ID (tmdbApi):', movieId);
+    const response = await tmdbApi.get(`/movie/${movieId}/credits`);
+    console.log('Movie credits response (tmdbApi):', response.data);
+
+    // Filtrar para obtener solo el director
+    const director = response.data.crew.find(
+      (person) => person.job === 'Director'
+    );
+
+    if (director) {
+      return director.name; // Retornar solo el nombre del director
+    } else {
+      console.warn('Director not found for movie ID:', movieId);
+      return 'Director not available';
+    }
+  } catch (error) {
+    console.error('Error fetching movie credits:', error);
+    throw error; // Propagar el error
+  }
+};
+
+export const getTopRatedMovies = async (page = 1) => {
+  try {
+    console.log(`Fetching top-rated movies for page ${page}...`);
+    const response = await tmdbApi.get('/movie/top_rated', {
+      params: {
+        language: 'en-US',
+        page, // Solicita una página específica
+      },
+    });
+
+    // Limita el número de resultados a 18
+    const topRatedMovies = response.data.results.slice(0, 18);
+    return topRatedMovies;
+  } catch (error) {
+    console.error('Error fetching top-rated movies:', error);
+    throw error;
+  }
+};
+
+export const getMostPopularMovies = async (page = 1) => {
+  try {
+    console.log(`Fetching most-popular movies for page ${page}...`);
+    const response = await tmdbApi.get('/trending/movie/week', {
+      params: {
+        language: 'en-US',
+        page, // Solicita una página específica
+      },
+    });
+
+    // Limita el número de resultados a 18
+    const mostPopularMovies = response.data.results.slice(0, 18);
+    return mostPopularMovies;
+  } catch (error) {
+    console.error('Error fetching most-popular movies:', error);
+    throw error;
+  }
+};
+
+
+
 
 export default tmdbApi;

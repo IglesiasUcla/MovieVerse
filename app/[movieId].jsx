@@ -5,7 +5,7 @@ import { Themes } from '../constants/Themes';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import RatingFavorite from '../components/RatingFavorite';
 import { Ionicons } from '@expo/vector-icons';
-import { getMovieDetails } from '../helpers/tmdbApi';
+import { getMovieDetails, getMovieDirector } from '../helpers/tmdbApi';
 
 const MovieScreen = () => {
   const [showFullSynopsis, setShowFullSynopsis] = useState(false);
@@ -16,6 +16,8 @@ const MovieScreen = () => {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [director, setDirector] = useState('');
+
 
 
   // Fetching detalles de la película
@@ -35,6 +37,20 @@ const MovieScreen = () => {
     };
     fetchMovieDetails();
   }, [movieId]);
+
+  useEffect(() => {
+    const fetchDirector = async () => {
+      try {
+        const directorName = await getMovieDirector(movieId); // Usa la nueva función
+        setDirector(directorName);
+      } catch (error) {
+        console.error('Error fetching director:', error);
+      }
+    };
+  
+    fetchDirector();
+  }, [movieId]);
+  
   
   // Verificación de errores o datos vacíos
   if (loading) {
@@ -121,8 +137,9 @@ const MovieScreen = () => {
             <View style={styles.movieTextContainer}>
               <Text style={styles.movieTitle}>{movie.title}</Text>
               <Text style={styles.movieDirector}>
-                Directed by <Text style={styles.bold}>DIRECTOR</Text>
+                Directed by 
               </Text>
+              <Text style={styles.bold}>{director}</Text>
               <Text style={styles.movieDetails}>{movie.release_date} • {movie.runtime} min</Text>
             </View>
             <Image
@@ -335,7 +352,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   movieTitle: {
-    marginTop: -24,
+    marginTop: -16,
     fontSize: 24,
     color: 'white',
     fontWeight: 'bold',
@@ -343,11 +360,13 @@ const styles = StyleSheet.create({
   movieDirector: {
     color: 'white',
     fontSize: 16,
-    marginVertical: 5,
-    marginTop: 16,
+    marginTop: 8,
   },
   bold: {
     fontWeight: 'bold',
+    color: 'white',
+    fontSize: 16,
+    marginBottom: 8+4,
   },
   movieDetails: {
     color: 'white',
