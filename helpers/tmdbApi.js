@@ -1,10 +1,11 @@
 import createApiInstance from './api';
-import { TMDB_API_KEY } from '@env';
 
 const BASE_URL = 'https://api.themoviedb.org/3';
 
 // Instancia de la API de TMDB
-const tmdbApi = createApiInstance(BASE_URL, { api_key: TMDB_API_KEY });
+const tmdbApi = createApiInstance(BASE_URL, {
+  api_key: process.env.EXPO_PUBLIC_TMDB_API_KEY,
+});
 
 // Funciones para realizar peticiones específicas
 export const getPopularMovies = async () => {
