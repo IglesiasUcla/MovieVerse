@@ -127,4 +127,23 @@ export const getMoviesByGenre = async (genreId, page = 1) => {
   }
 };
 
+export const getMoviesByYear = async (year, page = 1) => {
+  try {
+    const response = await tmdbApi.get('/discover/movie', {
+      params: {
+        primary_release_year: year,
+        page,
+      },
+    });
+
+    // Limita el número de resultados a 18
+    const movieYear = response.data.results.slice(0, 18);
+    return movieYear; // Retorna solo las primeras 18 películas
+  } catch (error) {
+    console.error('Error fetching movies by year:', error);
+    throw error;
+  }
+};
+
+
 export default tmdbApi;

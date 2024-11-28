@@ -4,37 +4,37 @@ import { Colors } from '../../constants/Colors';
 import { Themes } from '../../constants/Themes';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Header from '../../components/Header'; 
-import { getMoviesByGenre } from '../../helpers/tmdbApi';
 import { useColorScheme } from 'react-native';
+import { getMoviesByYear } from '../../helpers/tmdbApi';
 
-const MovieGenreList = () => {
+const MoviesByYear = () => {
   const [movies, setMovies] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages] = useState(3); // Ajusta el valor inicial según sea necesario
+  const [totalPages] = useState(3); // Se actualizará según la respuesta de la API
   const router = useRouter();
-  const { genreId, genreName } = useLocalSearchParams(); // Usar los parámetros pasados
+  const { year } = useLocalSearchParams(); // Obtener el año desde los parámetros
   const themeColors = Colors[useColorScheme()] || Colors.light;
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!genreId) {
-      setError('Invalid genre selected.');
+    if (!year) {
+      setError('Invalid year selected.');
       return;
     }
   
-    const fetchMovies = async () => {
+    const fetchMoviesYear = async () => {
       try {
-        const genreMovies = await getMoviesByGenre(genreId);
-        setMovies(genreMovies);
+        const genreMoviesYear = await getMoviesByYear(year);
+        setMovies(genreMoviesYear);
       } catch (error) {
-        console.error('Error fetching movies by genre:', error);
+        console.error('Error fetching movies by year:', error);
         setError('Failed to fetch movies. Please try again.');
       }
     };
   
-    fetchMovies();
-  }, [genreId]);
-  
+    fetchMoviesYear();
+  }, [year]);
+
   if (error) {
     return (
       <View style={styles.container}>
@@ -59,7 +59,7 @@ const MovieGenreList = () => {
 
   const fetchMoviesByPage = async (page) => {
     try {
-      const genreMovies = await getMoviesByGenre(genreId, page);
+      const genreMovies = await getMoviesByYear(year, page);
       setMovies(genreMovies);
     } catch (error) {
       console.error('Error fetching movies for page:', error);
@@ -74,10 +74,12 @@ const MovieGenreList = () => {
     <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
       <Header 
-        title={genreName || "Genre"} 
+        title={`Movies from ${year}`} 
         leftIconName="arrow-back" 
-        leftIconRoute="/searchMovieGenre" 
+        leftIconRoute="/yearListScreen" 
       />
+
+      {/* Lista de películas */}
       <FlatList
         data={movies}
         keyExtractor={(item) => item.id.toString()}
@@ -86,7 +88,8 @@ const MovieGenreList = () => {
         contentContainerStyle={styles.grid}
       />
 
-<View style={styles.pagination}>
+      {/* Paginación */}
+      <View style={styles.pagination}>
   <TouchableOpacity
     onPress={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
     disabled={currentPage === 1} // Desactiva el botón si estás en la primera página
@@ -105,8 +108,6 @@ const MovieGenreList = () => {
     <Text style={styles.paginationText}>Next</Text>
   </TouchableOpacity>
 </View>
-
-
     </View>
   );
 };
@@ -141,7 +142,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'white',
   },
-  
 });
 
-export default MovieGenreList;
+export default MoviesByYear;

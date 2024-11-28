@@ -32,7 +32,7 @@ const SearchMovies = () => {
         <Text style={styles.browseTitle}>Browse By</Text>
         
         {/* Navegación a cada pantalla específica */}
-        <TouchableOpacity style={styles.optionContainer} onPress={() => router.push('/releaseData_1')}>
+        <TouchableOpacity style={styles.optionContainer} onPress={() => router.push('/yearListScreen')}>
           <Text style={styles.optionText}>Release Date</Text>
           <Icon name="chevron-right" size={24} color="#FFFFFF" />
         </TouchableOpacity>
