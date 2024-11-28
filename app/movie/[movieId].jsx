@@ -92,7 +92,7 @@ const MovieScreen = () => {
   };
 
   const posterUri = movie.poster_path
-  ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
+  ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
   : 'https://via.placeholder.com/500x750.png?text=No+Image';
 
   const backdropUri = movie.backdrop_path

@@ -28,6 +28,8 @@ import MyPosts from './myPosts'
 import MovieScreen from './movie/[movieId]'
 import Other_user_information from './other_user_information'
 import Activity_favorite_movies from './activity_favorite_movies'
+import YearListScreen from './yearListScreen'
+import MoviesByYear from './moviesByYear/[year]'
 
 const index = () => {
 

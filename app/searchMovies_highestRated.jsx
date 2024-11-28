@@ -46,7 +46,7 @@ const SearchMovies_highestRated = () => {
       onPress={() => route.push(`/movie/${item.id}`)} // Navega a la pantalla de detalles de la película
     >
       <Image
-        source={{ uri: `https://image.tmdb.org/t/p/original${item.poster_path}` }}
+        source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` }}
         style={styles.movieImage}
       />
 
