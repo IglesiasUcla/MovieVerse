@@ -9,7 +9,9 @@ import { getMovieDetails, getMovieDirector } from '../../helpers/tmdbApi';
 
 const MovieScreen = () => {
   const [showFullSynopsis, setShowFullSynopsis] = useState(false);
-  const [synopsisHeight] = useState(new Animated.Value(52)); // Estado animado para la altura de la sinopsis
+  const [isExpandable, setIsExpandable] = useState(false);
+  const [measuredHeight, setMeasuredHeight] = useState(0);
+  const [synopsisHeight, setSynopsisHeight] = useState(52);
   const scrollY = new Animated.Value(0);
   const route = useRouter()
   const { movieId } = useLocalSearchParams(); // Uso de useLocalSearchParams para obtener movieId
@@ -17,8 +19,6 @@ const MovieScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [director, setDirector] = useState('');
-
-
 
   // Fetching detalles de la película
   useEffect(() => {
@@ -81,14 +81,8 @@ const MovieScreen = () => {
   }
 
   const toggleSynopsis = () => {
-    // Animación para expandir o contraer la sinopsis
-    Animated.timing(synopsisHeight, {
-      toValue: showFullSynopsis ? 52 : 132,  // Cambia la altura (expandir o contraer)
-      duration: 350, // Duración de la animación
-      useNativeDriver: false, // Usar el driver nativo
-    }).start();
-    
-    setShowFullSynopsis(!showFullSynopsis); // Cambia el estado de visibilidad
+    setShowFullSynopsis(!showFullSynopsis);
+    setSynopsisHeight(!showFullSynopsis ? measuredHeight : 52); // Expandir o contraer
   };
 
   const posterUri = movie.poster_path
@@ -148,20 +142,38 @@ const MovieScreen = () => {
             />
           </View>
 
-      {/* Sinopsis */}
-      <View style={styles.synopsisContainer}>
-        <Animated.View style={{ height: synopsisHeight }}>
-          <Text style={styles.synopsisText}>
+        {/* Sinopsis */}
+        <View>
+        {/* Vista fantasma para medir la altura completa */}
+          <Text
+            style={[styles.synopsisText, { position: 'absolute', opacity: 0, zIndex: -1 }]} // Oculta este texto
+            onLayout={(event) => {
+              const { height } = event.nativeEvent.layout;
+              if (height > 52) {
+                setIsExpandable(true); // Activa el botón si es necesario
+                setMeasuredHeight(height); // Guarda la altura completa
+              }
+            }}
+          >
             {movie.overview || "No synopsis available."}
           </Text>
-        </Animated.View>
 
-        <TouchableOpacity onPress={toggleSynopsis} style={styles.ex}>
-          <Text style={styles.moreText}>
-            {showFullSynopsis ? "" : "•••"}
-          </Text>
-        </TouchableOpacity>
-      </View>
+        {/* Texto visible con restricciones */}
+          <Animated.View style={{ height: showFullSynopsis ? measuredHeight : synopsisHeight }}>
+            <Text style={styles.synopsisText} numberOfLines={showFullSynopsis ? undefined : 3}>
+              {movie.overview || "No synopsis available."}
+            </Text>
+          </Animated.View>
+
+        {/* Botón de expansión */}
+          {isExpandable && (
+            <TouchableOpacity onPress={toggleSynopsis} style={styles.ex}>
+              <Text style={styles.moreText}>
+                {showFullSynopsis ? "Show Less" : "Show More"}
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
 
           <View style={styles.divider} />
 
@@ -375,8 +387,10 @@ const styles = StyleSheet.create({
   },
   synopsisContainer: {
     flexDirection: 'column',
-    alignItems: 'center',
-  },
+    alignItems: 'flex-start', // Asegura alineación adecuada
+    overflow: 'hidden', // Esconde texto fuera de la altura inicial
+    width: '100%', // O el tamaño que necesites
+  },  
   synopsisText: {
     marginTop: 8,
     color: 'white',
@@ -495,18 +509,19 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   ex: {
-    flexDirection: 'row',
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
+    
   },
   movieTextContainer: {
     flex: 0.95,
   },
   moreText: {
     color: Themes.colors.purpleDetail,
-    fontSize: 20,
+    fontSize: 14,
     alignItems: 'center',
-  }
+  },
 });
 
 export default MovieScreen;
