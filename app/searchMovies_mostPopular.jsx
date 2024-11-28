@@ -42,7 +42,7 @@ const SearchMovies_highestRated = () => {
   const renderMovieItem = ({ item }) => (
     <TouchableOpacity
       style={styles.movieContainer}
-      onPress={() => route.push(`${item.id}`)} // Navega a la pantalla de detalles de la película
+      onPress={() => route.push(`/movie/${item.id}`)} // Navega a la pantalla de detalles de la película
     >
       <Image
         source={{ uri: `https://image.tmdb.org/t/p/original${item.poster_path}` }}

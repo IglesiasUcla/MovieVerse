@@ -1,42 +1,64 @@
-import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, StatusBar, ActivityIndicator } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import Header from '../components/Header';
 import { Themes } from '../constants/Themes';
-
-const genres = [
-  'Action', 'Adventure', 'Animation', 'Comedy', 'Crime',
-  'Documentary', 'Drama', 'Family', 'Fantasy', 'History',
-  'Horror', 'Music', 'Mystery', 'Romance', 'Science Fiction'
-];
+import { getMovieGenres } from '../helpers/tmdbApi';
 
 const SearchMovieGenre = () => {
-  const router = useRouter(); 
+  const [genres, setGenres] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        const fetchedGenres = await getMovieGenres();
+        setGenres(fetchedGenres); // Actualiza el estado con los géneros de la API
+      } catch (error) {
+        console.error('Error fetching genres:', error);
+      } finally {
+        setLoading(false); // Detiene el indicador de carga
+      }
+    };
+
+    fetchGenres();
+  }, []);
 
   const handleGenrePress = (genre) => {
-    console.log(`Selected genre: ${genre}`);
-    router.push(`searchMovieGenre${genre}`); 
+    console.log(`Selected genre test: ${genre.name}`);
+    console.log(`Selected genre id: ${genre.id}`);
+    // Pasa el genreId y genreName como parámetros
+    router.push({
+      pathname: `/genreMovieList/${genre.id}`,
+      params: { genreId: genre.id, genreName: genre.name },
+    });    
   };
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
       <Header
-        title="Genre"
-        leftIconName="arrow-back"       
-        leftIconRoute={"/search_movies"} 
+        title="Genres"
+        leftIconName="arrow-back"
+        leftIconRoute="/search_movies"
       />
-      <FlatList
-        data={genres}
-        keyExtractor={(item) => item}
-        renderItem={({ item }) => (
-          <TouchableOpacity style={styles.genreItem} onPress={() => handleGenrePress(item)}>
-            <Text style={styles.genreText}>{item}</Text>
-            <AntDesign name="rightcircle" size={20} color="white" />
-          </TouchableOpacity>
-        )}
-      />
+
+      {loading ? (
+        <ActivityIndicator size="large" color={Themes.colors.white} style={styles.loader} />
+      ) : (
+        <FlatList
+          data={genres}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity style={styles.genreItem} onPress={() => handleGenrePress(item)}>
+              <Text style={styles.genreText}>{item.name}</Text>
+              <AntDesign name="rightcircle" size={20} color="white" />
+            </TouchableOpacity>
+          )}
+        />
+      )}
     </View>
   );
 };
@@ -58,6 +80,11 @@ const styles = StyleSheet.create({
   genreText: {
     color: 'white',
     fontSize: 16,
+  },
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

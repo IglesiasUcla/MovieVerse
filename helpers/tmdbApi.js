@@ -94,7 +94,37 @@ export const getMostPopularMovies = async (page = 1) => {
   }
 };
 
+export const getMovieGenres = async () => {
+  try {
+    const response = await tmdbApi.get('/genre/movie/list', {
+      params: { language: 'en-US' },
+    });
+    return response.data.genres; // Retorna un array con los géneros
+  } catch (error) {
+    console.error('Error fetching genres:', error);
+    throw error;
+  }
+};
 
-
+export const getMoviesByGenre = async (genreId, page = 1) => {
+  try {
+    console.log('Requesting movie genre (tmdbApi):', genreId); // Imprime el valor real
+    const response = await tmdbApi.get('/discover/movie', {
+      params: {
+        with_genres: genreId, // ID del género
+        page, // Página para paginación
+        language: 'en-US', // Idioma de los resultados
+      },
+    });
+    console.log('Movie genre response (tmdbApi):', response.data); // Muestra la respuesta
+    
+    // Limita el número de resultados a 18
+    const genreMovies = response.data.results.slice(0, 18);
+    return genreMovies; // Retorna solo las primeras 18 películas
+  } catch (error) {
+    console.error('Error fetching movies by genre:', error);
+    throw error; // Propaga el error
+  }
+};
 
 export default tmdbApi;

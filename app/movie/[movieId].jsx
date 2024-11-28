@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Animated, Pressable, StatusBar, ActivityIndicator } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { Themes } from '../constants/Themes';
+import { Themes } from '../../constants/Themes';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import RatingFavorite from '../components/RatingFavorite';
+import RatingFavorite from '../../components/RatingFavorite';
 import { Ionicons } from '@expo/vector-icons';
-import { getMovieDetails, getMovieDirector } from '../helpers/tmdbApi';
+import { getMovieDetails, getMovieDirector } from '../../helpers/tmdbApi';
 
 const MovieScreen = () => {
   const [showFullSynopsis, setShowFullSynopsis] = useState(false);
@@ -498,6 +498,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  movieTextContainer: {
+    flex: 0.95,
   },
   moreText: {
     color: Themes.colors.purpleDetail,
