@@ -31,7 +31,7 @@ const HomePage = () => {
     // Renderizar cada película en el carrusel
     const renderMoviePoster = ({ item }) => (
         <Pressable
-            onPress={() => route.push(`${item.id}`)} // Aquí puedes pasar `item.id` si la ruta necesita el ID de la película
+            onPress={() => route.push(`/movie/${item.id}`)} // Aquí puedes pasar `item.id` si la ruta necesita el ID de la película
             style={styles.moviePosterContainer}
         >
             <Image
