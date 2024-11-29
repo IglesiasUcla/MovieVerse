@@ -3,11 +3,37 @@ import { View, Text, TextInput, TouchableOpacity, Pressable, StyleSheet,StatusBa
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Themes } from '../constants/Themes';
 import { useRouter } from 'expo-router';
+import axios from 'axios';
 
 const Login = () => {
   const route = useRouter();
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [message, setMessage] = useState();
+  const [messageType, setMessageType] = useState();
 
+  const handleLogin = (credentials) => {
+    const url = 'http://localhost:3000/login'
+
+    axios
+    
+    .post(url, credentials)
+    .then((response) => {
+      const result = response.data;
+      const {message, status, data} = result;
+
+
+    })
+    
+    .catch(error => {
+      console.log(error.JSON());
+    })
+  }
+
+  const handleMessage = (message, type = 'FAILED') => {
+      setMessage(message);
+      setMessageType(type);
+  }
+  
   return (
 
     <View style={styles.container}>
