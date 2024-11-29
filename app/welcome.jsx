@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
     },
 
     log:{
-        height: heightPercentage(100),
-        width: widthPercentage(100),
+        height: heightPercentage(50),
+        width: widthPercentage(50),
         alignSelf: 'center',
     },
 
