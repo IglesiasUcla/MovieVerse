@@ -26,7 +26,7 @@ const Login = () => {
     const body = { email, password };
 
     try {
-      const data = await axios.post("http://192.168.1.106:3000/login", body);
+      const data = await axios.post("http://localhost:3000/login", body);
       if (data.data.mensaje === "user logged successfully") {
         console.error(data.data.mensaje);
         Alert.alert(data.data.mensaje);

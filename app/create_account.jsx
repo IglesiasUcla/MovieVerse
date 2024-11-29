@@ -39,7 +39,7 @@ import {
   
       try {
         const response = await axios.post(
-          "http://192.168.1.106:3000/register",
+          "http://localhost:3000/register",
           body
         );
         if (response.data.mensaje === "user registered successfully") {
