@@ -1,141 +1,285 @@
-import { StyleSheet, Text, View, Image, TextInput, Pressable } from 'react-native';
-import React from 'react';
-import ScreamWrapper from '../components/ScreenWrapper.jsx';
-import { StatusBar } from 'expo-status-bar';
-import { Themes } from '../constants/Themes.js';
-import { heightPercentage, widthPercentage } from '../helpers/commons.js';
-import { useRouter } from 'expo-router';
-import Input from '../components/Input.jsx';
-import Button from '../components/Button.jsx';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import CheckButton from '../components/CheckButton.jsx';
-
-const Create_account = () => {
+import {
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    TextInput,
+    Pressable,
+    Alert,
+    TouchableOpacity,
+  } from "react-native";
+  import React, { useState } from "react";
+  import ScreamWrapper from "../components/ScreenWrapper.jsx";
+  import { StatusBar } from "expo-status-bar";
+  import { Themes } from "../constants/Themes.js";
+  import { heightPercentage, widthPercentage } from "../helpers/commons.js";
+  import { useRouter } from "expo-router";
+  import Input from "../components/Input.jsx";
+  import Button from "../components/Button.jsx";
+  import AntDesign from "@expo/vector-icons/AntDesign";
+  import CheckButton from "../components/CheckButton.jsx";
+  import axios from "axios";
+  import Icon from "react-native-vector-icons/FontAwesome";
+  
+  const Create_account = () => {
     const route = useRouter();
-    
+    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
+    const [confPassword, setConfPassword] = useState("");
+    const [passwordVisible, setPasswordVisible] = useState(false);
+  
+    const SING_IN = async () => {
+      if (password !== confPassword) {
+        Alert.alert("Las contraseñas no coinciden.");
+        return;
+      }
+  
+      const body = { username, email, password, confPassword };
+  
+      try {
+        const response = await axios.post(
+          "http://192.168.1.106:3000/register",
+          body
+        );
+        if (response.data.mensaje === "user registered successfully") {
+          Alert.alert(response.data.mensaje);
+          route.push("homePage");
+        } else {
+          Alert.alert("Error al crear usuario. Intenta nuevamente");
+        }
+      } catch (error) {
+        console.error(error);
+  
+        Alert.alert(
+          "Error:",
+          error.message || "Error desconocido al crear usuario"
+        );
+      }
+    };
+  
     return (
-        <ScreamWrapper background={Themes.colors.grayDark}>
-            <StatusBar style="dark" />
-            <View style={styles.container}>
-                <View>
-                    <Image style={styles.iconTop} source={require('../assets/images/Star_Icon.png')} resizeMode='contain'/>
-                </View>
-                <Text style={styles.title}>Create Account</Text>
-                <View style={styles.elements}>
-                    <Input 
-                        titleField="Username" 
-                        guideText="Your username" 
-                    />
-                    <Input 
-                        titleField="Email" 
-                        guideText="Your email" 
-                    />
-                    <Input 
-                        titleField="Password" 
-                        guideText="Your password"
-                        isPassword
-                    />
-                    <Input 
-                        titleField="Confirm Password" 
-                        guideText="Repeat password"
-                        isPassword
-                    />
-                    <CheckButton
-                        isCheck
-                        textCheck="I accept the terms and privacy policy"
-                    />
-                    {/* <View style={styles.checkBox}>
-                        <AntDesign name="checkcircleo" size={20} color={Themes.colors.purpleStrong}/>
-                        <Text style={styles.checkText}> I accept the terms and privacy policy</Text>
-                    </View> */}
-                </View>
-                {/* footer */}
-                <View style={styles.footer}>
-                    <Button 
-                        title="Log In" 
-                        buttonStyle={styles.button} 
-                        onPress={() => { route.push('homePage'); }} 
-                        backgroundColor={Themes.colors.purpleStrong} 
-                        textColor="white" 
-                    />
-                    <View style={styles.link}>
-                        <Text style={styles.footerText}>
-                            Already have an account? 
-                        </Text>
-                        <Text style={styles.redirectionText} onPress={() => { route.push('login'); }}>
-                            Log in
-                        </Text>
-                    </View>
-                </View>
-
+      <ScreamWrapper background={Themes.colors.grayDark}>
+        <StatusBar style="dark" />
+        <View style={styles.container}>
+          <View>
+            <Image
+              style={styles.iconTop}
+              source={require("../assets/images/Star_Icon.png")}
+              resizeMode="contain"
+            />
+          </View>
+          <Text style={styles.title}>Create Account</Text>
+          {/* Reemplazamos el form por un View */}
+          <View>
+            <Text style={styles.title2}>Username</Text>
+            <TextInput
+              placeholder="Your username"
+              placeholderTextColor="#B0B0B0"
+              style={styles.input}
+              value={username}
+              onChangeText={(text) => setUsername(text)}
+            />
+            <Text style={styles.title2}>Email</Text>
+            <TextInput
+              placeholder="Your email"
+              placeholderTextColor="#B0B0B0"
+              style={styles.input}
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+            />
+  
+            <Text style={styles.title2}>Password</Text>
+            <View style={styles.passwordContainer}>
+              <TextInput
+                placeholder="Your password"
+                placeholderTextColor="#B0B0B0"
+                secureTextEntry={!passwordVisible}
+                style={styles.passwordInput}
+                value={password}
+                onChangeText={(text) => setPassword(text)}
+              />
+              <TouchableOpacity
+                onPress={() => setPasswordVisible(!passwordVisible)}
+                style={styles.iconButton}
+              >
+                <Icon
+                  name={passwordVisible ? "eye" : "eye-slash"}
+                  size={24}
+                  color="white"
+                />
+              </TouchableOpacity>
             </View>
-        </ScreamWrapper>
+  
+            <Text style={styles.title2}>Confirm Password</Text>
+            <View style={styles.passwordContainer}>
+              <TextInput
+                placeholder="Repeat password"
+                placeholderTextColor="#B0B0B0"
+                secureTextEntry={!passwordVisible}
+                style={styles.passwordInput}
+                value={confPassword}
+                onChangeText={(text) => setConfPassword(text)}
+              />
+              <TouchableOpacity
+                onPress={() => setPasswordVisible(!passwordVisible)}
+                style={styles.iconButton}
+              >
+                <Icon
+                  name={passwordVisible ? "eye" : "eye-slash"}
+                  size={24}
+                  color="white"
+                />
+              </TouchableOpacity>
+            </View>
+  
+            <View style={styles.elements}>
+              <CheckButton
+                isCheck
+                textCheck="I accept the terms and privacy policy"
+              />
+            </View>
+            {/* footer */}
+            <View style={styles.footer}>
+              <Button
+                title="Sign Up"
+                buttonStyle={styles.button}
+                onPress={SING_IN}
+                backgroundColor={Themes.colors.purpleStrong}
+                textColor="white"
+              />
+              <View style={styles.link}>
+                <Text style={styles.footerText}>Already have an account?</Text>
+                <Text
+                  style={styles.redirectionText}
+                  onPress={() => {
+                    route.push("login");
+                  }}
+                >
+                  Log in
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </ScreamWrapper>
     );
-};
-
-export default Create_account;
-
-const styles = StyleSheet.create({
+  };
+  
+  export default Create_account;
+  
+  const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'space-between',  
-        paddingHorizontal: 16,  
+      flex: 1,
+      justifyContent: "space-between",
+      paddingHorizontal: 16,
     },
-
+  
     iconTop: {
-        justifyContent: 'flex-end',
-        padding: 25,
-        marginLeft: 275,
+      justifyContent: "flex-end",
+      padding: 25,
+      marginLeft: 275,
     },
-
-    title: {
-        color: 'white',
-        fontSize: heightPercentage(5),
-        textAlign: 'left',
-        fontWeight: Themes.fonts.extrabold,
-        marginBottom: 20,  
+    inputContainer: {
+      width: "100%",
+      marginBottom: 15,
     },
-
+    inputLabel: {
+      color: "#fff",
+      fontSize: 16,
+      marginBottom: 5,
+    },
+    passwordInput: {
+      flex: 1,
+      color: "#ffffff",
+      paddingHorizontal: 15,
+      paddingVertical: 10,
+    },
+    input: {
+      width: "100%",
+      height: 48,
+      borderWidth: 1,
+      backgroundColor: "#333333",
+      borderRadius: 10,
+      paddingLeft: 15,
+      fontSize: 16,
+      color: "#fff",
+      backgroundColor: "#333333",
+    },
+    title2: {
+      color: "#fff",
+      fontSize: 16,
+      marginBottom: 10,
+    },
+  
+    passwordContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: "#333333",
+      borderRadius: 8,
+      marginBottom: 16,
+    },
     elements: {
-        alignItems: 'center',
-        marginBottom: 30,  
+      alignItems: "center",
+      width: "100%",
     },
-
+    checkBox: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginVertical: 10,
+    },
+    checkText: {
+      color: "white",
+      fontSize: 16,
+      marginHorizontal: 10,
+    },
+  
+    title: {
+      color: "white",
+      fontSize: heightPercentage(5),
+      textAlign: "left",
+      fontWeight: Themes.fonts.extrabold,
+      marginBottom: 20,
+    },
+  
+    elements: {
+      alignItems: "center",
+      marginBottom: 30,
+    },
+  
     button: {
-        marginTop: 20,  
-        width: '100%',  
-        borderRadius: 10,  
+      marginTop: 20,
+      width: "100%",
+      borderRadius: 10,
     },
-    footer:{
-        alignItems:'center',
+    footer: {
+      alignItems: "center",
     },
-    checkBox:{
-        flexDirection:'row',
-        alignItems:'center',
-        marginVertical:10,
+    checkBox: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginVertical: 10,
     },
-    checkText:{
-        color:'white',
-        fontSize:16,
-        marginHorizontal:10,
-        
+    checkText: {
+      color: "white",
+      fontSize: 16,
+      marginHorizontal: 10,
     },
-    button:{
-        marginBottom:30,
-        width:widthPercentage(84),
+    button: {
+      marginBottom: 30,
+      width: widthPercentage(84),
     },
-    link:{
-        flexDirection:'row',
-        marginVertical:15,
+    link: {
+      flexDirection: "row",
+      marginVertical: 15,
     },
-    footerText:{
-        color:'#9d9d9d',
-        marginHorizontal:10,
+    footerText: {
+      color: "#9d9d9d",
+      marginHorizontal: 10,
     },
-    redirectionText:{
-        color:'white',
-        paddingHorizontal:10,
-        // marginHorizontal:15,
-    }
-
-});
+    redirectionText: {
+      color: "white",
+      paddingHorizontal: 10,
+    },
+  });
+  
