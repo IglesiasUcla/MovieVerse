@@ -1,173 +1,162 @@
 import {
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    TextInput,
-    Pressable,
-    Alert,
-    TouchableOpacity,
-  } from "react-native";
-  import React, { useState } from "react";
-  import ScreamWrapper from "../components/ScreenWrapper.jsx";
-  import { StatusBar } from "expo-status-bar";
-  import { Themes } from "../constants/Themes.js";
-  import { heightPercentage, widthPercentage } from "../helpers/commons.js";
-  import { useRouter } from "expo-router";
-  import Input from "../components/Input.jsx";
-  import Button from "../components/Button.jsx";
-  import AntDesign from "@expo/vector-icons/AntDesign";
-  import CheckButton from "../components/CheckButton.jsx";
-  import axios from "axios";
-  import Icon from "react-native-vector-icons/FontAwesome";
-  
-  const Create_account = () => {
-    const route = useRouter();
-    const [password, setPassword] = useState("");
-    const [email, setEmail] = useState("");
-    const [username, setUsername] = useState("");
-    const [confPassword, setConfPassword] = useState("");
-    const [passwordVisible, setPasswordVisible] = useState(false);
-  
-    const SING_IN = async () => {
-      if (password !== confPassword) {
-        Alert.alert("Las contraseñas no coinciden.");
-        return;
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TextInput,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
+import React, { useState } from "react";
+import ScreamWrapper from "../components/ScreenWrapper.jsx";
+import { StatusBar } from "expo-status-bar";
+import { Themes } from "../constants/Themes.js";
+import { heightPercentage, widthPercentage } from "../helpers/commons.js";
+import { useRouter } from "expo-router";
+import Input from "../components/Input.jsx";
+import Button from "../components/Button.jsx";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import CheckButton from "../components/CheckButton.jsx";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { registerUser } from "../helpers/movieverseApi.js";
+
+const Create_account = () => {
+  const route = useRouter();
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [confPassword, setConfPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const handleRegister = async () => {
+    if (password !== confPassword) {
+      Alert.alert("Las contraseñas no coinciden.");
+      return;
+    }
+
+    try {
+      const response = await registerUser({ username, email, password, confPassword }); // Usamos la nueva función
+      if (response.success) {
+        Alert.alert("Usuario registrado exitosamente");
+        route.push("homePage");
+      } else {
+        Alert.alert("Error al crear usuario:", response.message);
+        console.log("error la crear usuario", response.message);
       }
-  
-      const body = { username, email, password, confPassword };
-  
-      try {
-        const response = await axios.post(
-          "http://localhost:3000/register",
-          body
-        );
-        if (response.data.mensaje === "user registered successfully") {
-          Alert.alert(response.data.mensaje);
-          route.push("homePage");
-        } else {
-          Alert.alert("Error al crear usuario. Intenta nuevamente");
-        }
-      } catch (error) {
-        console.error(error);
-  
-        Alert.alert(
-          "Error:",
-          error.message || "Error desconocido al crear usuario"
-        );
-      }
-    };
-  
-    return (
-      <ScreamWrapper background={Themes.colors.grayDark}>
-        <StatusBar style="dark" />
-        <View style={styles.container}>
-          <View>
-            <Image
-              style={styles.iconTop}
-              source={require("../assets/images/Star_Icon.png")}
-              resizeMode="contain"
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", error.message || "Error desconocido al crear usuario");
+    }
+  };
+
+  return (
+    <ScreamWrapper background={Themes.colors.grayDark}>
+      <StatusBar style="dark" />
+      <View style={styles.container}>
+        <View>
+          <Image
+            style={styles.iconTop}
+            source={require("../assets/images/Star_Icon.png")}
+            resizeMode="contain"
+          />
+        </View>
+        <Text style={styles.title}>Create Account</Text>
+        <View>
+          <Text style={styles.title2}>Username</Text>
+          <TextInput
+            placeholder="Your username"
+            placeholderTextColor="#B0B0B0"
+            style={styles.input}
+            value={username}
+            onChangeText={(text) => setUsername(text)}
+          />
+          <Text style={styles.title2}>Email</Text>
+          <TextInput
+            placeholder="Your email"
+            placeholderTextColor="#B0B0B0"
+            style={styles.input}
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+          />
+
+          <Text style={styles.title2}>Password</Text>
+          <View style={styles.passwordContainer}>
+            <TextInput
+              placeholder="Your password"
+              placeholderTextColor="#B0B0B0"
+              secureTextEntry={!passwordVisible}
+              style={styles.passwordInput}
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+            />
+            <TouchableOpacity
+              onPress={() => setPasswordVisible(!passwordVisible)}
+              style={styles.iconButton}
+            >
+              <Icon
+                name={passwordVisible ? "eye" : "eye-slash"}
+                size={24}
+                color="white"
+              />
+            </TouchableOpacity>
+          </View>
+
+          <Text style={styles.title2}>Confirm Password</Text>
+          <View style={styles.passwordContainer}>
+            <TextInput
+              placeholder="Repeat password"
+              placeholderTextColor="#B0B0B0"
+              secureTextEntry={!passwordVisible}
+              style={styles.passwordInput}
+              value={confPassword}
+              onChangeText={(text) => setConfPassword(text)}
+            />
+            <TouchableOpacity
+              onPress={() => setPasswordVisible(!passwordVisible)}
+              style={styles.iconButton}
+            >
+              <Icon
+                name={passwordVisible ? "eye" : "eye-slash"}
+                size={24}
+                color="white"
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.elements}>
+            <CheckButton
+              isCheck
+              textCheck="I accept the terms and privacy policy"
             />
           </View>
-          <Text style={styles.title}>Create Account</Text>
-          {/* Reemplazamos el form por un View */}
-          <View>
-            <Text style={styles.title2}>Username</Text>
-            <TextInput
-              placeholder="Your username"
-              placeholderTextColor="#B0B0B0"
-              style={styles.input}
-              value={username}
-              onChangeText={(text) => setUsername(text)}
+          <View style={styles.footer}>
+            <Button
+              title="Sign Up"
+              buttonStyle={styles.button}
+              onPress={handleRegister}
+              backgroundColor={Themes.colors.purpleStrong}
+              textColor="white"
             />
-            <Text style={styles.title2}>Email</Text>
-            <TextInput
-              placeholder="Your email"
-              placeholderTextColor="#B0B0B0"
-              style={styles.input}
-              value={email}
-              onChangeText={(text) => setEmail(text)}
-            />
-  
-            <Text style={styles.title2}>Password</Text>
-            <View style={styles.passwordContainer}>
-              <TextInput
-                placeholder="Your password"
-                placeholderTextColor="#B0B0B0"
-                secureTextEntry={!passwordVisible}
-                style={styles.passwordInput}
-                value={password}
-                onChangeText={(text) => setPassword(text)}
-              />
-              <TouchableOpacity
-                onPress={() => setPasswordVisible(!passwordVisible)}
-                style={styles.iconButton}
+            <View style={styles.link}>
+              <Text style={styles.footerText}>Already have an account?</Text>
+              <Text
+                style={styles.redirectionText}
+                onPress={() => {
+                  route.push("login");
+                }}
               >
-                <Icon
-                  name={passwordVisible ? "eye" : "eye-slash"}
-                  size={24}
-                  color="white"
-                />
-              </TouchableOpacity>
-            </View>
-  
-            <Text style={styles.title2}>Confirm Password</Text>
-            <View style={styles.passwordContainer}>
-              <TextInput
-                placeholder="Repeat password"
-                placeholderTextColor="#B0B0B0"
-                secureTextEntry={!passwordVisible}
-                style={styles.passwordInput}
-                value={confPassword}
-                onChangeText={(text) => setConfPassword(text)}
-              />
-              <TouchableOpacity
-                onPress={() => setPasswordVisible(!passwordVisible)}
-                style={styles.iconButton}
-              >
-                <Icon
-                  name={passwordVisible ? "eye" : "eye-slash"}
-                  size={24}
-                  color="white"
-                />
-              </TouchableOpacity>
-            </View>
-  
-            <View style={styles.elements}>
-              <CheckButton
-                isCheck
-                textCheck="I accept the terms and privacy policy"
-              />
-            </View>
-            {/* footer */}
-            <View style={styles.footer}>
-              <Button
-                title="Sign Up"
-                buttonStyle={styles.button}
-                onPress={SING_IN}
-                backgroundColor={Themes.colors.purpleStrong}
-                textColor="white"
-              />
-              <View style={styles.link}>
-                <Text style={styles.footerText}>Already have an account?</Text>
-                <Text
-                  style={styles.redirectionText}
-                  onPress={() => {
-                    route.push("login");
-                  }}
-                >
-                  Log in
-                </Text>
-              </View>
+                Log in
+              </Text>
             </View>
           </View>
         </View>
-      </ScreamWrapper>
-    );
-  };
-  
-  export default Create_account;
-  
+      </View>
+    </ScreamWrapper>
+  );
+};
+
+export default Create_account;
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
