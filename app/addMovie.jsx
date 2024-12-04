@@ -1,25 +1,44 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from '../components/Header';
 import { Themes } from '../constants/Themes';
 import { useRouter } from 'expo-router';
+import { searchMovies } from '../helpers/tmdbApi'; // Agrega el helper para la búsqueda
 
-const AddMovie = () => {
+const SearchMovieSearch = () => {
   const [search, setSearch] = useState('');
-  const route = useRouter();
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const router = useRouter();
 
-  const movies = [
-    { id: 1, title: 'Movie A', year: '2019', poster: 'https://link-to-poster1.com' },
-    { id: 2, title: 'Movie B', year: '1982', poster: 'https://link-to-poster2.com' },
-    { id: 3, title: 'Movie C', year: '2014', poster: 'https://link-to-poster3.com' },
-    { id: 4, title: 'Movie D', year: '2004', poster: 'https://link-to-poster4.com' },
-    { id: 5, title: 'Movie E', year: '2020', poster: 'https://link-to-poster4.com' },
-    { id: 6, title: 'Movie F', year: '1998', poster: 'https://link-to-poster4.com' },
-    { id: 7, title: 'Movie G', year: '1989', poster: 'https://link-to-poster4.com' },
-    { id: 8, title: 'Movie H', year: '2001', poster: 'https://link-to-poster4.com' },
-    { id: 9, title: 'Movie I', year: '2016', poster: 'https://link-to-poster4.com' },
-  ];
+  useEffect(() => {
+    const debounceTimeout = setTimeout(() => {
+      if (search.trim()) {
+        fetchMovies(search);
+      } else {
+        setMovies([]);
+      }
+    }, 500); // 500ms debounce
+
+    return () => clearTimeout(debounceTimeout);
+  }, [search]);
+
+  const fetchMovies = async (query) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const results = await searchMovies(query);
+      setMovies(results);
+    } catch (err) {
+      console.error('Error fetching movies:', err);
+      setError('Failed to fetch movies. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -32,24 +51,50 @@ const AddMovie = () => {
         <Icon name="search" size={24} color="#AAA" style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
-          placeholder="Search"
+          placeholder="Search a movie"
           placeholderTextColor="#AAA"
           value={search}
           onChangeText={setSearch}
         />
       </View>
 
-      {/* Movie List */}
+      {/* Movie List or Loading/Error */}
       <ScrollView contentContainerStyle={styles.movieList}>
-        {movies.map((movie) => (
-          <TouchableOpacity key={movie.id} style={styles.movieItem} onPress={()=>{route.push('movieReview')}} >
-            <Image source={{ uri: movie.poster }} style={styles.poster} />
-            <View style={styles.movieInfo}>
-              <Text style={styles.movieTitle}>{movie.title}</Text>
-              <Text style={styles.movieYear}>{movie.year}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+        {loading ? (
+          <ActivityIndicator size="large" color={Themes.colors.purpleStrong} />
+        ) : error ? (
+          <Text style={styles.errorText}>{error}</Text>
+        ) : movies.length === 0 && search.trim() ? (
+          <Text style={styles.noResultsText}>No movies found for "{search}".</Text>
+        ) : (
+          movies.map((movie) => (
+            <TouchableOpacity
+              key={movie.id}
+              style={styles.movieItem}
+              onPress={() => {
+                // Pasa la película como parámetro a la pantalla de creación de reseñas
+                router.push({
+                  pathname: '/movieReview',
+                  params: {
+                    title: movie.title,
+                    year: new Date(movie.release_date).getFullYear(),
+                    posterUrl: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+                    movieId: movie.id,
+                  },
+                });
+              }}
+            >
+              <Image
+                source={{ uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}` }}
+                style={styles.poster}
+              />
+              <View style={styles.movieInfo}>
+                <Text style={styles.movieTitle}>{movie.title}</Text>
+                <Text style={styles.movieYear}>{new Date(movie.release_date).getFullYear()}</Text>
+              </View>
+            </TouchableOpacity>
+          ))
+        )}
       </ScrollView>
     </View>
   );
@@ -103,6 +148,18 @@ const styles = StyleSheet.create({
     color: '#AAAAAA',
     fontSize: 16,
   },
+  errorText: {
+    color: '#FF4444',
+    textAlign: 'center',
+    marginTop: 20,
+    fontSize: 16,
+  },
+  noResultsText: {
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginTop: 20,
+    fontSize: 16,
+  },
 });
 
-export default AddMovie;
+export default SearchMovieSearch;
