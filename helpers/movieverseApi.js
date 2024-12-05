@@ -86,5 +86,17 @@ export const createPost = async (formData) => {
   }
 };
 
+// Endpoint para obtener los posts recientes
+export const fetchRecentPosts = async (page = 1, limit = 20) => {
+  try {
+    const response = await movieverseApi.get('/posts/recent', {
+      params: { page, limit },
+    });
+    return response.data; // Retorna los datos de los posts recientes
+  } catch (error) {
+    console.error('Error fetching recent posts:', error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
+};
 
 export default movieverseApi;
