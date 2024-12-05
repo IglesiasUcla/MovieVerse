@@ -3,8 +3,10 @@ import { View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const RatingFavorite = ({ rating = 0, isFavorite = false, showFavorite = true, starSize = 14, iconSize = 12 }) => {
-  const fullStars = Math.floor(rating);  // Parte entera
-  const partialStar = rating - fullStars; // Fracción decimal (ej: 0.6 para 4.6)
+  // Validar y normalizar el rating
+  const safeRating = Math.min(Math.max(rating, 0), 5); // Clampa el rating entre 0 y 5
+  const fullStars = Math.floor(safeRating);
+  const partialStar = safeRating - fullStars;
 
   return (
     <View style={styles.ratingFavoriteContainer}>
@@ -31,7 +33,7 @@ const RatingFavorite = ({ rating = 0, isFavorite = false, showFavorite = true, s
         )}
 
         {/* Relleno con estrellas grises si el rating es menor que 5 */}
-        {[...Array(5 - Math.ceil(rating))].map((_, index) => (
+        {[...Array(5 - Math.ceil(safeRating))].map((_, index) => (
           <Text key={fullStars + index + 1} style={[styles.star, { color: 'gray', fontSize: starSize }]}>
             ✦
           </Text>

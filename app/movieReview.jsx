@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, StatusBar, TextInput  } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, StatusBar, TextInput, ScrollView  } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from '../components/Header';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -10,6 +10,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import TagsSection from '../components/TagsSection';
 import { createPost } from '../helpers/movieverseApi';
 import { Alert } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
 const MovieReview = ({  }) => {
   const [date, setDate] = useState(new Date());
@@ -24,10 +25,44 @@ const MovieReview = ({  }) => {
   const route = useRouter();
   const { title, year, posterUrl, movieId } = useLocalSearchParams();
 
+  // Función para tomar una foto 
+  const takePhotoFunction = async () => {
+    const result = await ImagePicker.launchCameraAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    aspect: [1, 1],
+    quality: 1,
+});
 
-  const handleRatingPress = (index) => {
+if (!result.canceled) {
+  handleInputChange('image', result.assets[0].uri);
+}
+
+setShowPhotoSelectionPopup(false);
+
+};
+
+// Función para seleccionar una foto de la galería
+const selectPhotoFunction = async () => {
+  const result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    aspect: [1, 1],
+    quality: 1,
+});
+
+if (!result.canceled) {
+  handleInputChange('image', result.assets[0].uri);
+}
+
+setShowPhotoSelectionPopup(false);
+
+};
+
+
+  function handleRatingPress(index) {
     setRating(index + 1);
-  };
+  }
 
   const [postDetails, setPostDetails] = useState({
     review: '',
@@ -53,57 +88,61 @@ const MovieReview = ({  }) => {
     }));
   };
 
-  const handleImageSelect = (image) => {
-    handleInputChange('image', image);
-  };
-
-  console.log('Movie ID:', movieId); // Verifica si movieId es null o tiene un valor válido
-
   const handleSavePost = async () => {
-    // Validación básica
     if (!postDetails.review.trim()) {
-      Alert.alert('Error', 'Please write a review before publishing.');
-      return;
+        Alert.alert('Error', 'Please write a review before publishing.');
+        return;
     }
     if (rating === 0) {
-      Alert.alert('Error', 'Please rate the movie before publishing.');
-      return;
+        Alert.alert('Error', 'Please rate the movie before publishing.');
+        return;
     }
 
-    // Construir datos del post
+    // Crear FormData para enviar datos con imagen
+    const formData = new FormData();
+    formData.append('movie_id', movieId);
+    formData.append('review', postDetails.review);
+    formData.append('rating', rating);
+    formData.append('favorite', favorite);
+    formData.append('tag', postDetails.tags);
+    formData.append('watch_date', date.toISOString());
+    formData.append('contains_spoilers', spoiler);
 
-    const postData = {
-      movie_id: movieId, // movieId desde los parámetros
-      review: postDetails.review,
-      rating,
-      favorite,
-      tag: postDetails.tags, // Aseguramos que los tags estén incluidos
-      watch_date: date.toISOString(), // Fecha formateada en ISO
-      contains_spoilers: spoiler, // Información de spoilers
-      reaction_photo: postDetails.image, // Imagen de reacción
-    };
+    // Agregar la imagen de reacción si existe
+     
+      const uri = postDetails.image;{/**
+      const fileType = uri.split('.').pop(); // Obtener tipo de archivo
+      const fileName = `reaction_photo.${fileType}`;*/}
 
-    
-  
+      if (postDetails.image) {
+        formData.append('reaction_photo', {
+            uri: postDetails.image,
+            type: 'image/jpeg',
+            name: 'reaction_photo.jpg',
+        });
+    }
+
+    console.log('Post Data to send:', Array.from(formData));
+
     try {
-      // Llamada al endpoint
-      const response = await createPost(postData);
-  
-      // Validar respuesta
-      if (response.success) {
-        Alert.alert('Success', 'Your post has been published!');
-        route.push('homePage'); // Redirigir a la página principal
-      } else {
-        throw new Error(response.message || 'An unexpected error occurred.');
-      }
+        const response = await createPost(formData);
+
+        if (response.success) {
+            Alert.alert('Success', 'Your post has been published!');
+            route.push('homePage');
+        } else {
+            throw new Error(response.message || 'An unexpected error occurred.');
+        }
     } catch (error) {
-      console.error('Error saving post:', error);
-      Alert.alert('Error', 'Failed to save the post. Please try again.');
+        console.error('Error saving post:', error);
+        Alert.alert('Error', 'Failed to save the post. Please try again.');
     }
-  };  
+};
+
+
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
       {/* Header */}
       <Header leftIconModule="close" title="I watched"  rightIconModule="check" onLeftPress={() => setShowDiscardPopup(true)} onRightPress={handleSavePost} />
@@ -212,27 +251,38 @@ const MovieReview = ({  }) => {
 
       <View style={styles.divider} />
 
-      {/* Image Upload */}
-      <View style={styles.imageContainer}><Text style={styles.imageTitle}>Show people your thoughts or reaction</Text></View>
-      <TouchableOpacity onPress={() => setShowPhotoSelectionPopup(true)}>
-        <View style={styles.imageUpload}>
-          <Icon name="image" size={94-16} color="#6116ec" />
-            <PhotoSelectionPopup
-              visible={showPhotoSelectionPopup}
-              onClose={() => setShowPhotoSelectionPopup(false)}
-              onTakePhoto={() => {
-                const image = takePhotoFunction();
-                handleImageSelect(image);
-                setShowPhotoSelectionPopup(false);
-              }}
-              onSelectPhoto={() => {
-                const image = selectPhotoFunction();
-                handleImageSelect(image);
-                setShowPhotoSelectionPopup(false);
-              }}
-            />
-        </View>
-      </TouchableOpacity>
+{/* Image Upload */}
+{!postDetails.image && (
+  <View style={styles.imageContainer}>
+    <Text style={styles.imageTitle}>Show people your thoughts or reaction</Text>
+    <TouchableOpacity onPress={() => setShowPhotoSelectionPopup(true)}>
+      <View style={styles.imageUpload}>
+        <Icon name="image" size={94 - 16} color="#6116ec" />
+      </View>
+    </TouchableOpacity>
+  </View>
+)}
+
+{/* Image Preview */}
+{postDetails.image && (
+  <View style={styles.imageContainer}>
+  <Text style={styles.imageTitle}>Show people your thoughts or reaction</Text>
+  <TouchableOpacity style={styles.imagePreviewContainer} onPress={() => setShowPhotoSelectionPopup(true)}>
+    <View style={styles.imageUpload}>
+      <Image source={{ uri: postDetails.image }} style={styles.imagePreview} />
+    </View>
+  </TouchableOpacity>
+  </View>
+)}
+
+<PhotoSelectionPopup
+  visible={showPhotoSelectionPopup}
+  onClose={() => setShowPhotoSelectionPopup(false)}
+  onTakePhoto={takePhotoFunction}
+  onSelectPhoto={selectPhotoFunction}
+/>
+
+
 
       <View style={styles.divider} />
 
@@ -241,7 +291,7 @@ const MovieReview = ({  }) => {
       <TouchableOpacity onPress={() => setSpoiler(!spoiler)} style={styles.spoilerButton}>
         <Ionicons name="skull" size={64-8} color={spoiler ? '#b39ddb' : 'gray'}/>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -261,6 +311,32 @@ const styles = StyleSheet.create({
     flexShrink: 1, // Permite reducir el tamaño si el espacio es limitado
     maxWidth: '65%', // Establece un límite máximo
   },
+  imageContainer: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  imageTitle: {
+    fontSize: 16,
+    color: '#AAA',
+    marginBottom: 8,
+  },
+  imageUpload: {
+    width: 100,
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    backgroundColor: '#F0F0F0',
+  },
+  imagePreviewContainer: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  imagePreview: {
+    width: 150,
+    height: 150,
+    borderRadius: 8,
+  }, 
   movieTitle: {
     color: '#FFFFFF',
     fontSize: 18,

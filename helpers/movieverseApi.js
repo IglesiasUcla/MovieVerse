@@ -71,12 +71,30 @@ export const loginUser = async (credentials) => {
 };
 
 // Endpoint para crear un post
-export const createPost = async (postData) => {
+export const createPost = async (formData) => {
   try {
-    const response = await movieverseApi.post('/posts', postData);
+    const response = await movieverseApi.post('/posts', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        // Puedes agregar otros encabezados de autenticación si es necesario
+      },
+    });
     return response.data; // Retorna los datos del post creado
   } catch (error) {
     console.error('Error creating post:', error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
+};
+
+// Endpoint para obtener los posts recientes
+export const fetchRecentPosts = async (page = 1, limit = 20) => {
+  try {
+    const response = await movieverseApi.get('/posts/recent', {
+      params: { page, limit },
+    });
+    return response.data; // Retorna los datos de los posts recientes
+  } catch (error) {
+    console.error('Error fetching recent posts:', error.response?.data || error.message);
     throw error.response?.data || error;
   }
 };
