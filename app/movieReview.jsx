@@ -10,6 +10,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import TagsSection from '../components/TagsSection';
 import { createPost } from '../helpers/movieverseApi';
 import { Alert } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
 const MovieReview = ({  }) => {
   const [date, setDate] = useState(new Date());
@@ -24,10 +25,38 @@ const MovieReview = ({  }) => {
   const route = useRouter();
   const { title, year, posterUrl, movieId } = useLocalSearchParams();
 
+  // Función para tomar una foto 
+  const takePhotoFunction = async () => {
+    const result = await ImagePicker.launchCameraAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    aspect: [1, 1],
+    quality: 1,
+});
 
-  const handleRatingPress = (index) => {
+if (!result.canceled) {
+  handleInputChange('image', result.assets[0].uri);
+}
+};
+
+// Función para seleccionar una foto de la galería
+const selectPhotoFunction = async () => {
+  const result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    aspect: [1, 1],
+    quality: 1,
+});
+
+if (!result.canceled) {
+  handleInputChange('image', result.assets[0].uri);
+}
+};
+
+
+  function handleRatingPress(index) {
     setRating(index + 1);
-  };
+  }
 
   const [postDetails, setPostDetails] = useState({
     review: '',
@@ -53,54 +82,58 @@ const MovieReview = ({  }) => {
     }));
   };
 
-  const handleImageSelect = (image) => {
-    handleInputChange('image', image);
-  };
-
-  console.log('Movie ID:', movieId); // Verifica si movieId es null o tiene un valor válido
-
   const handleSavePost = async () => {
-    // Validación básica
     if (!postDetails.review.trim()) {
-      Alert.alert('Error', 'Please write a review before publishing.');
-      return;
+        Alert.alert('Error', 'Please write a review before publishing.');
+        return;
     }
     if (rating === 0) {
-      Alert.alert('Error', 'Please rate the movie before publishing.');
-      return;
+        Alert.alert('Error', 'Please rate the movie before publishing.');
+        return;
     }
 
-    // Construir datos del post
+    // Crear FormData para enviar datos con imagen
+    const formData = new FormData();
+    formData.append('movie_id', movieId);
+    formData.append('review', postDetails.review);
+    formData.append('rating', rating);
+    formData.append('favorite', favorite);
+    formData.append('tag', postDetails.tags);
+    formData.append('watch_date', date.toISOString());
+    formData.append('contains_spoilers', spoiler);
 
-    const postData = {
-      movie_id: movieId, // movieId desde los parámetros
-      review: postDetails.review,
-      rating,
-      favorite,
-      tag: postDetails.tags, // Aseguramos que los tags estén incluidos
-      watch_date: date.toISOString(), // Fecha formateada en ISO
-      contains_spoilers: spoiler, // Información de spoilers
-      reaction_photo: postDetails.image, // Imagen de reacción
-    };
+    // Agregar la imagen de reacción si existe
+     
+      const uri = postDetails.image;{/**
+      const fileType = uri.split('.').pop(); // Obtener tipo de archivo
+      const fileName = `reaction_photo.${fileType}`;*/}
 
-    
-  
+      if (postDetails.image) {
+        formData.append('reaction_photo', {
+            uri: postDetails.image,
+            type: 'image/jpeg',
+            name: 'reaction_photo.jpg',
+        });
+    }
+
+    console.log('Post Data to send:', Array.from(formData));
+
     try {
-      // Llamada al endpoint
-      const response = await createPost(postData);
-  
-      // Validar respuesta
-      if (response.success) {
-        Alert.alert('Success', 'Your post has been published!');
-        route.push('homePage'); // Redirigir a la página principal
-      } else {
-        throw new Error(response.message || 'An unexpected error occurred.');
-      }
+        const response = await createPost(formData);
+
+        if (response.success) {
+            Alert.alert('Success', 'Your post has been published!');
+            route.push('homePage');
+        } else {
+            throw new Error(response.message || 'An unexpected error occurred.');
+        }
     } catch (error) {
-      console.error('Error saving post:', error);
-      Alert.alert('Error', 'Failed to save the post. Please try again.');
+        console.error('Error saving post:', error);
+        Alert.alert('Error', 'Failed to save the post. Please try again.');
     }
-  };  
+};
+
+
 
   return (
     <View style={styles.container}>
@@ -217,20 +250,13 @@ const MovieReview = ({  }) => {
       <TouchableOpacity onPress={() => setShowPhotoSelectionPopup(true)}>
         <View style={styles.imageUpload}>
           <Icon name="image" size={94-16} color="#6116ec" />
+          
             <PhotoSelectionPopup
               visible={showPhotoSelectionPopup}
               onClose={() => setShowPhotoSelectionPopup(false)}
-              onTakePhoto={() => {
-                const image = takePhotoFunction();
-                handleImageSelect(image);
-                setShowPhotoSelectionPopup(false);
-              }}
-              onSelectPhoto={() => {
-                const image = selectPhotoFunction();
-                handleImageSelect(image);
-                setShowPhotoSelectionPopup(false);
-              }}
-            />
+              onTakePhoto={ takePhotoFunction}
+              onSelectPhoto={selectPhotoFunction} 
+            /> 
         </View>
       </TouchableOpacity>
 

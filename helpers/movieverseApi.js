@@ -71,14 +71,20 @@ export const loginUser = async (credentials) => {
 };
 
 // Endpoint para crear un post
-export const createPost = async (postData) => {
+export const createPost = async (formData) => {
   try {
-    const response = await movieverseApi.post('/posts', postData);
+    const response = await movieverseApi.post('/posts', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        // Puedes agregar otros encabezados de autenticación si es necesario
+      },
+    });
     return response.data; // Retorna los datos del post creado
   } catch (error) {
     console.error('Error creating post:', error.response?.data || error.message);
     throw error.response?.data || error;
   }
 };
+
 
 export default movieverseApi;
