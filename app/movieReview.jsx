@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, StatusBar, TextInput  } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, StatusBar, TextInput, ScrollView  } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from '../components/Header';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -37,6 +37,9 @@ const MovieReview = ({  }) => {
 if (!result.canceled) {
   handleInputChange('image', result.assets[0].uri);
 }
+
+setShowPhotoSelectionPopup(false);
+
 };
 
 // Función para seleccionar una foto de la galería
@@ -51,6 +54,9 @@ const selectPhotoFunction = async () => {
 if (!result.canceled) {
   handleInputChange('image', result.assets[0].uri);
 }
+
+setShowPhotoSelectionPopup(false);
+
 };
 
 
@@ -136,7 +142,7 @@ if (!result.canceled) {
 
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
       {/* Header */}
       <Header leftIconModule="close" title="I watched"  rightIconModule="check" onLeftPress={() => setShowDiscardPopup(true)} onRightPress={handleSavePost} />
@@ -245,20 +251,38 @@ if (!result.canceled) {
 
       <View style={styles.divider} />
 
-      {/* Image Upload */}
-      <View style={styles.imageContainer}><Text style={styles.imageTitle}>Show people your thoughts or reaction</Text></View>
-      <TouchableOpacity onPress={() => setShowPhotoSelectionPopup(true)}>
-        <View style={styles.imageUpload}>
-          <Icon name="image" size={94-16} color="#6116ec" />
-          
-            <PhotoSelectionPopup
-              visible={showPhotoSelectionPopup}
-              onClose={() => setShowPhotoSelectionPopup(false)}
-              onTakePhoto={ takePhotoFunction}
-              onSelectPhoto={selectPhotoFunction} 
-            /> 
-        </View>
-      </TouchableOpacity>
+{/* Image Upload */}
+{!postDetails.image && (
+  <View style={styles.imageContainer}>
+    <Text style={styles.imageTitle}>Show people your thoughts or reaction</Text>
+    <TouchableOpacity onPress={() => setShowPhotoSelectionPopup(true)}>
+      <View style={styles.imageUpload}>
+        <Icon name="image" size={94 - 16} color="#6116ec" />
+      </View>
+    </TouchableOpacity>
+  </View>
+)}
+
+{/* Image Preview */}
+{postDetails.image && (
+  <View style={styles.imageContainer}>
+  <Text style={styles.imageTitle}>Show people your thoughts or reaction</Text>
+  <TouchableOpacity style={styles.imagePreviewContainer} onPress={() => setShowPhotoSelectionPopup(true)}>
+    <View style={styles.imageUpload}>
+      <Image source={{ uri: postDetails.image }} style={styles.imagePreview} />
+    </View>
+  </TouchableOpacity>
+  </View>
+)}
+
+<PhotoSelectionPopup
+  visible={showPhotoSelectionPopup}
+  onClose={() => setShowPhotoSelectionPopup(false)}
+  onTakePhoto={takePhotoFunction}
+  onSelectPhoto={selectPhotoFunction}
+/>
+
+
 
       <View style={styles.divider} />
 
@@ -267,7 +291,7 @@ if (!result.canceled) {
       <TouchableOpacity onPress={() => setSpoiler(!spoiler)} style={styles.spoilerButton}>
         <Ionicons name="skull" size={64-8} color={spoiler ? '#b39ddb' : 'gray'}/>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -287,6 +311,32 @@ const styles = StyleSheet.create({
     flexShrink: 1, // Permite reducir el tamaño si el espacio es limitado
     maxWidth: '65%', // Establece un límite máximo
   },
+  imageContainer: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  imageTitle: {
+    fontSize: 16,
+    color: '#AAA',
+    marginBottom: 8,
+  },
+  imageUpload: {
+    width: 100,
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    backgroundColor: '#F0F0F0',
+  },
+  imagePreviewContainer: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  imagePreview: {
+    width: 150,
+    height: 150,
+    borderRadius: 8,
+  }, 
   movieTitle: {
     color: '#FFFFFF',
     fontSize: 18,
