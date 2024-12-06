@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, Image, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, Image, StatusBar, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Themes } from '../constants/Themes';
 import TopBar from '../components/TopBar';
@@ -92,7 +92,9 @@ const HomePagePost = () => {
                     style={styles.favoriteIcon}
                 />
             )}
+            <Pressable onPress={() => router.push({ pathname: '/post', params: { postId: item.post_id } })}>
                 <Text style={styles.review}>{item.review}</Text>
+            </Pressable>
             </View>
         </View>
     );
