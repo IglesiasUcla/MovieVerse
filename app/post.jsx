@@ -1,38 +1,93 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, useColorScheme, StatusBar } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, useColorScheme, StatusBar, ActivityIndicator, Image } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { Themes } from '../constants/Themes';
 import { Colors } from '../constants/Colors';
 import Header from '../components/Header';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons'; 
-import RatingFavorite from '../components/RatingFavorite'; // Importa el componente RatingFavorite
+import RatingFavorite from '../components/RatingFavorite';
+import movieverseApi from '../helpers/movieverseApi';
+import tmdbApi from '../helpers/tmdbApi';
 
 const { fonts } = Themes;
 
 export default function Post() {
+    const { postId } = useLocalSearchParams(); // Leer el parámetro postId
     const router = useRouter();
     const colorScheme = useColorScheme();
     const colors = Colors[colorScheme]; // Selecciona colores dependiendo del modo (light o dark)
 
+    const [post, setPost] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+
+    useEffect(() => {
+        const fetchPostData = async () => {
+            try {
+                // Solicitud al backend para obtener los datos del post
+                const postResponse = await movieverseApi.get(`/posts/${postId}`);
+                const postDetails = postResponse.data.post;
+
+                // Solicitud a TMDB para obtener información adicional de la película
+                const movieResponse = await tmdbApi.get(`/movie/${postDetails.movie_id}`);
+                const movieDetails = movieResponse.data;
+
+                // Combinar datos del post y detalles de la película
+                setPost({ ...postDetails, movie: movieDetails });
+            } catch (error) {
+                console.error('Error fetching post data:', error);
+                setError(true);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPostData();
+    }, [postId]);
+
+    if (loading) {
+        return (
+            <View style={styles.loader}>
+                <ActivityIndicator size="large" color={Themes.colors.purpleStrong} />
+            </View>
+        );
+    }
+
+    if (error || !post) {
+        return (
+            <View style={styles.error}>
+                <Text style={{ color: Themes.colors.purpleStrong }}>
+                    Error: No se pudo cargar el post. Por favor, intenta nuevamente más tarde.
+                </Text>
+            </View>
+        );
+    }
+
+    const posterUrl = post.movie.poster_path
+        ? `https://image.tmdb.org/t/p/w500/${post.movie.poster_path}`
+        : 'https://via.placeholder.com/120x180?text=No+Image';
+
+    const reactionPhotoUrl = post.reaction_photo
+        ? post.reaction_photo // Si hay una imagen en reaction_photo, úsala
+        : 'https://via.placeholder.com/500x300?text=No+Reaction+Image'; // Placeholder si no hay imagen
+
     return (
         <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
-                  <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
+            <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
 
             {/* Encabezado */}
             <Header
-                title="User’s Post"
+                title={`${post.username}'s Post`}
                 leftIconName="arrow-back"
                 leftIconRoute="/search_posts" // Regresa a la pantalla anterior
             />
 
             <View style={[styles.tabContainer, { backgroundColor: Themes.colors.purpleStrong }]}>
-                {/* Botón de "Post" (activo, no navega) */}
                 <TouchableOpacity onPress={() => router.push('/post')}>
                     <Text style={styles.tabActive}>Post</Text>
                 </TouchableOpacity>
-                
-                {/* Botón de "Comments" (redirige a post_comments) */}
                 <TouchableOpacity onPress={() => router.push('/post_comments')}>
                     <Text style={[styles.tab, { color: colors.icon }]}>Comments</Text>
                 </TouchableOpacity>
@@ -41,71 +96,65 @@ export default function Post() {
             {/* Contenido del post */}
             <View style={styles.postContent}>
                 <View style={styles.userInfo}>
-                    {/* Recuadro en lugar de imagen */}
                     <View style={styles.avatarContainer}>
-                    <Ionicons name="person-circle-outline" size={24} color={Themes.colors.purpleStrong} />
-                        {/* Nombre de usuario al lado del icono */}
-                        <Text style={[styles.movieTitle, { color: colors.text, marginLeft: 8 }]}>User</Text>
+                        <Ionicons name="person-circle-outline" size={24} color={Themes.colors.purpleStrong} />
+                        <Text style={[styles.movieTitle, { color: colors.text, marginLeft: 8 }]}>
+                            {post.username}
+                        </Text>
                     </View>
                 </View>
 
-                {/* Contenedor de película y poster en fila horizontal */}
+                {/* Información de la película y poster */}
                 <View style={styles.movieAndPosterContainer}>
-                    {/* Información de la película a la izquierda */}
                     <View style={styles.movieInfoContainer}>
-                        <Text style={[styles.movieTitle, { color: colors.text }]}>Hereditary</Text>
-                        <Text style={[styles.movieYear, { color: Themes.colors.purpleDetail }]}>2018</Text>
-
-                        {/* Integración del componente RatingFavorite */}
-                        <RatingFavorite rating={4.6} isFavorite={true} />
-
-                        <Text style={[styles.date, { color: Themes.colors.purpleDetail }]}>Watched May 11, 2024</Text>
+                        <Text style={[styles.movieTitle, { color: colors.text }]}>{post.movie.title}</Text>
+                        <Text style={[styles.movieYear, { color: Themes.colors.purpleDetail }]}>
+                            {post.movie.release_date.split('-')[0]}
+                        </Text>
+                        <RatingFavorite rating={post.rating} isFavorite={post.favorite} />
+                        <Text style={[styles.date, { color: Themes.colors.purpleDetail }]}>
+                            Watched {new Date(post.watch_date).toDateString()}
+                        </Text>
                     </View>
-
-                    {/* Recuadro del poster a la derecha */}
                     <View style={styles.posterContainer}>
-                        <View style={styles.posterImage} />
+                        <Image source={{ uri: posterUrl }} style={styles.posterImage} />
                     </View>
                 </View>
 
-                <Text style={[styles.description, { color: colors.text }]}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id erat nec elit tempus vehicula. Pellentesque fringilla nisi id erat.
-                </Text>
+                <Text style={[styles.description, { color: colors.text }]}>{post.review}</Text>
 
-                <View style={styles.cinemaImage} />
+                {/* Imagen adjunta (reaction_photo) */}
+                <View style={styles.reactionPhotoContainer}>
+                    <Image source={{ uri: reactionPhotoUrl }} style={styles.reactionPhoto} />
+                </View>
 
                 <View style={styles.actions}>
+                    {post.tag && (
+                        <ScrollView
+                            style={styles.tagsContainer}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={styles.tagsContent}>
+                            {post.tag.split(',').map((tag, index) => (
+                                <TouchableOpacity key={index} style={styles.tagButton}>
+                                    <Text style={styles.tagText}>{tag.trim()}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </ScrollView>
+                     )}  
+                </View>
+                {/* Botón de Like */}
+                <View>
                     <TouchableOpacity style={styles.likeButton}>
-                        <FontAwesome name="heart" size={30} color={Themes.colors.purpleDetail} style={styles.heartIcon} solid />
-                        <Text style={[styles.likeCount, { color: colors.text }]}>999 Likes</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.tagButton}>
-                        <Text style={styles.tagText}>TAG</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.tagButton}>
-                        <Text style={styles.tagText}>TAG</Text>
+                        <FontAwesome name="heart" size={30} color={Themes.colors.purpleDetail} />
+                            <Text style={[styles.likeCount, { color: colors.text }]}>{post.likes} Likes</Text>
                     </TouchableOpacity>
                 </View>
 
-                {/* Separación entre los iconos */}
-                <View style={styles.likesContainer}>
-                    {Array.from({ length: 6 }).map((_, index) => (
-                        <Ionicons 
-                        name="person-circle-outline" 
-                        key={index}
-                        size={40} 
-                        color={Themes.colors.purpleStrong} 
-                        style={styles.likeUser}
-                        />
-                        
-                            
-                    ))}
-                </View>
             </View>
         </ScrollView>
     );
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -126,9 +175,28 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         borderBottomColor: 'white',
     },
+    reactionPhotoContainer: {
+        alignItems: 'center',
+    },
+    reactionPhoto: {
+        width: '90%',
+        height: 200,
+        resizeMode: 'cover',
+        borderRadius: 10,
+    },
     postContent: {
         padding: 16,
     },
+    tagsContainer: {
+        marginVertical: 16, // Espaciado arriba y abajo
+        maxHeight: 40, // Altura limitada para mantener el diseño limpio
+    },
+    tagsContent: {
+        flexDirection: 'row', // Coloca los elementos en fila
+        alignItems: 'center', // Centra los tags verticalmente
+        gap: 8, // Espaciado entre tags (requiere React Native 0.71 o superior)
+        paddingHorizontal: 8, // Añade un padding interno
+    },   
     userInfo: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -180,14 +248,14 @@ const styles = StyleSheet.create({
     },
     tagButton: {
         backgroundColor: Themes.colors.purpleStrong,
-        borderRadius: 8,
+        borderRadius: 16, // Botones con bordes redondeados
         paddingHorizontal: 12,
         paddingVertical: 6,
-        marginHorizontal: 4,
     },
     tagText: {
         color: 'white',
         fontSize: 14,
+        fontWeight: '500',
     },
     likesContainer: {
         flexDirection: 'row',
@@ -226,5 +294,3 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
 });
-
-

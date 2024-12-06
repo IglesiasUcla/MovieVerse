@@ -99,4 +99,15 @@ export const fetchRecentPosts = async (page = 1, limit = 20) => {
   }
 };
 
+async function fetchPostData(postId) {
+  try {
+      const response = await movieverseApi.get(`/posts/${postId}`);
+      return response.data.post;
+  } catch (error) {
+      console.error('Error fetching post data:', error);
+      throw error;
+  }
+}
+
+
 export default movieverseApi;

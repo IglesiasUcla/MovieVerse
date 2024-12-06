@@ -93,10 +93,14 @@ setShowPhotoSelectionPopup(false);
         Alert.alert('Error', 'Please write a review before publishing.');
         return;
     }
-    if (rating === 0) {
-        Alert.alert('Error', 'Please rate the movie before publishing.');
+    if (!postDetails.image) {
+        Alert.alert('Error', 'Please upload a photo before publishing.');
         return;
     }
+    if (!postDetails.tags || postDetails.tags.length === 0) {
+      Alert.alert('Error', 'Please add at least one tag before publishing.');
+      return;
+    }    
 
     // Crear FormData para enviar datos con imagen
     const formData = new FormData();
@@ -104,7 +108,7 @@ setShowPhotoSelectionPopup(false);
     formData.append('review', postDetails.review);
     formData.append('rating', rating);
     formData.append('favorite', favorite);
-    formData.append('tag', postDetails.tags);
+    formData.append('tag', postDetails.tags.join(','));
     formData.append('watch_date', date.toISOString());
     formData.append('contains_spoilers', spoiler);
 
