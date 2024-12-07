@@ -99,7 +99,8 @@ export const fetchRecentPosts = async (page = 1, limit = 20) => {
   }
 };
 
-async function fetchPostData(postId) {
+//Endpoint para ver un post individualmente
+export async function fetchPostData(postId) {
   try {
       const response = await movieverseApi.get(`/posts/${postId}`);
       return response.data.post;
@@ -108,6 +109,27 @@ async function fetchPostData(postId) {
       throw error;
   }
 }
+
+// Endpoint para buscar posts por tag
+export const searchPostsByTag = async (tag, page = 1, limit = 20) => {
+  try {
+    // Verificar que el tag no esté vacío
+    if (!tag || typeof tag !== 'string') {
+      throw new Error('El parámetro "tag" es obligatorio y debe ser una cadena de texto.');
+    }
+
+    // Realizar la solicitud al endpoint
+    const response = await movieverseApi.get('/posts/search', {
+      params: { tag, page, limit }, // Pasar los parámetros al backend
+    });
+
+    return response.data; // Retorna los posts encontrados
+  } catch (error) {
+    console.error('Error buscando posts por tag:', error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
+};
+
 
 
 export default movieverseApi;
