@@ -1,16 +1,19 @@
-import { StyleSheet, Text, View, Pressable, ScrollView, Image } from 'react-native';
+import { StyleSheet, Text, View, Pressable, ScrollView, Image, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Themes } from '../constants/Themes';
 import Header from '../components/Header';
 import { useRouter } from 'expo-router';
-import { fetchFavoriteMovies } from '../helpers/movieverseApi'; 
+import { fetchFavoriteMovies, unmarkMovieAsFavorite } from '../helpers/movieverseApi'; 
 import { getMovieDetails } from '../helpers/tmdbApi';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
+import { DiscardChangesPopup } from '../components/Popup';
 
 const Activity_favorite_movies = () => {
     const [currentTab, setCurrentTab] = useState('activity_favorite_movies');
     const [favoriteMovies, setFavoriteMovies] = useState([]);
+    const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+    const [selectedMovie, setSelectedMovie] = useState(null); // Película seleccionada para eliminar
     const router = useRouter();
 
     // Función para cambiar de pestaña y navegar a la pantalla correspondiente
@@ -29,13 +32,13 @@ const Activity_favorite_movies = () => {
             try {
                 const favoriteMovieIds = await fetchFavoriteMovies();
                 console.log('favoriteMovieIds:', favoriteMovieIds); // Verifica que sea un array plano
-    
+
                 if (!Array.isArray(favoriteMovieIds)) {
                     console.error('Invalid data format:', favoriteMovieIds);
                     setFavoriteMovies([]); // Configura un estado vacío
                     return;
                 }
-    
+
                 const movieDetails = await Promise.all(
                     favoriteMovieIds.map(async (movieId) => {
                         const details = await getMovieDetails(movieId);
@@ -56,8 +59,27 @@ const Activity_favorite_movies = () => {
         };
         fetchMovies();
     }, []);
-    
-    
+
+    // Función para confirmar y eliminar una película favorita
+    const handleDeleteMovie = async () => {
+        try {
+            if (!selectedMovie) return;
+
+            await unmarkMovieAsFavorite(selectedMovie.id); // Llama al endpoint
+            setFavoriteMovies((prevMovies) =>
+                prevMovies.filter((movie) => movie.id !== selectedMovie.id)
+            ); // Actualiza el estado eliminando la película
+            setShowConfirmPopup(false); // Cierra el popup
+        } catch (error) {
+            console.error('Error deleting favorite movie:', error.message);
+        }
+    };
+
+    // Mostrar popup de confirmación
+    const showDeletePopup = (movie) => {
+        setSelectedMovie(movie); // Configura la película seleccionada
+        setShowConfirmPopup(true); // Muestra el popup
+    };
 
     return (
         <View style={styles.container}>
@@ -95,13 +117,25 @@ const Activity_favorite_movies = () => {
                             <Text style={styles.movieTitle}>{movie.title}</Text>
                             <Text style={styles.movieInfo}>{movie.year}</Text>
                         </View>
-                        <Ionicons name="star" size={24+8} color={Themes.colors.purpleStrong} style={styles.starIcon} />
+                        <TouchableOpacity onPress={() => showDeletePopup(movie)}>
+                            <Ionicons name="star" size={32} color={Themes.colors.purpleStrong} style={styles.starIcon} />
+                        </TouchableOpacity>
                     </View>
                 ))}
             </ScrollView>
+            {/* Popup de confirmación */}
+            <DiscardChangesPopup
+                visible={showConfirmPopup}
+                onCancel={() => setShowConfirmPopup(false)} // Cierra el popup al cancelar
+                onDiscard={handleDeleteMovie} // Llama a la función para eliminar
+                title="Remove Favorite Movie"
+                text={`Are you sure you want to remove "${selectedMovie?.title}" from your favorites?`}
+                purpleButton="Remove"
+            />
         </View>
     );
 };
+
 
 export default Activity_favorite_movies;
 
