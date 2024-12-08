@@ -8,7 +8,7 @@ import { DiscardChangesPopup, DiscardChangesPopup1, PhotoSelectionPopup } from '
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import TagsSection from '../components/TagsSection';
-import { createPost } from '../helpers/movieverseApi';
+import { createPost, markMovieAsFavorite } from '../helpers/movieverseApi';
 import { Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -90,58 +90,61 @@ setShowPhotoSelectionPopup(false);
 
   const handleSavePost = async () => {
     if (!postDetails.review.trim()) {
-        Alert.alert('Error', 'Please write a review before publishing.');
-        return;
+      Alert.alert('Error', 'Please write a review before publishing.');
+      return;
     }
     if (!postDetails.image) {
-        Alert.alert('Error', 'Please upload a photo before publishing.');
-        return;
+      Alert.alert('Error', 'Please upload a photo before publishing.');
+      return;
     }
     if (!postDetails.tags || postDetails.tags.length === 0) {
       Alert.alert('Error', 'Please add at least one tag before publishing.');
       return;
-    }    
-
-    // Crear FormData para enviar datos con imagen
+    }
+  
     const formData = new FormData();
     formData.append('movie_id', movieId);
     formData.append('review', postDetails.review);
     formData.append('rating', rating);
-    formData.append('favorite', favorite);
     formData.append('tag', postDetails.tags.join(','));
     formData.append('watch_date', date.toISOString());
     formData.append('contains_spoilers', spoiler);
-
-    // Agregar la imagen de reacción si existe
-     
-      const uri = postDetails.image;{/**
-      const fileType = uri.split('.').pop(); // Obtener tipo de archivo
-      const fileName = `reaction_photo.${fileType}`;*/}
-
-      if (postDetails.image) {
-        formData.append('reaction_photo', {
-            uri: postDetails.image,
-            type: 'image/jpeg',
-            name: 'reaction_photo.jpg',
-        });
+  
+    if (postDetails.image) {
+      formData.append('reaction_photo', {
+        uri: postDetails.image,
+        type: 'image/jpeg',
+        name: 'reaction_photo.jpg',
+      });
     }
-
+  
     console.log('Post Data to send:', Array.from(formData));
-
+  
     try {
-        const response = await createPost(formData);
-
-        if (response.success) {
-            Alert.alert('Success', 'Your post has been published!');
-            route.push('homePage');
-        } else {
-            throw new Error(response.message || 'An unexpected error occurred.');
+      // Guardar el post primero
+      const response = await createPost(formData);
+  
+      if (response.success) {
+        Alert.alert('Success', 'Your post has been published!');
+        // Marcar como favorita solo si la estrella está activada
+        if (favorite) {
+          try {
+            await markMovieAsFavorite(movieId); // Llamar al endpoint
+            console.log(`Movie ${movieId} marked as favorite.`);
+          } catch (favoriteError) {
+            console.error('Error marking movie as favorite:', favoriteError);
+            Alert.alert('Warning', 'Your post was saved, but the movie could not be marked as favorite.');
+          }
         }
+        route.push('homePage'); // Redirigir a la pantalla principal
+      } else {
+        throw new Error(response.message || 'An unexpected error occurred.');
+      }
     } catch (error) {
-        console.error('Error saving post:', error);
-        Alert.alert('Error', 'Failed to save the post. Please try again.');
+      console.error('Error saving post:', error);
+      Alert.alert('Error', 'Failed to save the post. Please try again.');
     }
-};
+  };  
 
 
 

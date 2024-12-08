@@ -130,6 +130,20 @@ export const searchPostsByTag = async (tag, page = 1, limit = 20) => {
   }
 };
 
+// Endpoint para marcar una película como favorita
+export const markMovieAsFavorite = async (movieId) => {
+  try {
+    const response = await movieverseApi.post('/users/me/favorites', {
+      movie_id: movieId,
+    });
+    return response.data; // Retorna la respuesta del servidor
+  } catch (error) {
+    console.error('Error marking movie as favorite:', error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
+};
+
+
 
 
 export default movieverseApi;

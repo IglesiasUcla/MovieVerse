@@ -135,7 +135,7 @@ const SearchPosts = () => {
                         rating={typeof post.rating === 'number' && post.rating >= 0 ? post.rating : 0}
                         showFavorite={false}
                         starSize={16}    // Ajusta el tamaño si es necesario
-                    />
+                    />{/** 
                     {post.favorite && (
                         <Icon
                             name="star"
@@ -143,7 +143,7 @@ const SearchPosts = () => {
                             color="#b39ddb"
                             style={styles.favoriteIcon}
                         />
-                    )}
+                    )}*/}
                     <Text style={styles.review}>{post.review}</Text>
                 </View>
             </TouchableOpacity>

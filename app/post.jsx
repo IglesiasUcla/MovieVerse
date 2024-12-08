@@ -111,7 +111,7 @@ export default function Post() {
                         <Text style={[styles.movieYear, { color: Themes.colors.purpleDetail }]}>
                             {post.movie.release_date.split('-')[0]}
                         </Text>
-                        <RatingFavorite rating={post.rating} isFavorite={post.favorite} />
+                        <RatingFavorite rating={post.rating} isFavorite={{/** post.favorite*/}} />
                         <Text style={[styles.date, { color: Themes.colors.purpleDetail }]}>
                             Watched {new Date(post.watch_date).toDateString()}
                         </Text>

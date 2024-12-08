@@ -83,7 +83,7 @@ const HomePagePost = () => {
                 rating={typeof item.rating === 'number' && item.rating >= 0 ? item.rating : 0}
                 showFavorite={false}
                 starSize={16}    // Ajusta el tamaño si es necesario
-            />
+            />{/** 
            {item.favorite && (
                 <Icon
                     name="star"
@@ -91,7 +91,7 @@ const HomePagePost = () => {
                     color="#b39ddb"
                     style={styles.favoriteIcon}
                 />
-            )}
+            )}*/}
             <Pressable onPress={() => router.push({ pathname: '/post', params: { postId: item.post_id } })}>
                 <Text style={styles.review}>{item.review}</Text>
             </Pressable>
