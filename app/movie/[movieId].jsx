@@ -196,7 +196,7 @@ const MovieScreen = () => {
 
           <View style={styles.rateButtonContainer}>
             <TouchableOpacity style={styles.rateButton} onPress={() => route.push('movieReview')} >
-              <Text style={styles.rateButtonText}>Rate this movie</Text>
+              <Text style={styles.rateButtonText}>Add this movie</Text>
             </TouchableOpacity>
           </View>
 

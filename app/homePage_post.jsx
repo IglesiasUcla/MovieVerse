@@ -78,23 +78,23 @@ const HomePagePost = () => {
                 </View>
                 <Text style={styles.movieTitle}>{item.movie_title}</Text>
                 
-                <RatingFavorite 
-                    style={styles.starsContainer}
-                    rating={typeof item.rating === 'number' && item.rating >= 0 ? item.rating : 0}
-                    showFavorite={false}
-                    starSize={16}    // Ajusta el tamaño si es necesario
+            <RatingFavorite 
+                style={styles.starsContainer}
+                rating={typeof item.rating === 'number' && item.rating >= 0 ? item.rating : 0}
+                showFavorite={false}
+                starSize={16}    // Ajusta el tamaño si es necesario
+            />{/** 
+           {item.favorite && (
+                <Icon
+                    name="star"
+                    size={16}
+                    color="#b39ddb"
+                    style={styles.favoriteIcon}
                 />
-                {item.favorite && (
-                    <Icon
-                        name="star"
-                        size={16}
-                        color="#b39ddb"
-                        style={styles.favoriteIcon}
-                    />
-                )}
-                <Pressable onPress={() => router.push({ pathname: '/post', params: { postId: item.post_id } })}>
-                    <Text style={styles.review}>{item.review}</Text>
-                </Pressable>
+            )}*/}
+            <Pressable onPress={() => router.push({ pathname: '/post', params: { postId: item.post_id } })}>
+                <Text style={styles.review}>{item.review}</Text>
+            </Pressable>
             </View>
         </View>
     );
