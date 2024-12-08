@@ -2,7 +2,7 @@ import createApiInstance from './api';
 import * as SecureStore from 'expo-secure-store';
 
 // URL base de tu backend
-const BASE_URL = 'http://192.168.1.107:3000'; // Cambia según la URL de tu backend
+const BASE_URL = 'http://192.168.68.106:3000'; // Cambia según la URL de tu backend
 
 // Instancia de la API de MovieVerse
 const movieverseApi = createApiInstance(BASE_URL);
@@ -142,6 +142,21 @@ export const markMovieAsFavorite = async (movieId) => {
     throw error.response?.data || error;
   }
 };
+
+// Endpoint para obtener las películas favoritas
+export const fetchFavoriteMovies = async (page = 1, limit = 20) => {
+  try {
+    const response = await movieverseApi.get('/users/me/favorite-movies', {
+      params: { page, limit }, // Pasar parámetros de paginación
+    });
+    console.log('Fetched favorite movies:', response.data);
+    return response.data.data || []; // Retorna los datos paginados
+  } catch (error) {
+    console.error('Error fetching favorite movies:', error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
+};
+
 
 
 
