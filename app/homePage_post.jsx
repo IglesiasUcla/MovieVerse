@@ -110,7 +110,7 @@ const HomePagePost = () => {
                 onSearchPress={() => router.push('search')}
             />
             <View style={styles.body}>
-                <FlatList
+                <FlatList style= {styles.listStyle}
                     data={posts}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.post_id?.toString() || Math.random().toString()}
@@ -137,34 +137,38 @@ const styles = StyleSheet.create({
     },
     body: {
         flex: 1,
-        paddingHorizontal: 16,
+        paddingHorizontal: 10,
+        alignContent: 'flex-start',
     },
     postContainer: {
         flexDirection: 'row',
         borderRadius: 8,
-        marginVertical: 8,
+        marginVertical: 10,
         padding: 10,
         alignItems: 'flex-start',
+        height:'auto',
     },
     poster: {
-        width: 80,
-        height: 120,
+        width: 120,
+        height: 180,
         borderRadius: 8,
         marginRight: 10,
     },
     postContent: {
         flex: 1,
+        height:'auto',
     },
     userInfo: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 8,
+        justifyContent: 'flex-start',
+        marginBottom: 2,
     },
     avatar: {
         width: 40,
         height: 40,
         borderRadius: 20,
-        marginRight: 10,
+        marginRight: 5,
     },
     username: {
         fontSize: 16,
@@ -185,6 +189,8 @@ const styles = StyleSheet.create({
     review: {
         fontSize: 14,
         color: 'white',
+        overflow: 'visible',
+        height:50,
     },
     emptyText: {
         textAlign: 'center',
@@ -192,4 +198,8 @@ const styles = StyleSheet.create({
         marginTop: 20,
         fontSize: 18,
     },
+
+    listStyle: {
+        // flexDirection: 'column',
+    }
 });
