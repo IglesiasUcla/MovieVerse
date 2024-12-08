@@ -143,6 +143,19 @@ export const markMovieAsFavorite = async (movieId) => {
   }
 };
 
+// Endpoint para desmarcar una película como favorita
+export const unmarkMovieAsFavorite = async (movieId) => {
+  try {
+    const response = await movieverseApi.delete(`/users/me/favorites/${movieId}`, {
+      movie_id: movieId,
+    });
+    return response.data; // Retorna la respuesta del servidor
+  } catch (error) {
+    console.error('Error marking movie as favorite:', error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
+};
+
 // Endpoint para obtener las películas favoritas
 export const fetchFavoriteMovies = async (page = 1, limit = 20) => {
   try {
