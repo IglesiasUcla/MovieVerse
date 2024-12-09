@@ -152,8 +152,8 @@ const MovieReview = ({}) => {
         // Marcar como favorita solo si la estrella está activada
         if (favorite) {
           try {
-            await markMovieAsFavorite(1241982); // Llamar al endpoint
-            console.log(`Movie ${1241982} marked as favorite.`);
+            await markMovieAsFavorite(parseInt(movieId)); // Llamar al endpoint
+            console.log(`Movie ${parseInt(movieId)} marked as favorite.`);
           } catch (favoriteError) {
             console.error("Error marking movie as favorite:", favoriteError);
             Alert.alert(
