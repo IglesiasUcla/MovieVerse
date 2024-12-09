@@ -12,39 +12,36 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Themes } from "../constants/Themes";
 import { useRouter } from "expo-router";
-import axios from "axios";
+import { loginUser } from "../helpers/movieverseApi.js"; // Importa la función centralizada
 
 const Login = () => {
   const route = useRouter();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const LOGIN_IN = async () => {
-    const body = { email, password };
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert("Por favor, llena todos los campos.");
+      return;
+    }
 
     try {
-      const data = await axios.post("http://localhost:3000/login", body);
-      if (data.data.mensaje === "user logged successfully") {
-        console.log("funciona");
-        console.error(data.data.mensaje); //msj rojo que muestra que fue logueado
-        Alert.alert(data.data.mensaje);
+      const response = await loginUser({ email, password });
+
+      if (response.success) {
         route.push("homePage");
       } else {
-        Alert.alert("Error al iniciar sesión. Intenta nuevamente");
-        console.log("funciona, pero colocaste algo mal");
-        return;
+        Alert.alert("Error al iniciar sesión", response.message);
+        console.log("Error al iniciar sesión:", response.message);
       }
-      setError("");
     } catch (error) {
-      console.log("No funciona");
-      Alert.alert(
-        "Error:",
-        data.message || "Error desconocido al iniciar sesión"
-      );
       console.error(error);
+      Alert.alert(
+        "Error",
+        error.message || "Error desconocido al iniciar sesión"
+      );
     }
   };
 
@@ -54,7 +51,6 @@ const Login = () => {
         barStyle="light-content"
         backgroundColor={Themes.colors.grayDark}
       />
-      {/* Icono decorativo */}
       <View style={styles.iconContainer}>
         <Text style={styles.icon}>✦</Text>
       </View>
@@ -63,7 +59,6 @@ const Login = () => {
 
       <Text style={styles.title}>Log In</Text>
 
-      {/* Campo de Email */}
       <Text style={styles.label}>Email</Text>
       <TextInput
         placeholder="Your email"
@@ -73,7 +68,6 @@ const Login = () => {
         onChangeText={(text) => setEmail(text)}
       />
 
-      {/* Campo de Password */}
       <Text style={styles.label}>Password</Text>
       <View style={styles.passwordContainer}>
         <TextInput
@@ -84,7 +78,6 @@ const Login = () => {
           value={password}
           onChangeText={(text) => setPassword(text)}
         />
-
         <TouchableOpacity
           onPress={() => setPasswordVisible(!passwordVisible)}
           style={styles.iconButton}
@@ -97,12 +90,10 @@ const Login = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Botón de Log In */}
-      <TouchableOpacity style={styles.loginButton} onPress={LOGIN_IN}>
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginButtonText}>Log In</Text>
       </TouchableOpacity>
 
-      {/* Texto de recuperación de contraseña */}
       <View style={styles.passwordRecoveryContainer}>
         <Text style={styles.forgotPasswordText}>Forgot your password? </Text>
         <Pressable onPress={() => route.push("password_recovery")}>
@@ -110,7 +101,6 @@ const Login = () => {
         </Pressable>
       </View>
 
-      {/* Enlace de creación de cuenta, centrado en la parte inferior */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>
           Don’t have an account?{" "}
