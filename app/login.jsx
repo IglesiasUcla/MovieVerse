@@ -28,19 +28,18 @@ const Login = () => {
     try {
       const data = await axios.post("http://localhost:3000/login", body);
       if (data.data.mensaje === "user logged successfully") {
-        
-console.log('funciona');
-console.error(data.data.mensaje); //msj rojo que muestra que fue logueado
+        console.log("funciona");
+        console.error(data.data.mensaje); //msj rojo que muestra que fue logueado
         Alert.alert(data.data.mensaje);
         route.push("homePage");
       } else {
         Alert.alert("Error al iniciar sesión. Intenta nuevamente");
-console.log('funciona, pero colocaste algo mal');
+        console.log("funciona, pero colocaste algo mal");
         return;
       }
       setError("");
     } catch (error) {
-console.log('No funciona');
+      console.log("No funciona");
       Alert.alert(
         "Error:",
         data.message || "Error desconocido al iniciar sesión"
