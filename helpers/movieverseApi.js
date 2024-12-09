@@ -72,6 +72,7 @@ export const loginUser = async (credentials) => {
 
 // Endpoint para crear un post
 export const createPost = async (formData) => {
+  console.log("estoy en el formDAtaa", formData);
   try {
     const response = await movieverseApi.post("/posts", formData, {
       headers: {
