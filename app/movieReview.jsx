@@ -33,13 +33,10 @@ const MovieReview = ({  }) => {
     aspect: [1, 1],
     quality: 1,
 });
-
 if (!result.canceled) {
   handleInputChange('image', result.assets[0].uri);
 }
-
 setShowPhotoSelectionPopup(false);
-
 };
 
 // Función para seleccionar una foto de la galería
@@ -50,15 +47,11 @@ const selectPhotoFunction = async () => {
     aspect: [1, 1],
     quality: 1,
 });
-
 if (!result.canceled) {
   handleInputChange('image', result.assets[0].uri);
 }
-
 setShowPhotoSelectionPopup(false);
-
 };
-
 
   function handleRatingPress(index) {
     setRating(index + 1);
@@ -101,7 +94,6 @@ setShowPhotoSelectionPopup(false);
       Alert.alert('Error', 'Please add at least one tag before publishing.');
       return;
     }
-  
     const formData = new FormData();
     formData.append('movie_id', movieId);
     formData.append('review', postDetails.review);
@@ -109,7 +101,6 @@ setShowPhotoSelectionPopup(false);
     formData.append('tag', postDetails.tags.join(','));
     formData.append('watch_date', date.toISOString());
     formData.append('contains_spoilers', spoiler);
-  
     if (postDetails.image) {
       formData.append('reaction_photo', {
         uri: postDetails.image,
@@ -117,13 +108,10 @@ setShowPhotoSelectionPopup(false);
         name: 'reaction_photo.jpg',
       });
     }
-  
     console.log('Post Data to send:', Array.from(formData));
-  
     try {
       // Guardar el post primero
       const response = await createPost(formData);
-  
       if (response.success) {
         Alert.alert('Success', 'Your post has been published!');
         // Marcar como favorita solo si la estrella está activada
@@ -144,9 +132,7 @@ setShowPhotoSelectionPopup(false);
       console.error('Error saving post:', error);
       Alert.alert('Error', 'Failed to save the post. Please try again.');
     }
-  };  
-
-
+  };
 
   return (
     <ScrollView style={styles.container}>

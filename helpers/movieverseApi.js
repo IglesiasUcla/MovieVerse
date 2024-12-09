@@ -170,6 +170,54 @@ export const fetchFavoriteMovies = async (page = 1, limit = 20) => {
   }
 };
 
+export const getUser = async () => {
+  try {
+      const response = await movieverseApi.get('/users/me');
+      return response.data; // Retornar la respuesta del backend
+  } catch (error) {
+      console.error('Error updating user:', error.response?.data || error.message);
+      throw error; // Propagar el error para manejarlo en la interfaz
+  }
+};
+
+export const updateUser = async (formData) => {
+  try {
+      const response = await movieverseApi.put('/users/me', formData, {
+          headers: {
+              'Content-Type': 'multipart/form-data',
+          },
+      });
+      return response.data; // Retornar la respuesta del backend
+  } catch (error) {
+      console.error('Error updating user:', error.response?.data || error.message);
+      throw error; // Propagar el error para manejarlo en la interfaz
+  }
+};
+
+export const createTopMovies = async (topMovies) => {
+  try {
+    const response = await movieverseApi.post('/topMovies', {
+      topMovies,
+    });
+    return response.data; // Retorna la respuesta del servidor
+  } catch (error) {
+    console.error('Error creating top movies:', error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
+};
+
+export const updateTopMovie = async (rank, movieId) => {
+  try {
+    const response = await movieverseApi.put('/topMovies', {
+      rank,
+      movieId,
+    });
+    return response.data; // Retorna la respuesta del servidor
+  } catch (error) {
+    console.error('Error updating top movie:', error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
+};
 
 
 
