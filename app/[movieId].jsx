@@ -1,3 +1,4 @@
+//MOVIEREVIEW
 import React, { useState } from "react";
 import {
   View,
@@ -134,16 +135,16 @@ const MovieReview = ({}) => {
     try {
       // Guardar el post primero
       const response = await createPost({
-        movie_id: 1241982,
-        review: "tabien",
-        rating: 5,
-        tag: "waos",
-        watch_date: "2024-12-09T02:26:45.890Z",
-        contains_spoilers: false,
+        movie_id: movieId,
+        review: postDetails.review,
+        rating: rating,
+        tag: postDetails.tags.join(","),
+        watch_date: date.toISOString(),
+        contains_spoilers: spoiler,
         reaction_photo: {
-          name: "reaction_photo.jpg",
+          uri: postDetails.image,
           type: "image/jpeg",
-          uri: "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FMovieVerse-75a29363-014e-4968-b5c0-626b45c17421/ImagePicker/e609c458-633c-4370-bd59-53738d2621cd.jpeg",
+          name: "reaction_photo.jpg",
         },
       });
 
