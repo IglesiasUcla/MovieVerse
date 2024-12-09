@@ -31,7 +31,6 @@ const Login = () => {
       const response = await loginUser({ email, password });
 
       if (response.success) {
-        Alert.alert(response.mensaje);
         route.push("homePage");
       } else {
         Alert.alert("Error al iniciar sesión", response.message);
@@ -39,7 +38,10 @@ const Login = () => {
       }
     } catch (error) {
       console.error(error);
-      Alert.alert("Error", error.message || "Error desconocido al iniciar sesión");
+      Alert.alert(
+        "Error",
+        error.message || "Error desconocido al iniciar sesión"
+      );
     }
   };
 
