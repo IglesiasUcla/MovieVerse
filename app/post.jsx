@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, useColorScheme, StatusBar, ActivityIndicator, Image } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, useColorScheme, StatusBar, ActivityIndicator, Image, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router';
 import { Themes } from '../constants/Themes';
@@ -36,6 +36,9 @@ export default function Post() {
 
                 // Combinar datos del post y detalles de la película
                 setPost({ ...postDetails, movie: movieDetails });
+
+                console.log('post data:', postDetails)
+
             } catch (error) {
                 console.error('Error fetching post data:', error);
                 setError(true);
@@ -46,6 +49,8 @@ export default function Post() {
 
         fetchPostData();
     }, [postId]);
+
+    //console.log('user id?:',post.user_id);
 
     if (loading) {
         return (
@@ -73,6 +78,10 @@ export default function Post() {
         ? post.reaction_photo // Si hay una imagen en reaction_photo, úsala
         : 'https://via.placeholder.com/500x300?text=No+Reaction+Image'; // Placeholder si no hay imagen
 
+    const useridd = post.user_id;
+
+    console.log('id?:', useridd)
+
     return (
         <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
             <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
@@ -96,12 +105,14 @@ export default function Post() {
             {/* Contenido del post */}
             <View style={styles.postContent}>
                 <View style={styles.userInfo}>
+                    <Pressable onPress={() => router.push({ pathname: '/other_user_information', params: { userId: useridd } })}>
                     <View style={styles.avatarContainer}>
                         <Ionicons name="person-circle-outline" size={24} color={Themes.colors.purpleStrong} />
                         <Text style={[styles.movieTitle, { color: colors.text, marginLeft: 8 }]}>
                             {post.username}
-                        </Text>
+                        </Text> 
                     </View>
+                    </Pressable>
                 </View>
 
                 {/* Información de la película y poster */}

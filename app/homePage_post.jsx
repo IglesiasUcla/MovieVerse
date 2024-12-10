@@ -73,7 +73,9 @@ const HomePagePost = () => {
                         style={styles.avatar}
                         resizeMode="cover"
                     />
-                    <Text style={styles.username}>{item.username}</Text>
+                    <Pressable onPress={() => router.push({ pathname: '/other_user_information', params: { userId: item.user_id } })}>
+                        <Text style={styles.username}>{item.username}</Text>
+                    </Pressable>
                 </View>
                 <Text style={styles.movieTitle}>{item.movie_title}</Text>
                 
@@ -82,15 +84,7 @@ const HomePagePost = () => {
                 rating={typeof item.rating === 'number' && item.rating >= 0 ? item.rating : 0}
                 showFavorite={false}
                 starSize={16}    // Ajusta el tamaño si es necesario
-            />{/** 
-           {item.favorite && (
-                <Icon
-                    name="star"
-                    size={16}
-                    color="#b39ddb"
-                    style={styles.favoriteIcon}
-                />
-            )}*/}
+            />
             <Pressable onPress={() => router.push({ pathname: '/post', params: { postId: item.post_id } })}>
                 <Text style={styles.review}>{item.review}</Text>
             </Pressable>
