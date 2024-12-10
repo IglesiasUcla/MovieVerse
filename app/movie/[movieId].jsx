@@ -6,6 +6,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import RatingFavorite from '../../components/RatingFavorite';
 import { Ionicons } from '@expo/vector-icons';
 import { getMovieDetails, getMovieDirector } from '../../helpers/tmdbApi';
+import { getPostsByMovieId } from '../../helpers/movieverseApi';
 
 const MovieScreen = () => {
   const [showFullSynopsis, setShowFullSynopsis] = useState(false);
@@ -19,6 +20,10 @@ const MovieScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [director, setDirector] = useState('');
+  const [posts, setPosts] = useState([]);
+  const [loadingPosts, setLoadingPosts] = useState(true); // Estado para el loading de los posts
+  const [errorPosts, setErrorPosts] = useState(null); // Estado para errores específicos de los posts
+
 
   // Fetching detalles de la película
   useEffect(() => {
@@ -49,6 +54,27 @@ const MovieScreen = () => {
   
     fetchDirector();
   }, [movieId]);
+
+  useEffect(() => {
+    const fetchMoviePosts = async () => {
+      try {
+        setLoadingPosts(true);
+        const postsData = await getPostsByMovieId(movieId);
+        console.log("Posts data response:", postsData); // Para depuración
+        setPosts(postsData);
+      } catch (error) {
+        console.error("Error fetching posts for movie:", error);
+        setErrorPosts("Failed to fetch posts. Please try again.");
+      } finally {
+        setLoadingPosts(false);
+      }
+    };
+  
+    fetchMoviePosts();
+  }, [movieId]);
+
+  console.log('response:', posts);
+  
 
 
   // Verificación de errores o datos vacíos
@@ -204,122 +230,48 @@ const MovieScreen = () => {
 
           {/* Posts de los usuarios */}
           <Text style={styles.postsTitle}>Posts</Text>
-          <Pressable onPress={() => route.push('post')}>
-          <View style={styles.postContainer}>
-          <Pressable style={styles.test} onPress={() => route.push('other_user_information')} >
-
-            <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
-
-          </Pressable>
-            <View style={styles.postContent}>
-              <View style={styles.usernameContainer}>
-                <Text style={styles.postUser}>User’s post</Text>
-                <View style={styles.userRating}>
-                  <RatingFavorite
-                    rating={5}
-                    isFavorite={true}
-                    starSize={16}    // Ajusta el tamaño si es necesario
-                    iconSize={12}    // Ajusta el tamaño si es necesario
-                  />
-                </View>
+          {/* Manejo de errores y carga */}
+          {loadingPosts ? (
+            <ActivityIndicator size="large" color="#6200EE" />
+          ) : errorPosts ? (
+            <Text style={styles.errorText}>{errorPosts}</Text>
+          ) : posts.length === 0 ? (
+            <Text style={styles.noPostsText}>No posts available for this movie.</Text>
+          ) : (
+            posts.map((post) => (
+              <Pressable key={post.post_id}
+              onPress={() => route.push(`/post/${post.post_id}`)}>
+              <View style={styles.postContent1}>
+              
               </View>
-              <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac.</Text>
-            </View>
-          </View>
-          </Pressable>
-          {/* Agrega más posts según sea necesario */}
-          <Pressable onPress={() => route.push('post')}>
           <View style={styles.postContainer}>
-          <Pressable style={styles.test} onPress={() => route.push('other_user_information')} >
+          
+          
 
-            <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
-
-          </Pressable>
             <View style={styles.postContent}>
+              
               <View style={styles.usernameContainer}>
-                <Text style={styles.postUser}>User’s post</Text>
+                <Text style={styles.postUser}>{post.username}</Text>
                 <View style={styles.userRating}>
                   <RatingFavorite
-                    rating={4.5}
-                    isFavorite={true}
-                    starSize={16}    // Ajusta el tamaño si es necesario
-                    iconSize={12}    // Ajusta el tamaño si es necesario
-                  />
-                </View>
-              </View>
-              <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac.</Text>
-            </View>
-          </View>
-          </Pressable>
-          <Pressable onPress={() => route.push('post')}>
-          <View style={styles.postContainer}>
-          <Pressable style={styles.test} onPress={() => route.push('other_user_information')} >
-
-            <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
-
-          </Pressable>
-            <View style={styles.postContent}>
-              <View style={styles.usernameContainer}>
-                <Text style={styles.postUser}>User’s post</Text>
-                <View style={styles.userRating}>
-                  <RatingFavorite
-                    rating={4.3}
+                    rating={post.rating}
+                    showFavorite={false}
                     isFavorite={false}
                     starSize={16}    // Ajusta el tamaño si es necesario
                     iconSize={12}    // Ajusta el tamaño si es necesario
                   />
                 </View>
               </View>
-              <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac.</Text>
+              <Text style={styles.postText}>{post.review}</Text>
             </View>
           </View>
           </Pressable>
-          <Pressable onPress={() => route.push('post')}>
-          <View style={styles.postContainer}>
-          <Pressable style={styles.test} onPress={() => route.push('other_user_information')} >
+            ))
+        )}
+          
+       
+     
 
-            <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
-
-          </Pressable>
-            <View style={styles.postContent}>
-              <View style={styles.usernameContainer}>
-                <Text style={styles.postUser}>User’s post</Text>
-                <View style={styles.userRating}>
-                  <RatingFavorite
-                    rating={4.4}
-                    isFavorite={true}
-                    starSize={16}    // Ajusta el tamaño si es necesario
-                    iconSize={12}    // Ajusta el tamaño si es necesario
-                  />
-                </View>
-              </View>
-              <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac.</Text>
-            </View>
-          </View>
-          </Pressable>
-          <Pressable onPress={() => route.push('post')}>
-          <View style={styles.postContainer}>
-          <Pressable style={styles.test} onPress={() => route.push('other_user_information')} >
-
-            <Ionicons name="person-circle-outline" size={48} color="#6200EE" style={styles.userPic} />
-
-          </Pressable>
-            <View style={styles.postContent}>
-              <View style={styles.usernameContainer}>
-                <Text style={styles.postUser}>User’s post</Text>
-                <View style={styles.userRating}>
-                  <RatingFavorite
-                    rating={4.6}
-                    isFavorite={true}
-                    starSize={16}    // Ajusta el tamaño si es necesario
-                    iconSize={12}    // Ajusta el tamaño si es necesario
-                  />
-                </View>
-              </View>
-              <Text style={styles.postText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum auctor magna ipsum, et egestas magna dapibus ac.</Text>
-            </View>
-          </View>
-          </Pressable>
         </View>
       </Animated.ScrollView>
 
@@ -334,6 +286,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Themes.colors.grayDark,
+  },
+  errorText: {
+    textAlign: 'center',
+    color: Themes.colors.purpleDetail,
+    marginVertical: 10,
+  },
+  noPostsText: {
+    textAlign: 'center',
+    color: '#888',
+    marginVertical: 10,
   },
   headerImageContainer: {
     height: 170,
@@ -448,9 +410,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 10,
   },
+  postContent1: {
+    flexDirection: 'row',
+  },
   postUser: {
     color: 'white',
     fontSize: 16,
+    fontWeight: 'bold',
   },
   userRating: {
     marginLeft: 8,
@@ -458,6 +424,7 @@ const styles = StyleSheet.create({
   postText: {
     color: 'white',
     fontSize: 14,
+    fontWeight: 'condensed',
   },
   floatingButton: {
     position: 'absolute',

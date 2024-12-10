@@ -339,6 +339,20 @@ export const getPostLikes = async (postId) => {
   }
 };
 
+// Request para obtener los posts relacionados con una película específica
+export const getPostsByMovieId = async (movieId) => {
+  try {
+      console.log('Fetching info for movieId:', movieId);
+      const response = await movieverseApi.get(`/movies/${movieId}/posts`);
+      console.log('Info API response:', response.data); // Cambiar aquí a response.data
+      return response.data.posts;
+  } catch (error) {
+      console.error("Error fetching posts by movie ID:", error);
+      throw error;
+  }
+}
+
+
 
 
 export default movieverseApi;
