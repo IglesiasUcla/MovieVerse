@@ -2,7 +2,7 @@ import createApiInstance from "./api";
 import * as SecureStore from "expo-secure-store";
 
 // URL base de tu backend
-const BASE_URL = "http://192.168.1.107:3000"; // Cambia según la URL de tu backend
+const BASE_URL = "http://192.168.68.106:3000"; // Cambia según la URL de tu backend
 
 // Instancia de la API de MovieVerse
 const movieverseApi = createApiInstance(BASE_URL);
@@ -306,5 +306,39 @@ export async function fetchOtherTopMovies(userId) {
       throw error;
   }
 }
+
+export const addLikeToPost = async (postId) => {
+  try {
+    const response = await movieverseApi.post(`/posts/${postId}/like`);
+    return response.data;
+  } catch (error) {
+    console.error("Error adding like:", error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
+};
+
+export const removeLikeFromPost = async (postId) => {
+  try {
+    const response = await movieverseApi.delete(`/posts/${postId}/like`);
+    return response.data;
+  } catch (error) {
+    console.error("Error removing like:", error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
+};
+
+export const getPostLikes = async (postId) => {
+  try {
+    console.log('Fetching likes for postId:', postId);
+    const response = await movieverseApi.get(`/posts/${postId}/like`);
+    console.log('Likes API response:', response.data); // Cambiar aquí a response.data
+    return response.data; // Retorna todo el objeto de datos
+  } catch (error) {
+    console.error("Error fetching likes:", error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
+};
+
+
 
 export default movieverseApi;
