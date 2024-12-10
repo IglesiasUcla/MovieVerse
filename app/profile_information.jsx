@@ -1,256 +1,306 @@
-import { StyleSheet, Text, View,SafeAreaView,ScrollView,TouchableOpacity,TextInput, StatusBar} from 'react-native'
-import React, { useState } from 'react';
-import { Themes } from '../constants/Themes'
-import { heightPercentage,widthPercentage } from '../helpers/commons';
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity, TextInput, StatusBar, ActivityIndicator, Image, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Themes } from '../constants/Themes';
+import { heightPercentage, widthPercentage } from '../helpers/commons';
 import Button from '../components/Button';
 import Header from '../components/Header';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import InputPencil from '../components/InputPencil';
+import * as ImagePicker from 'expo-image-picker'; // Importación para el picker de imágenes
 import { useRouter } from 'expo-router';
-import { DiscardChangesPopup, DiscardChangesPopup1, PhotoSelectionPopup } from '../components/Popup';
+import { getUser, updateUser } from '../helpers/movieverseApi';
+import { PhotoSelectionPopup } from '../components/Popup';
 
-const Profile_information = () => {
-    const route= useRouter();
-    const [showDiscardPopup, setShowDiscardPopup] = useState(false);
+
+
+const ProfileInformation = () => {
+    const route = useRouter();
+    const [userProfile, setUserProfile] = useState(null); // Estado para almacenar los datos del usuario
+    const [loading, setLoading] = useState(true); // Estado de carga
+    const [saving, setSaving] = useState(false); // Estado de guardar cambios
     const [showPhotoSelectionPopup, setShowPhotoSelectionPopup] = useState(false);
+
+    // Campos del perfil
+    const [username, setUsername] = useState('');
+    const [bio, setBio] = useState('');
+    const [profilePicture, setProfilePicture] = useState(null); // Estado para la foto de perfil
+
+    // Cargar los datos del usuario al iniciar
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const data = await getUser();
+                setUserProfile(data.user); // Cargar datos del usuario
+                setUsername(data.user.username || '');
+                setBio(data.user.description || '');
+                setTopMovies(data.user.top_movies || Array(3).fill(null));
+                setProfilePicture(data.user.profile_picture || null); // Establecer foto de perfil
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                alert('Failed to load user data.');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchUserData();
+    }, []);
+
+    // Manejar la selección de la foto de perfil
+    const handleProfilePicture = async () => {
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (!permissionResult.granted) {
+            Alert.alert("Permission required", "You need to enable permission to access the gallery.");
+            return;
+        }
+
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 0.8,
+        });
+
+        if (!result.canceled) {
+            setProfilePicture(result.assets[0].uri);
+        }setShowPhotoSelectionPopup(false);
+    };
+
+    // Manejar la selección de la foto de perfil
+    const takeProfilePicture = async () => {
+        const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+        if (!permissionResult.granted) {
+            Alert.alert("Permission required", "You need to enable permission to access the gallery.");
+            return;
+        }
+
+        const result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 0.8,
+        });
+
+        if (!result.canceled) {
+            setProfilePicture(result.assets[0].uri);
+        }setShowPhotoSelectionPopup(false);
+    };
+
+    // Subir la foto de perfil al servidor
+    const uploadProfilePicture = async () => {
+        if (!profilePicture) {
+            Alert.alert("No image selected", "Please select a profile picture to upload.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('profile_picture', {
+            uri: profilePicture,
+            name: 'profile_picture.jpg',
+            type: 'image/jpeg',
+        });
+
+        try {
+            setSaving(true);
+            const response = await updateUser(formData);
+            if (response && response.message === "User updated successfully.") {
+
+            } else {
+                Alert.alert('Error', 'Failed to update profile picture. Please try again.');
+            }
+        } catch (error) {
+            console.error("Error uploading profile picture:", error);
+            Alert.alert('Error', 'An error occurred while updating the profile picture.');
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const handleSave = async () => {
+        setSaving(true);
+        try {
+            const response = await updateUser({
+                username,
+                description: bio,
+            });
+    
+            if (response && response.message === "User updated successfully.") {
+                alert('Profile updated successfully!');
+            } else {
+                alert('Failed to update profile. Please try again.');
+            }
+    
+            console.log('response:', response);
+        } catch (error) {
+            console.error(error);
+            alert('An error occurred while updating the profile.');
+        } finally {
+            setSaving(false);
+        }
+    };
+    
+    
+    
+
+    // Nueva función para ejecutar ambas acciones
+    const handleSaveWithImage = async () => {
+    if (saving) return; // Evita ejecutar si ya está guardando.
+
+    setSaving(true);
+    try {
+        // Llamar a la función de carga de imagen
+        await uploadProfilePicture();
+
+        // Llamar a la función de guardar cambios
+        await handleSave();
+
+
+    } catch (error) {
+        console.error("Error during combined save operation:", error);
+        alert('An error occurred while updating the profile and uploading the picture.');
+    } finally {
+        setSaving(false);
+    }
+    };
+
+    if (loading) {
+        return (
+            <SafeAreaView style={styles.container}>
+                <ActivityIndicator size="large" color={Themes.colors.purpleStrong} />
+            </SafeAreaView>
+        );
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
-            {/* header */}
-            <View>
-                
-                <Header
-                    title="Profile Information"
-                    leftIconName="arrow-back"       
-                    leftIconRoute={"/profile_Settings"}
-                />
-            </View>
-            <View style={styles.containerWrapper}>
-                
-                <View >
-                    <Text style={styles.titleBody}> Signed in as user </Text>
-                </View>
-                <View style={styles.containerBody}>
-                    <InputPencil
-                        title="Name"
-                        textEdit="your name"
-                    />
-                    <InputPencil
-                        title="Phone"
-                        textEdit="your phone number"
-                    />
-                    <InputPencil
-                        title="Email"
-                        textEdit="your email"
-                    />
-                    <InputPencil
-                        title="Address"
-                        textEdit="your address"
-                    />
-                    <InputPencil
-                        title="Bio"
-                        textEdit="something about you"
-                    />
-                </View>
-                {/* favorites movies */}
-                <View style={styles.favoriteMovies}>
-                        <Text style={styles.localTitle}> Favorite Movies</Text>
-                        <ScrollView
-                            horizontal={true}
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={styles.containerMovies}
-                        >
-                            {[1,2,3,4,5,6,7].map((item,index) =>(
-                                <TouchableOpacity key={index} style={styles.box}>
-                                    <FontAwesome6 name="add" size={24} color={Themes.colors.purpleStrong} />
-                                </TouchableOpacity>
-                            ))}
-                        </ScrollView>
-                    </View>
-                {/* footer */}
-                <View style={styles.footer}>
-                <DiscardChangesPopup
-                    visible={showDiscardPopup}
-                    onCancel={() => setShowDiscardPopup(false)} // Cierra el popup al cancelar
-                    onDiscard={() => {route.push('')}}
-                    title='Erase avatar'
-                    text='Would you like to erase your profile picture?'
-                    purpleButton='Yes'
-                />
+            {/* Header */}
+            <Header
+                title="Profile Information"
+                leftIconName="arrow-back"
+                leftIconRoute="/profile_Settings"
+            />
 
-                <PhotoSelectionPopup
-                    visible={showPhotoSelectionPopup}
-                    onClose={() => setShowPhotoSelectionPopup(false)}
-                    onTakePhoto={() => {
-                    // Lógica para tomar foto
-                    setShowPhotoSelectionPopup(false);
-                    }}
-                    onSelectPhoto={() => {
-                    // Lógica para seleccionar foto
-                    setShowPhotoSelectionPopup(false);
-                     }}
-                />
-                    <Text style={styles.footerAvatarText}>Avatar</Text>
-                    <View style={styles.footerItems}>
-                        <View style={styles.avatarIcon}>
-                            <TouchableOpacity>
-                                <FontAwesome5 name="user-circle" size={100} color={Themes.colors.purpleStrong} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.iconsContainer}>
-                            <TouchableOpacity onPress={() => setShowPhotoSelectionPopup(true)} >
-                                <FontAwesome style={styles.icons} name="cloud-upload" size={30} color={Themes.colors.purpleStrong} />
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setShowDiscardPopup(true)} >
-                            <AntDesign style={styles.icons} name="delete" size={30} color={Themes.colors.purpleStrong} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.containerButton}>
-                            <Button
-                                title="Cancel" 
-                                buttonStyle={styles.button} 
-                                onPress={() => route.push('profile_Settings')} 
-                                backgroundColor={Themes.colors.purpleLight} 
-                                textColor="white" 
+            <ScrollView contentContainerStyle={styles.wrapper}>
+                {/* User Information */}
+                <View style={styles.infoSection}>
+                    <TouchableOpacity style={styles.profilePictureContainer} onPress={() => setShowPhotoSelectionPopup(true)}>
+                        {profilePicture ? (
+                            <Image
+                                source={{ uri: profilePicture }}
+                                style={styles.profilePicture}
                             />
-                            <Button
-                                title="Save" 
-                                buttonStyle={styles.button} 
-                                onPress={() => route.push('profile_user')} 
-                                backgroundColor={Themes.colors.purpleStrong} 
-                                textColor="white" 
-                            />
-                        </View>
-                    </View>
+                        ) : (
+                            <FontAwesome6 name="user-circle" size={116} color={Themes.colors.purpleStrong} />
+                        )}
+                    </TouchableOpacity>
+                    <Text style={styles.sectionTitle}>User Information</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Username"
+                        value={username}
+                        onChangeText={setUsername}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Bio"
+                        value={bio}
+                        onChangeText={setBio}
+                        multiline
+                    />
+                    
                 </View>
+            </ScrollView>
+
+            {/* Save Button */}
+            <View style={styles.footer}>
+                <Button
+                    title={saving ? "Saving..." : "Save"}
+                    buttonStyle={styles.saveButton}
+                    onPress={handleSaveWithImage} // Integrar la subida de imagen
+                    disabled={saving}
+                    backgroundColor={Themes.colors.purpleStrong}
+                    textColor="white"
+                />
             </View>
-            
+            <PhotoSelectionPopup
+                visible={showPhotoSelectionPopup}
+                onClose={() => setShowPhotoSelectionPopup(false)}
+                onTakePhoto={takeProfilePicture}
+                onSelectPhoto={handleProfilePicture}
+            />
         </SafeAreaView>
-    )
-}
-
-export default Profile_information
+    );
+};
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor:Themes.colors.screensColor,
-        justifyContent:'space-between',
+    container: {
+        flex: 1,
+        backgroundColor: Themes.colors.screensColor,
     },
-    containerWrapper:{
-        alignContent:'center',
-        marginBottom:80,
+    wrapper: {
+        padding: 20,
     },
-    titleBody:{
-        color:'white',
-        fontSize:24,
-        fontWeight:Themes.fonts.extrabold,
-        marginVertical:25,
-        paddingLeft:10,
+    infoSection: {
+        marginBottom: 30,
     },
-    containerBody:{
-        flexDirection:'column',
-        paddingHorizontal:10,
-        
+    sectionTitle: {
+        color: 'white',
+        fontSize: 22,
+        fontWeight: 'bold',
+        marginBottom: 10,
     },
-    fieldBody:{
-        flexDirection:'row',
-        alignItems:'baseline',
-        justifyContent: 'space-evenly',
-        paddingHorizontal:15,
-        marginTop:8,
+    profilePictureContainer: {
+        alignItems: 'center',
+        marginBottom: 20,
     },
-    textDescription:{
-        color:'white',
-        fontSize:20,
-        fontWeight: Themes.fonts.minimus,
-        marginRight:75,
-        alignItems:'flex-end',
-        alignSelf:'flex-start',
-        justifyContent:'flex-end',
-    },
-    textField:{
-        flexDirection: 'row',
-        alignItems: 'baseline',
-        justifyContent:'flex-end',
-        backgroundColor:'black',  
+    profilePicture: {
+        width: 116,
+        height: 116,
+        borderRadius: 58, // Circular
         borderWidth: 1,
-        borderBottomColor: 'white',
-        height:heightPercentage(6),
-        
+        borderColor: Themes.colors.purpleStrong,
+    },    
+    input: {
+        backgroundColor: '#333',
+        color: 'white',
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 15,
+        fontSize: 16,
     },
-    dataField:{
-        height: heightPercentage(4),
-        width:'60%',
-        // paddingLeft:widthPercentage(40),
-        textAlign:'auto',
-        
+    topMoviesSection: {
+        marginBottom: 20,
     },
-    favoriteMovies:{
-        // alignItems:'left',
-        marginTop:25,
-        marginBottom:20,
-        marginHorizontal:0,
+    moviesContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
-    localTitle:{
-        color:'white',
-        textAlign:'left',
-        fontSize:26,
-        fontWeight: Themes.fonts.bold,
-        marginBottom:15,
-        marginHorizontal:20,
-    },
-    containerMovies:{
-        paddingHorizontal:20,
-    },
-    box:{
-        width:widthPercentage(20),
-        height:heightPercentage(15),
-        backgroundColor:'#d9d9d9',
-        alignItems:'center',
-        justifyContent:'center',
-        borderRadius:4,
-        marginHorizontal:5,
-    },
-    footer:{
-
-    },
-    footerAvatarText:{
-        color:'white',
-        fontSize:20,
-        fontWeight:Themes.fonts.medium,
-        marginLeft:25,
-    },
-    footerItems:{
-        flexDirection:'row',
-    },
-    avatarIcon:{
-        width: 140,
-        height: 140,
+    movieBox: {
+        width: widthPercentage(28),
+        height: heightPercentage(15),
+        backgroundColor: '#d9d9d9',
+        borderRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
     },
-    iconsContainer:{
-        flexDirection:'column',
-        justifyContent:'center',
-        marginHorizontal:20,
+    emptyBox: {
+        borderWidth: 1.5,
+        borderColor: Themes.colors.purpleStrong,
     },
-    icons:{
-        marginVertical:8,
+    movieText: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: Themes.colors.purpleStrong,
     },
-    containerButton:{
-        flexDirection:'column',
-        width:120,
-        marginLeft:30,
-        marginVertical:15,
+    footer: {
+        padding: 15,
+        alignItems: 'center',
     },
-    button: {
-        marginTop: 20,  
-        width: '100%',  
-        borderRadius: 10,  
-        height:heightPercentage(3),
+    saveButton: {
+        width: '100%',
+        borderRadius: 10,
+        height: heightPercentage(6),
     },
-})
+});
+
+export default ProfileInformation;
