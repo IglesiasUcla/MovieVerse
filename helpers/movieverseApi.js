@@ -206,6 +206,16 @@ export const createTopMovies = async (topMovies) => {
   }
 };
 
+export const getTopMovies = async () => {
+  try {
+      const response = await movieverseApi.get('/topMovies');
+      return response.data; // Retornar la respuesta del backend
+  } catch (error) {
+      console.error('Error updating user:', error.response?.data || error.message);
+      throw error; // Propagar el error para manejarlo en la interfaz
+  }
+};
+
 export const updateTopMovie = async (rank, movieId) => {
   try {
     const response = await movieverseApi.put('/topMovies', {

@@ -1,93 +1,83 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar, ActivityIndicator } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { View, Text, StyleSheet, TouchableOpacity, Image, StatusBar } from 'react-native';
 import Header from '../components/Header';
 import { Themes } from '../constants/Themes';
 import { useRouter } from 'expo-router';
-import { searchMovies } from '../helpers/tmdbApi'; // Agrega el helper para la búsqueda
+import { getTopMovies } from '../helpers/movieverseApi';
+import { getMovieDetails } from '../helpers/tmdbApi';
 
 const TopMovies = () => {
-  const [search, setSearch] = useState('');
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [topMovies, setTopMovies] = useState([null, null, null]); // Placeholder inicial
   const router = useRouter();
-  const handleSelectMovie = (movieId, index) => {
-        router.push(`/profile_information?movieId=${movieId}&topMovieIndex=${index}`);
-    };
+
+  const fetchMovieDetails = async (movieId) => {
+    try {
+      if (movieId === "placeholder1" || movieId === "placeholder2" || movieId === "placeholder3") {
+        return null; // Or return a default image URL or placeholder value
+      }
+  
+      const movieDetails = await getMovieDetails(movieId);
+      return movieDetails.poster_path;
+    } catch (error) {
+      console.error(`Error fetching details for movie ID ${movieId}:`, error);
+      return null;
+    }
+  };
 
   useEffect(() => {
-    const debounceTimeout = setTimeout(() => {
-      if (search.trim()) {
-        fetchMovies(search);
-      } else {
-        setMovies([]);
+    const fetchTopMovies = async () => {
+      try {
+        const response = await getTopMovies();
+        const updatedMovies = await Promise.all(
+          response.topMovies.map(async (movie) => {
+            const posterPath = await fetchMovieDetails(movie.movie_id);
+            return { ...movie, poster_path: posterPath };
+          })
+        );
+
+        const sortedMovies = [null, null, null];
+        updatedMovies.forEach((movie) => {
+          sortedMovies[movie.rank - 1] = movie;
+        });
+        setTopMovies(sortedMovies);
+      } catch (error) {
+        console.error('Error fetching top movies:', error);
       }
-    }, 500); // 500ms debounce
+    };
 
-    return () => clearTimeout(debounceTimeout);
-  }, [search]);
+    fetchTopMovies();
+  }, []);
 
-  const fetchMovies = async (query) => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const results = await searchMovies(query);
-      setMovies(results);
-    } catch (err) {
-      console.error('Error fetching movies:', err);
-      setError('Failed to fetch movies. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+  const handleSelectMovie = (rank) => {
+    router.push(`/searchTopMovies?rank=${rank}`);
   };
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
-      {/* Header */}
-      <Header title="Add a Top Movie" leftIconName="arrow-back" leftIconRoute="profile_information" />
-
-      {/* Search Input */}
-      <View style={styles.searchContainer}>
-        <Icon name="search" size={24} color="#AAA" style={styles.searchIcon} />
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Add a top Movie"
-          placeholderTextColor="#AAA"
-          value={search}
-          onChangeText={setSearch}
-        />
-      </View>
-
-      {/* Movie List or Loading/Error */}
-      <ScrollView contentContainerStyle={styles.movieList}>
-        {loading ? (
-          <ActivityIndicator size="large" color={Themes.colors.purpleStrong} />
-        ) : error ? (
-          <Text style={styles.errorText}>{error}</Text>
-        ) : movies.length === 0 && search.trim() ? (
-          <Text style={styles.noResultsText}>No movies found for "{search}".</Text>
-        ) : (
-          movies.map((movie, index) => (
-            <TouchableOpacity
-            key={movie.id}
-            style={styles.movieItem}
-            onPress={() => handleSelectMovie(movie.id, index)}
+      <Header title="Top Movies" leftIconName="arrow-back" leftIconRoute="profile_user" />
+      <View style={styles.movieContainers}>
+        {topMovies.map((movie, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.movieContainer}
+            onPress={() => handleSelectMovie(index + 1)}
           >
-            <Image
-              source={{ uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}` }}
-              style={styles.poster}
-            />
-            <View style={styles.movieInfo}>
-              <Text style={styles.movieTitle}>{movie.title}</Text>
-              <Text style={styles.movieYear}>{new Date(movie.release_date).getFullYear()}</Text>
-            </View>
+            {movie ? (
+              movie.poster_path ? (
+                <Image
+                  source={{ uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}` }}
+                  style={styles.poster}
+                />
+              ) : (
+                <Text style={styles.placeholderText}>Loading Poster...</Text>
+              )
+            ) : (
+              <Text style={styles.placeholderText}>Select a movie for Rank {index + 1}</Text>
+            )}
           </TouchableOpacity>
-          ))
-        )}
-      </ScrollView>
+        ))}
+      </View>
     </View>
   );
 };
@@ -97,60 +87,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#1A1A1A',
   },
-  searchContainer: {
+  movieContainers: {
     flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 16,
+  },
+  movieContainer: {
+    width: '30%',
+    height: 150,
     backgroundColor: '#333',
-    borderRadius: 25,
-    margin: 16,
-    paddingHorizontal: 12,
-  },
-  searchIcon: {
-    marginRight: 8,
-  },
-  searchInput: {
-    flex: 1,
-    color: '#FFFFFF',
-    fontSize: 16,
-    paddingVertical: 8,
-  },
-  movieList: {
-    paddingHorizontal: 16,
-  },
-  movieItem: {
-    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
+    borderRadius: 8,
+  },
+  placeholderText: {
+    color: '#AAA',
+    textAlign: 'center',
   },
   poster: {
-    width: 50,
-    height: 75,
+    width: '100%',
+    height: '100%',
     borderRadius: 8,
-    marginRight: 16,
-  },
-  movieInfo: {
-    flex: 1,
-  },
-  movieTitle: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  movieYear: {
-    color: '#AAAAAA',
-    fontSize: 16,
-  },
-  errorText: {
-    color: '#FF4444',
-    textAlign: 'center',
-    marginTop: 20,
-    fontSize: 16,
-  },
-  noResultsText: {
-    color: '#FFFFFF',
-    textAlign: 'center',
-    marginTop: 20,
-    fontSize: 16,
   },
 });
 

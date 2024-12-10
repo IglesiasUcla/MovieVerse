@@ -6,10 +6,10 @@ import Button from '../components/Button';
 import Header from '../components/Header';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import * as ImagePicker from 'expo-image-picker'; // Importación para el picker de imágenes
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { getUser, updateUser } from '../helpers/movieverseApi';
 import { PhotoSelectionPopup } from '../components/Popup';
-import { getMovieDetails } from '../helpers/tmdbApi';
+
 
 
 const ProfileInformation = () => {
@@ -18,12 +18,10 @@ const ProfileInformation = () => {
     const [loading, setLoading] = useState(true); // Estado de carga
     const [saving, setSaving] = useState(false); // Estado de guardar cambios
     const [showPhotoSelectionPopup, setShowPhotoSelectionPopup] = useState(false);
-    const { movieId = null, topMovieIndex = null } = useLocalSearchParams();
 
     // Campos del perfil
     const [username, setUsername] = useState('');
     const [bio, setBio] = useState('');
-    const [topMovies, setTopMovies] = useState(Array(3).fill(null));
     const [profilePicture, setProfilePicture] = useState(null); // Estado para la foto de perfil
 
     // Cargar los datos del usuario al iniciar
@@ -45,50 +43,6 @@ const ProfileInformation = () => {
         };
         fetchUserData();
     }, []);
-
-    // Manejar la selección de una película
-    const handleMovieSelect = (index) => {
-        route.push(`/topMovies?topMovieIndex=${index}`);
-    };
-
-    const updateTopMovie = async () => {
-        if (!movieId || !topMovieIndex) {
-            return; // Salir si no hay parámetros válidos
-        }
-    
-        console.log("movieId:", movieId);
-        console.log("topMovieIndex:", topMovieIndex);
-    
-        try {
-            const index = parseInt(topMovieIndex);
-            if (isNaN(index) || index < 0 || index >= topMovies.length) {
-                console.warn("Invalid topMovieIndex provided.");
-                return;
-            }
-    
-            // Evitar actualizaciones innecesarias
-            if (topMovies[index] === parseInt(movieId)) {
-                return;
-            }
-    
-            const updatedTopMovies = [...topMovies];
-            updatedTopMovies[index] =  `${movieId}` ; // Asegurar que sea un número
-            setTopMovies(updatedTopMovies);
-    
-            console.log("Updated topMovies:", updatedTopMovies);
-        } catch (error) {
-            console.error("Error updating top movies:", error);
-        }
-    };
-
-    // Actualizar la lista de películas principales
-    // Llamar a la nueva función desde el useEffect
-    useEffect(() => {
-    updateTopMovie();
-    // Eliminar `topMovies` de las dependencias para evitar re-renderizados innecesarios
-    }, [movieId, topMovieIndex]);
-    
-    
 
     // Manejar la selección de la foto de perfil
     const handleProfilePicture = async () => {
@@ -163,29 +117,9 @@ const ProfileInformation = () => {
     const handleSave = async () => {
         setSaving(true);
         try {
-            // Filtrar los valores no nulos y transformar a un array de strings o números
-            const cleanedTopMovies = [];
-// Add existing movie IDs
-for (let i = 0; i < topMovies.length; i++) {
-  if (topMovies[i] !== null) {
-    cleanedTopMovies.push(topMovies[i]);
-  }
-}
-
-// Add movieId only to the first empty slot
-if (movieId && !cleanedTopMovies[0]) {
-  cleanedTopMovies.unshift(movieId); // Use unshift to add to the beginning
-}
-
-
-            
-            console.log("Prepared top_movies:", cleanedTopMovies);
-            
-    
             const response = await updateUser({
                 username,
                 description: bio,
-                top_movies: cleanedTopMovies, // Enviar el array directamente
             });
     
             if (response && response.message === "User updated successfully.") {
@@ -273,26 +207,6 @@ if (movieId && !cleanedTopMovies[0]) {
                         multiline
                     />
                     
-                </View>
-
-                {/* Top Movies */}
-                <View style={styles.topMoviesSection}>
-                    <Text style={styles.sectionTitle}>Top Movies</Text>
-                    <View style={styles.moviesContainer}>
-                        {topMovies.map((movie, index) => (
-                            <TouchableOpacity
-                                key={index}
-                                style={[styles.movieBox, movie ? {} : styles.emptyBox]}
-                                onPress={() => handleMovieSelect(index)}
-                            >
-                                {movie ? (
-                                    <Text style={styles.movieText}></Text>
-                                ) : (
-                                    <FontAwesome6 name="add" size={36} color={Themes.colors.purpleStrong} />
-                                )}
-                            </TouchableOpacity>
-                        ))}
-                    </View>
                 </View>
             </ScrollView>
 

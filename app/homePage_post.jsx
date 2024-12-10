@@ -6,7 +6,6 @@ import TopBar from '../components/TopBar';
 import { fetchRecentPosts } from '../helpers/movieverseApi';
 import { getMovieDetails } from '../helpers/tmdbApi';
 import RatingFavorite from '../components/RatingFavorite';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const HomePagePost = () => {
     const [posts, setPosts] = useState([]);
