@@ -32,7 +32,6 @@ const ProfileInformation = () => {
                 setUserProfile(data.user); // Cargar datos del usuario
                 setUsername(data.user.username || '');
                 setBio(data.user.description || '');
-                setTopMovies(data.user.top_movies || Array(3).fill(null));
                 setProfilePicture(data.user.profile_picture || null); // Establecer foto de perfil
             } catch (error) {
                 console.error('Error fetching user data:', error);
