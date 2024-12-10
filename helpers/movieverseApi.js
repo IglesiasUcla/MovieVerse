@@ -287,4 +287,24 @@ export const updateTopMovie = async (rank, movieId) => {
   }
 };
 
+export async function fetchOtherUser(userId) {
+  try {
+      const response = await movieverseApi.get(`/users/${userId}`);
+      return response.data.user;
+  } catch (error) {
+      console.error("Error fetching user data:", error);
+      throw error;
+  }
+}
+
+export async function fetchOtherTopMovies(userId) {
+  try {
+      const response = await movieverseApi.get(`/users/${userId}/top-movies`);
+      return response.data.topMovies;
+  } catch (error) {
+      console.error("Error fetching user's top movies:", error);
+      throw error;
+  }
+}
+
 export default movieverseApi;
