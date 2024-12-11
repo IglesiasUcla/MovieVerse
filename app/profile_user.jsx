@@ -11,9 +11,7 @@ import { useRouter } from 'expo-router';
 
 const Profile_user = () => {
   const route = useRouter();
-  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
   const [profilePicture, setProfilePicture] = useState(null);
