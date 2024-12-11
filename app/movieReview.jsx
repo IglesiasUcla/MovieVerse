@@ -1,78 +1,18 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  StatusBar,
-  TextInput,
-  ScrollView,
-} from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons";
-import Header from "../components/Header";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { Themes } from "../constants/Themes";
-import {
-  DiscardChangesPopup,
-  DiscardChangesPopup1,
-  PhotoSelectionPopup,
-} from "../components/Popup";
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter, useLocalSearchParams } from "expo-router";
-import TagsSection from "../components/TagsSection";
-import {
-  createPost,
-  EditPostId,
-  GetPostById,
-  markMovieAsFavorite,
-} from "../helpers/movieverseApi";
-import { Alert } from "react-native";
-import * as ImagePicker from "expo-image-picker";
-import { getMovieDetails } from "../helpers/tmdbApi";
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, Image, StyleSheet, StatusBar, TextInput, ScrollView, BackHandler  } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import Header from '../components/Header';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { Themes } from '../constants/Themes';
+import { DiscardChangesPopup, DiscardChangesPopup1, PhotoSelectionPopup } from '../components/Popup';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import TagsSection from '../components/TagsSection';
+import { createPost, markMovieAsFavorite } from '../helpers/movieverseApi';
+import { Alert } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
-const MovieReview = ({}) => {
-  const [postDetails, setPostDetails] = useState({
-    title: "",
-    movieId: "",
-    year: new Date(),
-    watch_date: new Date(),
-    rating: 0,
-    review: "",
-    spoiler: false,
-    tags: [],
-    image: null,
-  });
-
-  const handleInfo = async () => {
-    if (postId) {
-      try {
-        const dataPost = await GetPostById(postId);
-        const details = await getMovieDetails(dataPost.post.movie_id);
-        setPostDetails({
-          movieId: dataPost.post.movie_id,
-          title: details.title,
-          year: new Date(details.release_date),
-          watch_date: new Date(dataPost.post.watch_date),
-          rating: dataPost.post.rating,
-          review: dataPost.post.review,
-          spoiler: dataPost.post.contains_spoilers,
-          tags: dataPost.post.tag.split(","),
-        });
-      } catch (error) {
-        console.error(error);
-        Alert.alert("Error", error.message || "Error desconocido");
-      }
-    } else {
-      console.log("fregaste");
-    }
-  };
-
-  useEffect(() => {
-    handleInfo();
-  }, []);
-
-  console.log(postDetails.watch_date);
+const MovieReview = ({  }) => {
 
   const [date, setDate] = useState(new Date());
   const [favorite, setFavorite] = useState(false);
@@ -83,6 +23,23 @@ const MovieReview = ({}) => {
   const { title, year, posterUrl, movieId, postId } = useLocalSearchParams();
 
   const route = useRouter();
+  const { title, year, posterUrl, movieId } = useLocalSearchParams();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    // Interceptar el botón de retroceso
+    const backAction = () => {
+      setShowDiscardPopup(true); // Muestra el popup
+      return true; // Bloquea el retroceso mientras el popup está visible
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    // Limpieza del evento al desmontar el componente
+    return () => backHandler.remove();
+  }, []);
+
+  
 
   // Función para tomar una foto
   const takePhotoFunction = async () => {
@@ -153,7 +110,7 @@ const MovieReview = ({}) => {
       Alert.alert("Error", "Please add at least one tag before publishing.");
       return;
     }
-
+    
     const formData = new FormData();
     formData.append("movie_id", movieId || postDetails.movieId);
     formData.append("review", postDetails.review);
@@ -171,52 +128,31 @@ const MovieReview = ({}) => {
         name: "reaction_photo.jpg",
       });
     }
-    console.log("Post Data to send:", Array.from(formData));
-    if (postId) {
-      try {
-        // Edita el post
-        const response = await EditPostId(postId, formData);
-        if (response.success) {
-          Alert.alert("Success", "Your post has been edited!");
-          // Marcar como favorita solo si la estrella está activada
-          if (favorite) {
-            try {
-              await markMovieAsFavorite(movieId); // Llamar al endpoint
-              console.log(`Movie ${movieId} marked as favorite.`);
-            } catch (favoriteError) {
-              console.error("Error marking movie as favorite:", favoriteError);
-              Alert.alert(
-                "Warning",
-                "Your post was saved, but the movie could not be marked as favorite."
-              );
-            }
-          }
-          route.push("homePage"); // Redirigir a la pantalla principal
-        } else {
-          throw new Error(response.message || "An unexpected error occurred.");
-        }
-      } catch (error) {
-        console.error("Error saving post:", error.message);
-        Alert.alert("Error", "Failed to save the post. Please try again.");
-      }
+
+    console.log('Post Data to send:', Array.from(formData));
+  
+    // New line to check and set the flag
+    if (!isSubmitting) {
+      setIsSubmitting(true);
     } else {
-      try {
-        // Crea el post primero
-        const response = await createPost(formData);
-        if (response.success) {
-          Alert.alert("Success", "Your post has been published!");
-          // Marcar como favorita solo si la estrella está activada
-          if (favorite) {
-            try {
-              await markMovieAsFavorite(movieId); // Llamar al endpoint
-              console.log(`Movie ${movieId} marked as favorite.`);
-            } catch (favoriteError) {
-              console.error("Error marking movie as favorite:", favoriteError);
-              Alert.alert(
-                "Warning",
-                "Your post was saved, but the movie could not be marked as favorite."
-              );
-            }
+      console.warn('Post submission already in progress.');
+      return; // Exit the function if already submitting
+    }
+  
+    try {
+      // Guardar el post primero
+      const response = await createPost(formData);
+      if (response.success) {
+        Alert.alert('Success', 'Your post has been published!');
+        // Marcar como favorita solo si la estrella está activada
+        if (favorite) {
+          try {
+            await markMovieAsFavorite(movieId); // Llamar al endpoint
+            console.log(`Movie ${movieId} marked as favorite.`);
+          } catch (favoriteError) {
+            console.error('Error marking movie as favorite:', favoriteError);
+            Alert.alert('Warning', 'Your post was saved, but the movie could not be marked as favorite.');
+
           }
           route.push("homePage"); // Redirigir a la pantalla principal
         } else {
@@ -226,7 +162,17 @@ const MovieReview = ({}) => {
         console.error("Error saving post:", error);
         Alert.alert("Error", "Failed to save the post. Please try again.");
       }
+
+    } catch (error) {
+      console.error('Error saving post:', error);
+      Alert.alert('Error', 'Failed to save the post. Please try again.');
+    } finally {
+      // Reset the flag regardless of success or failure
+      setIsSubmitting(false);
+
     }
+  
+    setShowDiscardPopup1(false);
   };
 
   return (
@@ -236,14 +182,9 @@ const MovieReview = ({}) => {
         backgroundColor={Themes.colors.purpleStrong}
       />
       {/* Header */}
-      <Header
-        leftIconModule="close"
-        title="I watched"
-        rightIconModule="check"
-        onLeftPress={() => setShowDiscardPopup(true)}
-        onRightPress={handleSavePost}
-      />
 
+      <Header leftIconModule="close" title="I watched"  rightIconModule="check" onLeftPress={() => setShowDiscardPopup(true)} onRightPress={() => setShowDiscardPopup1(true)} />
+      
       <DiscardChangesPopup
         visible={showDiscardPopup}
         onCancel={() => setShowDiscardPopup(false)} // Cierra el popup al cancelar
@@ -254,12 +195,11 @@ const MovieReview = ({}) => {
 
       <DiscardChangesPopup1
         visible={showDiscardPopup1}
-        onDiscard={() => {
-          route.push("homePage");
-        }}
-        title={"Success"}
-        text={"Your post has been published and added to my posts"}
-        purpleButton={"Okay"}
+        onCancel={() => setShowDiscardPopup1(false)}
+        onDiscard={handleSavePost}
+        title={'Create Post?'}
+        text={'Do you want to create your post?'}
+        purpleButton={'Yes'}
       />
 
       {/* Movie Info */}

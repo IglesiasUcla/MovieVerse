@@ -66,25 +66,42 @@ const HomePagePost = () => {
     }
   };
 
-  useEffect(() => {
-    loadPosts();
-  }, []);
+    console.log('details:', posts)
 
-  const renderItem = ({ item }) => (
-    <View style={styles.postContainer}>
-      <Image
-        source={{ uri: item.movie_poster }}
-        style={styles.poster}
-        resizeMode="cover"
-      />
-      <View style={styles.postContent}>
-        <View style={styles.userInfo}>
-          <Image
-            source={{ uri: item.user_avatar }}
-            style={styles.avatar}
-            resizeMode="cover"
-          />
-          <Text style={styles.username}>{item.username}</Text>
+    useEffect(() => {
+        loadPosts();
+    }, []);
+
+    const renderItem = ({ item }) => (
+        <View style={styles.postContainer}>
+            <Image
+                source={{ uri: item.movie_poster }}
+                style={styles.poster}
+                resizeMode="cover"
+            />
+            <View style={styles.postContent}>
+                <View style={styles.userInfo}>
+                    <Image
+                        source={{ uri: item.profile_picture }}
+                        style={styles.avatar}
+                        resizeMode="cover"
+                    />
+                    <Pressable onPress={() => router.push({ pathname: '/other_user_information', params: { userId: item.user_id } })}>
+                        <Text style={styles.username}>{item.username}</Text>
+                    </Pressable>
+                </View>
+                <Text style={styles.movieTitle}>{item.movie_title}</Text>
+                
+            <RatingFavorite 
+                style={styles.starsContainer}
+                rating={typeof item.rating === 'number' && item.rating >= 0 ? item.rating : 0}
+                showFavorite={false}
+                starSize={16}    // Ajusta el tamaño si es necesario
+            />
+            <Pressable onPress={() => router.push({ pathname: '/post', params: { postId: item.post_id } })}>
+                <Text style={styles.review}>{item.review}</Text>
+            </Pressable>
+            </View>
         </View>
         <Text style={styles.movieTitle}>{item.movie_title}</Text>
 
@@ -163,73 +180,75 @@ const HomePagePost = () => {
 export default HomePagePost;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Themes.colors.screensColor,
-  },
-  body: {
-    flex: 1,
-    paddingHorizontal: 10,
-    alignContent: "flex-start",
-  },
-  postContainer: {
-    flexDirection: "row",
-    borderRadius: 8,
-    marginVertical: 10,
-    padding: 10,
-    alignItems: "flex-start",
-    height: "auto",
-  },
-  poster: {
-    width: 120,
-    height: 180,
-    borderRadius: 8,
-    marginRight: 10,
-  },
-  postContent: {
-    flex: 1,
-    height: "auto",
-  },
-  userInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    marginBottom: 2,
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 5,
-  },
-  username: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "white",
-  },
-  movieTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "white",
-    marginBottom: 4,
-  },
-  rating: {
-    fontSize: 14,
-    color: Themes.colors.textSecondary,
-    marginBottom: 6,
-  },
-  review: {
-    fontSize: 14,
-    color: "white",
-    overflow: "visible",
-    height: 50,
-  },
-  emptyText: {
-    textAlign: "center",
-    color: "white",
-    marginTop: 20,
-    fontSize: 18,
-  },
+    container: {
+        flex: 1,
+        backgroundColor: Themes.colors.screensColor,
+    },
+    body: {
+        flex: 1,
+        paddingHorizontal: 10,
+        alignContent: 'flex-start',
+    },
+    postContainer: {
+        flexDirection: 'row',
+        borderRadius: 8,
+        marginVertical: 10,
+        padding: 10,
+        alignItems: 'flex-start',
+        height:'auto',
+    },
+    poster: {
+        width: 120,
+        height: 180,
+        borderRadius: 8,
+        marginRight: 10,
+    },
+    postContent: {
+        flex: 1,
+        height:'auto',
+    },
+    userInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        marginBottom: 2,
+    },
+    avatar: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        marginRight: 8,
+        borderWidth: 1,
+        borderColor: Themes.colors.purpleStrong,
+    },
+    username: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'white',
+    },
+    movieTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: 'white',
+        marginBottom: 4,
+    },
+    rating: {
+        fontSize: 14,
+        color: Themes.colors.textSecondary,
+        marginBottom: 6,
+    },
+    review: {
+        fontSize: 14,
+        color: 'white',
+        overflow: 'visible',
+        height:50,
+    },
+    emptyText: {
+        textAlign: 'center',
+        color: 'white',
+        marginTop: 20,
+        fontSize: 18,
+    },
 
   listStyle: {
     // flexDirection: 'column',
