@@ -9,7 +9,7 @@ import React from "react";
 import { Themes } from "../constants/Themes";
 import { heightPercentage } from "../helpers/commons";
 import Header from "../components/Header";
-import SearchField from "../components/searchField";
+import SearchField from "../components/SearchField";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 

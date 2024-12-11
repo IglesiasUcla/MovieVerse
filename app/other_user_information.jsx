@@ -1,18 +1,24 @@
-import { StyleSheet, Text, View,SafeAreaView,ScrollView,TouchableOpacity, StatusBar } from 'react-native'
-import React from 'react'
-import TopBack from '../components/TopBackButton'
-import { Themes } from '../constants/Themes'
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import React, { useState, useEffect } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
+import { Themes } from '../constants/Themes';
+import Header from '../components/Header';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { heightPercentage,widthPercentage } from '../helpers/commons';
+import { useLocalSearchParams } from 'expo-router';
+import { fetchOtherUser, fetchOtherTopMovies } from '../helpers/movieverseApi';
+import { getMovieDetails } from '../helpers/tmdbApi';
 import Button from '../components/Button';
-
 const OtherUserInformation = () => {
   const { userId } = useLocalSearchParams(); // Lee el parámetro userId
   const [user, setUser] = useState(null);
   const [topMovies, setTopMovies] = useState([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const loadUserData = async () => {
       try {
@@ -22,23 +28,22 @@ const OtherUserInformation = () => {
 
         const userTopMovies = await fetchOtherTopMovies(userId);
 
-        if (userTopMovies === "placeholder1" || userTopMovies === "placeholder2" || userTopMovies === "placeholder3" || userTopMovies === null) {
-            return null; // Or return a default image URL or placeholder value
-          }
-
-        // Obtiene detalles de cada película
-
-        
+        // Filter out movie IDs that might be invalid
+        const validMovieIds = userTopMovies.filter((movie) => movie.movie_id);
 
         const topMoviesWithDetails = await Promise.all(
-          userTopMovies.map(async (movie) => {
-            const movieDetails = await getMovieDetails(movie.movie_id);
-            return {
-              rank: movie.rank,
-              ...movieDetails,
-            };
+          validMovieIds.map(async (movie) => {
+            try {
+              const movieDetails = await getMovieDetails(movie.movie_id);
+              return { rank: movie.rank, ...movieDetails };
+            } catch (error) {
+              console.error(`Error fetching movie details for ID ${movie.movie_id}`, error);
+              // Return a placeholder object for missing movies
+              return { rank: movie.rank, title: "Movie Not Found", poster_path: null };
+            }
           })
         );
+
         setTopMovies(topMoviesWithDetails);
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -46,12 +51,10 @@ const OtherUserInformation = () => {
         setLoading(false);
       }
     };
-
     if (userId) {
       loadUserData();
     }
   }, [userId]);
-
   if (loading) {
     return (
       <View style={styles.loader}>
@@ -59,7 +62,6 @@ const OtherUserInformation = () => {
       </View>
     );
   }
-
   if (!user) {
     return <Text style={styles.errorText}>User not found.</Text>;
   }
@@ -131,7 +133,6 @@ const OtherUserInformation = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -236,5 +237,4 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 });
-
 export default OtherUserInformation;

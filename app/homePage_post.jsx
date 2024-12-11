@@ -1,62 +1,44 @@
-import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  ActivityIndicator,
-  Image,
-  StatusBar,
-  Pressable,
-} from "react-native";
-import { useRouter } from "expo-router";
-import { Themes } from "../constants/Themes";
-import TopBar from "../components/TopBar";
-import { fetchRecentPosts } from "../helpers/movieverseApi";
-import { getMovieDetails } from "../helpers/tmdbApi";
-import RatingFavorite from "../components/RatingFavorite";
-
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, Image, StatusBar, TouchableOpacity, Pressable } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Themes } from '../constants/Themes';
+import TopBar from '../components/TopBar';
+import { fetchRecentPosts } from '../helpers/movieverseApi';
+import { getMovieDetails } from '../helpers/tmdbApi';
+import RatingFavorite from '../components/RatingFavorite';
 const HomePagePost = () => {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-
-  const router = useRouter();
-
-  const loadPosts = async () => {
-    if (loading || !hasMore) return; // Evitar llamadas múltiples o cuando no hay más datos
-
-    setLoading(true);
-    try {
-      const { posts: newPosts } = await fetchRecentPosts(page);
-
-      const postsWithMovieDetails = await Promise.all(
-        newPosts.map(async (post) => {
-          if (!post.movie_id) {
-            console.warn(
-              `Post ${post.post_id} tiene un movie_id nulo o inválido.`
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const router = useRouter();
+    const loadPosts = async () => {
+        if (loading || !hasMore) return; // Evitar llamadas múltiples o cuando no hay más datos
+        setLoading(true);
+        try {
+            const { posts: newPosts } = await fetchRecentPosts(page);
+            const postsWithMovieDetails = await Promise.all(
+                newPosts.map(async (post) => {
+                    if (!post.movie_id) {
+                        console.warn(`Post ${post.post_id} tiene un movie_id nulo o inválido.`);
+                        return { ...post, movie_title: 'Unknown', movie_poster: null };
+                    }
+                    const movieDetails = await getMovieDetails(post.movie_id);
+                    return {
+                        ...post,
+                        movie_title: movieDetails.title,
+                        movie_poster: `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`,
+                    };
+                })
             );
-            return { ...post, movie_title: "Unknown", movie_poster: null };
-          }
-          const movieDetails = await getMovieDetails(post.movie_id);
-          return {
-            ...post,
-            movie_title: movieDetails.title,
-            movie_poster: `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`,
-          };
-        })
-      );
-
-      // Evitar duplicados con Set y mantener el orden
-      setPosts((prevPosts) => {
-        const uniquePosts = new Map();
-        [...prevPosts, ...postsWithMovieDetails].forEach((post) =>
-          uniquePosts.set(post.post_id, post)
-        );
-        return Array.from(uniquePosts.values());
-      });
-
+            // Evitar duplicados con Set y mantener el orden
+            setPosts((prevPosts) => {
+                const uniquePosts = new Map();
+                [...prevPosts, ...postsWithMovieDetails].forEach((post) =>
+                    uniquePosts.set(post.post_id, post)
+                );
+                return Array.from(uniquePosts.values());
+            });
             setHasMore(newPosts.length > 0); // Si no hay más posts, detener carga
             setPage((prevPage) => prevPage + 1); // Incrementar la página
         } catch (error) {
@@ -68,10 +50,9 @@ const HomePagePost = () => {
 
     console.log('details:', posts)
 
-  useEffect(() => {
-    loadPosts();
-  }, []);
-
+    useEffect(() => {
+        loadPosts();
+    }, []);
     const renderItem = ({ item }) => (
         <View style={styles.postContainer}>
             <Image
@@ -98,57 +79,41 @@ const HomePagePost = () => {
                 showFavorite={false}
                 starSize={16}    // Ajusta el tamaño si es necesario
             />
-            <Pressable onPress={() => router.push({ pathname: '/post', params: { postId: item.post_id } })}>
+            <TouchableOpacity onPress={() => router.push({ pathname: '/post', params: { postId: item.post_id } })}>
                 <Text style={styles.review}>{item.review}</Text>
-            </Pressable>
+            </TouchableOpacity>
             </View>
         </View>
     );
-
-  return (
-    <View style={styles.container}>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor={Themes.colors.purpleStrong}
-      />
-      <TopBar
-        title="Recent Posts"
-        currentTab="posts"
-        onTabChange={() => router.push("homePage")}
-        onMenuPress={() => console.log("Menu pressed")}
-        onSearchPress={() => router.push("search")}
-      />
-      <View style={styles.body}>
-        <FlatList
-          style={styles.listStyle}
-          data={posts}
-          renderItem={renderItem}
-          keyExtractor={(item) =>
-            item.post_id?.toString() || Math.random().toString()
-          }
-          onEndReached={loadPosts}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={
-            loading && (
-              <ActivityIndicator
-                size="large"
-                color={Themes.colors.purpleStrong}
-              />
-            )
-          }
-          ListEmptyComponent={
-            !loading && (
-              <Text style={styles.emptyText}>No posts available.</Text>
-            )
-          }
-        />
-      </View>
-    </View>
-  );
+    return (
+        <View style={styles.container}>
+            <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
+            <TopBar
+                title="Recent Posts"
+                currentTab="posts"
+                onTabChange={() => router.push('homePage')}
+                onMenuPress={() => console.log('Menu pressed')}
+                onSearchPress={() => router.push('search')}
+            />
+            <View style={styles.body}>
+                <FlatList style= {styles.listStyle}
+                    data={posts}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.post_id?.toString() || Math.random().toString()}
+                    onEndReached={loadPosts}
+                    onEndReachedThreshold={0.5}
+                    ListFooterComponent={loading && (
+                        <ActivityIndicator size="large" color={Themes.colors.purpleStrong} />
+                    )}
+                    ListEmptyComponent={!loading && (
+                        <Text style={styles.emptyText}>No posts available.</Text>
+                    )}
+                />
+            </View>
+        </View>
+    );
 };
-
 export default HomePagePost;
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -219,8 +184,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         fontSize: 18,
     },
-
-  listStyle: {
-    // flexDirection: 'column',
-  },
+    listStyle: {
+        // flexDirection: 'column',
+    }
 });
