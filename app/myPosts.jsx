@@ -16,15 +16,13 @@ import { Ionicons } from "@expo/vector-icons";
 import RatingFavorite from "../components/RatingFavorite";
 import { useRouter } from "expo-router";
 import { DiscardChangesPopup } from "../components/Popup";
-import { DeletePost, MyUserPost } from "../helpers/movieverseApi";
+import { MyUserPost } from "../helpers/movieverseApi";
 import { getMovieDetails } from "../helpers/tmdbApi";
 
 const MyPosts = () => {
   const route = useRouter();
   const [resul, setResul] = useState([]);
-  const [postId, setPostId] = useState();
   const [showDiscardPopup, setShowDiscardPopup] = useState(false);
-  const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [movieDetails, setMovieDetails] = useState({}); // Almacena detalles de cada película
 
   // Función para obtener las publicaciones del usuario
@@ -35,32 +33,18 @@ const MyPosts = () => {
 
       // Se obtienen los detalles de la película para cada post
       result.forEach(async (post) => {
-        const details = await getMovieDetails(post.movie_id);
+        const details = await getMovieDetails("912649");
+        console.log(details);
         setMovieDetails((prevState) => ({
           ...prevState,
           [post.post_id]: details,
         }));
       });
+
+      console.log("Resultado", movieDetails);
     } catch (error) {
       console.error(error);
       Alert.alert("Error", error.message || "Error desconocido");
-    }
-  };
-
-  const handleDeletePost = async () => {
-    try {
-      console.log(postId);
-      const result = await DeletePost(postId);
-
-      if (result.message) {
-        Alert.alert("Success", "Your post has been deleted successfully!");
-        handleMyPost(); // Actualizar los posts después de eliminar uno
-      } else {
-        Alert.alert("Error", "Failed to delete the post. Please try again.");
-      }
-    } catch (error) {
-      console.error("Error deleting post:", error);
-      Alert.alert("Error", error.message || "An unexpected error occurred");
     }
   };
 
@@ -97,25 +81,13 @@ const MyPosts = () => {
                     {movieDetails[post.post_id]?.title || "Default"}
                   </Text>
                   <Text style={styles.movieYear}>
-                    {post.watch_date?.substring(0, 4) || "Default"}
+                    {movieDetails[post.post_id]?.year || "Default"}
                   </Text>
                   <TouchableOpacity
-                    onPress={() => {
-                      setShowDiscardPopup(true);
-                      setPostId(post.post_id);
-                    }}
+                    onPress={() => setShowDiscardPopup(true)}
                     style={styles.editButton}
                   >
                     <Ionicons name="pencil" size={20} color="#6116ec" />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setShowDeletePopup(true);
-                      setPostId(post.post_id);
-                    }}
-                    style={styles.editButton}
-                  >
-                    <Ionicons name="trash" size={20} color="#6116ec" />
                   </TouchableOpacity>
                 </View>
               </Pressable>
@@ -133,12 +105,7 @@ const MyPosts = () => {
               <Pressable onPress={() => route.push("post")}>
                 <View style={styles.contentContainer}>
                   <Image
-                    source={{
-                      uri:
-                        `https://image.tmdb.org/t/p/w500${
-                          movieDetails[post.post_id]?.poster_path
-                        }` || "https://via.placeholder.com/80x120",
-                    }}
+                    source={{ uri: post.posterUri }}
                     style={styles.poster}
                   />
                   <Text style={styles.description}>{post.review}</Text>
@@ -152,28 +119,11 @@ const MyPosts = () => {
       </ScrollView>
 
       <DiscardChangesPopup
-        visible={showDeletePopup}
-        onCancel={() => setShowDeletePopup(false)}
-        onDiscard={() => {
-          handleDeletePost(postId);
-          setShowDeletePopup(false);
-        }}
-        title="Delete Post"
-        text="Are you sure you want to delete this post?"
-        purpleButton="Yes"
-      />
-
-      <DiscardChangesPopup
         visible={showDiscardPopup}
         onCancel={() => setShowDiscardPopup(false)}
-        onDiscard={() =>
-          route.push({
-            pathname: "movieReview",
-            params: {
-              postId: postId,
-            },
-          })
-        }
+        onDiscard={() => {
+          route.push("movieReview");
+        }}
         title="Edit post"
         text="Would you like to edit your post?"
         purpleButton="Yes"
