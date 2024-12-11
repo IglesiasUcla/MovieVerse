@@ -2,7 +2,7 @@ import createApiInstance from "./api";
 import * as SecureStore from "expo-secure-store";
 
 // URL base de tu backend
-const BASE_URL = "http://192.168.68.106:3000"; // Cambia según la URL de tu backend
+const BASE_URL = "http://192.168.1.102:3000"; // Cambia según la URL de tu backend
 
 // Instancia de la API de MovieVerse
 const movieverseApi = createApiInstance(BASE_URL);
@@ -72,6 +72,43 @@ export const loginUser = async (credentials) => {
 export async function searchUser(userTag) {
   try {
     const response = await movieverseApi.get(`/search?query=${userTag}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+}
+
+// Post por id
+export async function GetPostById(postId) {
+  try {
+    const response = await movieverseApi.get(`/posts/${postId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+}
+
+// Delete Post
+export async function DeletePost(postId) {
+  try {
+    const response = await movieverseApi.delete(`/post/${postId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+}
+
+//Edit Post
+export async function EditPostId(postId, formData) {
+  try {
+    const response = await movieverseApi.put(`/posts/${postId}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error:", error);
@@ -289,21 +326,21 @@ export const updateTopMovie = async (rank, movieId) => {
 
 export async function fetchOtherUser(userId) {
   try {
-      const response = await movieverseApi.get(`/users/${userId}`);
-      return response.data.user;
+    const response = await movieverseApi.get(`/users/${userId}`);
+    return response.data.user;
   } catch (error) {
-      console.error("Error fetching user data:", error);
-      throw error;
+    console.error("Error fetching user data:", error);
+    throw error;
   }
 }
 
 export async function fetchOtherTopMovies(userId) {
   try {
-      const response = await movieverseApi.get(`/users/${userId}/top-movies`);
-      return response.data.topMovies;
+    const response = await movieverseApi.get(`/users/${userId}/top-movies`);
+    return response.data.topMovies;
   } catch (error) {
-      console.error("Error fetching user's top movies:", error);
-      throw error;
+    console.error("Error fetching user's top movies:", error);
+    throw error;
   }
 }
 
@@ -322,19 +359,25 @@ export const removeLikeFromPost = async (postId) => {
     const response = await movieverseApi.delete(`/posts/${postId}/like`);
     return response.data;
   } catch (error) {
-    console.error("Error removing like:", error.response?.data || error.message);
+    console.error(
+      "Error removing like:",
+      error.response?.data || error.message
+    );
     throw error.response?.data || error;
   }
 };
 
 export const getPostLikes = async (postId) => {
   try {
-    console.log('Fetching likes for postId:', postId);
+    console.log("Fetching likes for postId:", postId);
     const response = await movieverseApi.get(`/posts/${postId}/like`);
-    console.log('Likes API response:', response.data); // Cambiar aquí a response.data
+    console.log("Likes API response:", response.data); // Cambiar aquí a response.data
     return response.data; // Retorna todo el objeto de datos
   } catch (error) {
-    console.error("Error fetching likes:", error.response?.data || error.message);
+    console.error(
+      "Error fetching likes:",
+      error.response?.data || error.message
+    );
     throw error.response?.data || error;
   }
 };
@@ -342,17 +385,14 @@ export const getPostLikes = async (postId) => {
 // Request para obtener los posts relacionados con una película específica
 export const getPostsByMovieId = async (movieId) => {
   try {
-      console.log('Fetching info for movieId:', movieId);
-      const response = await movieverseApi.get(`/movies/${movieId}/posts`);
-      console.log('Info API response:', response.data); // Cambiar aquí a response.data
-      return response.data.posts;
+    console.log("Fetching info for movieId:", movieId);
+    const response = await movieverseApi.get(`/movies/${movieId}/posts`);
+    console.log("Info API response:", response.data); // Cambiar aquí a response.data
+    return response.data.posts;
   } catch (error) {
-      console.error("Error fetching posts by movie ID:", error);
-      throw error;
+    console.error("Error fetching posts by movie ID:", error);
+    throw error;
   }
-}
-
-
-
+};
 
 export default movieverseApi;

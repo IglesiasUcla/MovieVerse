@@ -1,233 +1,131 @@
-import React, { useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Image,
-  ActivityIndicator,
-} from 'react-native';
-import { Themes } from '../constants/Themes';
-import Header from '../components/Header';
+import { StyleSheet, Text, View,SafeAreaView,ScrollView,TouchableOpacity, StatusBar } from 'react-native'
+import React from 'react'
+import TopBack from '../components/TopBackButton'
+import { Themes } from '../constants/Themes'
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { useLocalSearchParams } from 'expo-router';
-import { fetchOtherUser, fetchOtherTopMovies } from '../helpers/movieverseApi';
-import { getMovieDetails } from '../helpers/tmdbApi';
+import { heightPercentage,widthPercentage } from '../helpers/commons';
 import Button from '../components/Button';
+import Header from '../components/Header';
+import { useRouter } from 'expo-router';
 
-const OtherUserInformation = () => {
-  const { userId } = useLocalSearchParams(); // Lee el parámetro userId
-  const [user, setUser] = useState(null);
-  const [topMovies, setTopMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadUserData = async () => {
-      try {
-        setLoading(true);
-        const userData = await fetchOtherUser(userId);
-        setUser(userData);
-
-        const userTopMovies = await fetchOtherTopMovies(userId);
-
-        if (userTopMovies === "placeholder1" || userTopMovies === "placeholder2" || userTopMovies === "placeholder3" || userTopMovies === null) {
-            return null; // Or return a default image URL or placeholder value
-          }
-
-        // Obtiene detalles de cada película
-
-        
-
-        const topMoviesWithDetails = await Promise.all(
-          userTopMovies.map(async (movie) => {
-            const movieDetails = await getMovieDetails(movie.movie_id);
-            return {
-              rank: movie.rank,
-              ...movieDetails,
-            };
-          })
-        );
-        setTopMovies(topMoviesWithDetails);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (userId) {
-      loadUserData();
-    }
-  }, [userId]);
-
-  if (loading) {
+const Other_user_information = () => {
+    const route= useRouter();
     return (
-      <View style={styles.loader}>
-        <ActivityIndicator size="large" color={Themes.colors.purpleStrong} />
-      </View>
-    );
-  }
-
-  if (!user) {
-    return <Text style={styles.errorText}>User not found.</Text>;
-  }
-
-  return (
-    <View style={styles.container}>
-      <Header
-        title={user.username}
-        leftIconName="arrow-back"
-        leftIconRoute="/homePage"
-      />
-      <ScrollView style={styles.contentContainer}>
-        <View style={styles.profileContainer}>
-          <View style={styles.avatarContainer}>
-            {user.profile_picture ? (
-              <Image
-                source={{ uri: user.profile_picture }}
-                style={styles.profilePicture}
-              />
-            ) : (
-              <FontAwesome6
-                name="user-circle"
-                size={132}
-                color={Themes.colors.purpleStrong}
-                style={styles.placeholderIcon}
-              />
-            )}
-          </View>
-          <Text style={styles.username}>{user.username}</Text>
-          <Text style={styles.bio}>{user.description}</Text>
-
-          </View>
-
-            <View style={styles.button}>
-          <Button
-                        title="View posts" 
-                        buttonStyle={styles.buttonb} 
-                        onPress={() => { route.push('profile_Settings'); }} 
+        <SafeAreaView style={styles.container}>
+            <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
+            {/* header */}
+            <View>
+                <Header
+                    title="Username"
+                    leftIconName="arrow-back"       
+                    leftIconRoute={"/search_user"}
+                />
+            </View>
+            {/* body */}
+            <View style={styles.profile}>
+                <View style={styles.avatarIcon}>
+                    <FontAwesome5 name="user-circle" size={140} color={Themes.colors.purpleStrong} />
+                </View>
+                <Text style={styles.title}>About User</Text>
+                <View style={styles.infoLine} />
+                <View style={styles.infoLine} />
+                <View style={styles.buttonContainer}>
+                    <Button
+                        buttonStyle={styles.button} 
+                        onPress={() => { route.push('userPosts'); }} 
                         backgroundColor={Themes.colors.purpleStrong} 
-                        textColor="white" 
-                    /></View>
+                        textColor="white"
+                        title='View posts'
+                    />
+                </View>
+            </View>
+            {/* footer */}
+            <View style={styles.favoriteMovies}>
+                <Text style={styles.localTitle}> Favorite Movies</Text>
+                <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.containerMovies}
+                >
+                    {[1,2,3,4,5,6,7].map((item,index) =>(
+                        <TouchableOpacity key={index} style={styles.box}>
+                            <FontAwesome6 name="add" size={24} color={Themes.colors.purpleStrong} />
+                        </TouchableOpacity>
+                    ))}
+                </ScrollView>
+            </View>
+        </SafeAreaView>
+    )
+}
 
-        <View style={styles.topMoviesContainer}>
-          <Text style={styles.sectionTitle}>Top Movies</Text>
-          <View style={styles.moviesRow}>
-            {topMovies.map((movie) => (
-              <View key={movie.id} style={styles.movieContainer}>
-                {movie.poster_path ? (
-                  <Image
-                    source={{
-                      uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-                    }}
-                    style={styles.moviePoster}
-                  />
-                ) : (
-                  <FontAwesome6
-                    name="film"
-                    size={64}
-                    color={Themes.colors.purpleStrong}
-                    style={styles.placeholderIcon}
-                  />
-                )}
-              </View>
-            ))}
-          </View>
-        </View>
-      </ScrollView>
-    </View>
-  );
-};
+export default Other_user_information
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Themes.colors.grayDark,
-  },
-  contentContainer: {
-    paddingHorizontal: 16,
-  },
-  profileContainer: {
-    alignItems: 'center',
-    marginTop: 152 - 16 - 16 - 16,
-  },
-  avatarContainer: {
-    width: 132,
-    height: 132,
-    borderRadius: 66,
-    backgroundColor: '#1A1A1A',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  profilePicture: {
-    width: 132,
-    height: 132,
-    borderRadius: 66,
-    borderWidth: 1,
-    borderColor: Themes.colors.purpleStrong,
-  },
-  moviesRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around', // Distribute posters evenly
-    flexWrap: 'wrap', // Allow wrapping to next line if needed
-  },
-  username: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginTop: 16,
-  },
-  bio: {
-    fontSize: 16,
-    color: '#ccc',
-    textAlign: 'center',
-    marginTop: 8,
-  },
-  topMoviesContainer: {
-    marginTop: 16,
-    alignItems: 'center',
-  },
-  button: {
-    marginTop: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonb: {
-    width: 120-8,
-    height: 48,
-  },
-  sectionTitle: {
-    color: '#FFFFFF',
-    fontSize: 22,
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  movieContainer: {
-    alignItems: 'center',
-    marginHorizontal: 4,
-  },
-  movieRank: {
-    fontSize: 18,
-    color: '#fff',
-    marginBottom: 4,
-  },
-  moviePoster: {
-    width: 100,
-    height: 150,
-    borderRadius: 8,
-  },
-  loader: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Themes.colors.grayDark,
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 16,
-    textAlign: 'center',
-    marginTop: 20,
-  },
-});
+    container:{
+        flex:1,
+        backgroundColor:'#212121',
+        justifyContent:'space-between',
+    },
+    topBack:{
 
-export default OtherUserInformation;
+    },
+    profile:{
+        alignItems:'center',
+        marginTop:10,
+    },
+    avatarIcon:{
+        width: 140,
+        height: 140,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    title:{
+        color:'white',
+        fontSize:35,
+        marginVertical:15,
+        marginBottom:30,
+    },
+    infoLine:{
+        width:widthPercentage(60),
+        height: heightPercentage(1),
+        backgroundColor: Themes.colors.purpleLight,
+        borderRadius:10,
+        marginVertical: 5,
+    },
+    buttonContainer:{
+        flexDirection:'row',
+
+    },
+    button: {
+        marginTop: 20,  
+        width: '30%',  
+        height: heightPercentage(6),
+        borderRadius: 10,  
+        marginHorizontal:15,
+    },
+    favoriteMovies:{
+        // alignItems:'left',
+        marginTop:10,
+        marginBottom:20,
+    },
+    localTitle:{
+        color:'white',
+        textAlign:'left',
+        fontSize:26,
+        marginBottom:15,
+        marginHorizontal:20,
+    },
+    containerMovies:{
+        paddingHorizontal:20,
+    },
+    box:{
+        width:widthPercentage(20),
+        height:heightPercentage(15),
+        backgroundColor:'#d9d9d9',
+        alignItems:'center',
+        justifyContent:'center',
+        borderRadius:4,
+        marginHorizontal:5,
+    },
+})
