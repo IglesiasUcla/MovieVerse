@@ -1,19 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Image,
-  ActivityIndicator,
-} from 'react-native';
-import { Themes } from '../constants/Themes';
-import Header from '../components/Header';
+import { StyleSheet, Text, View,SafeAreaView,ScrollView,TouchableOpacity, StatusBar } from 'react-native'
+import React from 'react'
+import TopBack from '../components/TopBackButton'
+import { Themes } from '../constants/Themes'
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { useLocalSearchParams } from 'expo-router';
-import { fetchOtherUser, fetchOtherTopMovies } from '../helpers/movieverseApi';
-import { getMovieDetails } from '../helpers/tmdbApi';
+import { heightPercentage,widthPercentage } from '../helpers/commons';
 import Button from '../components/Button';
+import Header from '../components/Header';
+import { useRouter } from 'expo-router';
 
 const OtherUserInformation = () => {
   const { userId } = useLocalSearchParams(); // Lee el parámetro userId
