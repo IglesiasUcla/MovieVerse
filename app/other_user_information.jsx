@@ -30,23 +30,22 @@ const OtherUserInformation = () => {
 
         const userTopMovies = await fetchOtherTopMovies(userId);
 
-        if (userTopMovies === "placeholder1" || userTopMovies === "placeholder2" || userTopMovies === "placeholder3" || userTopMovies === null) {
-            return null; // Or return a default image URL or placeholder value
-          }
-
-        // Obtiene detalles de cada película
-
-        
+        // Filter out movie IDs that might be invalid
+        const validMovieIds = userTopMovies.filter((movie) => movie.movie_id);
 
         const topMoviesWithDetails = await Promise.all(
-          userTopMovies.map(async (movie) => {
-            const movieDetails = await getMovieDetails(movie.movie_id);
-            return {
-              rank: movie.rank,
-              ...movieDetails,
-            };
+          validMovieIds.map(async (movie) => {
+            try {
+              const movieDetails = await getMovieDetails(movie.movie_id);
+              return { rank: movie.rank, ...movieDetails };
+            } catch (error) {
+              console.error(`Error fetching movie details for ID ${movie.movie_id}`, error);
+              // Return a placeholder object for missing movies
+              return { rank: movie.rank, title: "Movie Not Found", poster_path: null };
+            }
           })
         );
+
         setTopMovies(topMoviesWithDetails);
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -71,6 +70,14 @@ const OtherUserInformation = () => {
   if (!user) {
     return <Text style={styles.errorText}>User not found.</Text>;
   }
+
+  const MoviePlaceholder = ({ style }) => {
+    return (
+      <View style={[styles.placeholder, style]}>
+        <Text style={styles.placeholderText}>Yet to pick</Text>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -98,37 +105,30 @@ const OtherUserInformation = () => {
           </View>
           <Text style={styles.username}>{user.username}</Text>
           <Text style={styles.bio}>{user.description}</Text>
+        </View>
 
-          </View>
-
-            <View style={styles.button}>
+        <View style={styles.button}>
           <Button
-                        title="View posts" 
-                        buttonStyle={styles.buttonb} 
-                        onPress={() => { route.push('profile_Settings'); }} 
-                        backgroundColor={Themes.colors.purpleStrong} 
-                        textColor="white" 
-                    /></View>
+            title="View posts"
+            buttonStyle={styles.buttonb}
+            onPress={() => route.push('profile_Settings')}
+            backgroundColor={Themes.colors.purpleStrong}
+            textColor="white"
+          />
+        </View>
 
         <View style={styles.topMoviesContainer}>
           <Text style={styles.sectionTitle}>Top Movies</Text>
           <View style={styles.moviesRow}>
-            {topMovies.map((movie) => (
-              <View key={movie.id} style={styles.movieContainer}>
+            {topMovies.map((movie, index) => ( // Use index for key
+              <View key={index} style={styles.movieContainer}>
                 {movie.poster_path ? (
                   <Image
-                    source={{
-                      uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-                    }}
+                    source={{ uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}` }}
                     style={styles.moviePoster}
                   />
                 ) : (
-                  <FontAwesome6
-                    name="film"
-                    size={64}
-                    color={Themes.colors.purpleStrong}
-                    style={styles.placeholderIcon}
-                  />
+                  <MoviePlaceholder style={styles.moviePoster} />
                 )}
               </View>
             ))}
@@ -146,6 +146,20 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: 16,
+  },
+  placeholder: {
+    width: 100, // Ajusta según sea necesario
+    height: 150, // Ajusta según sea necesario
+    backgroundColor: Themes.colors.grayLight, // Un color de fondo neutral
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  placeholderText: {
+    // Estilos del texto
+    color: 'black',
+    fontSize: 16,
+
   },
   profileContainer: {
     alignItems: 'center',

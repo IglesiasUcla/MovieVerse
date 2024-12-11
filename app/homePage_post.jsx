@@ -55,6 +55,8 @@ const HomePagePost = () => {
         }
     };
 
+    console.log('details:', posts)
+
     useEffect(() => {
         loadPosts();
     }, []);
@@ -69,7 +71,7 @@ const HomePagePost = () => {
             <View style={styles.postContent}>
                 <View style={styles.userInfo}>
                     <Image
-                        source={{ uri: item.user_avatar }}
+                        source={{ uri: item.profile_picture }}
                         style={styles.avatar}
                         resizeMode="cover"
                     />
@@ -158,10 +160,12 @@ const styles = StyleSheet.create({
         marginBottom: 2,
     },
     avatar: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        marginRight: 5,
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        marginRight: 8,
+        borderWidth: 1,
+        borderColor: Themes.colors.purpleStrong,
     },
     username: {
         fontSize: 16,

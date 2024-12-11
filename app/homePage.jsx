@@ -3,10 +3,11 @@ import { StyleSheet, View, Text, TouchableOpacity, FlatList, Pressable, StatusBa
 import { Themes } from '../constants/Themes';
 import { widthPercentage, heightPercentage } from '../helpers/commons';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useRouter, useNavigation } from 'expo-router';
 import TopBar from '../components/TopBar';
 import { getPopularMovies } from '../helpers/tmdbApi';
 import { DiscardChangesPopup } from '../components/Popup';
+import { createTopMovies } from '../helpers/movieverseApi';
 
 
 const HomePage = () => {
@@ -14,6 +15,8 @@ const HomePage = () => {
     const [movies, setMovies] = useState([]); // Inicializamos con un arreglo vacío
     const [loading, setLoading] = useState(true); // Estado para manejar el loading
     const [showDiscardPopup, setShowDiscardPopup] = useState(false);
+    const navigation = useNavigation();
+    const [topMoviesCreated, setTopMoviesCreated] = useState(false);
 
     useEffect(() => {
         // Interceptar el botón de retroceso
@@ -27,6 +30,24 @@ const HomePage = () => {
         // Limpieza del evento al desmontar el componente
         return () => backHandler.remove();
       }, []);
+
+      useEffect(() => {
+        const createInitialTopMovies = async () => {
+            if (!topMoviesCreated) {
+                try {
+                    const topMovies = ["placeholder1", "placeholder2", "placeholder3"];
+                    const response = await createTopMovies(topMovies);
+                    if (response.message === "Top movies created successfully.") {
+                        setTopMoviesCreated(true); // Evita que vuelva a ejecutarse
+                    }
+                } catch (error) {
+                    console.error("Error creating top movies:", error);
+                }
+            }
+        };
+    
+        createInitialTopMovies();
+      }, [topMoviesCreated]);
     
       const handleDiscard = () => {
         setShowDiscardPopup(false);
@@ -106,7 +127,10 @@ const HomePage = () => {
       <DiscardChangesPopup
         visible={showDiscardPopup}
         onCancel={() => setShowDiscardPopup(false)} // Cierra el popup al cancelar
-        onDiscard={() => {route.push('welcome')}}
+        onDiscard={() => {navigation.reset({
+            index: 0,
+            routes: [{ name: 'welcome' }], // your stack screen name
+        })}}
         title={'Log Out'}
         text={'Are you sure you want to Log Out?'}
         purpleButton={'Log Out'}

@@ -139,7 +139,10 @@ export default function Post() {
                 <View style={styles.userInfo}>
                     <Pressable onPress={() => router.push({ pathname: '/other_user_information', params: { userId: useridd } })}>
                         <View style={styles.avatarContainer}>
-                            <Ionicons name="person-circle-outline" size={24} color={Themes.colors.purpleStrong} />
+                        <Image
+                    source={{ uri: post.profile_picture || 'https://via.placeholder.com/48' }}
+                    style={styles.profilePicture}
+                  />
                             <Text style={[styles.movieTitle, { color: colors.text, marginLeft: 8 }]}>
                                 {post.username}
                             </Text>
@@ -217,6 +220,13 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         fontSize: 16,
     },
+    profilePicture: {
+        width: 42,
+        height: 42,
+        borderRadius: 24, // Circular
+        borderWidth: 1,
+        borderColor: Themes.colors.purpleStrong,
+      },
     tabActive: {
         color: 'white',
         paddingVertical: 8,
