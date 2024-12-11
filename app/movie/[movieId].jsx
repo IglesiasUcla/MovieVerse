@@ -77,6 +77,7 @@ const MovieScreen = () => {
   
 
 
+
   // Verificación de errores o datos vacíos
   if (loading) {
     return <ActivityIndicator size="large" color="#6200EE" style={styles.loader} />;
@@ -158,7 +159,7 @@ const MovieScreen = () => {
                 Directed by 
               </Text>
               <Text style={styles.bold}>{director}</Text>
-              <Text style={styles.movieDetails}>{movie.release_date} • {movie.runtime} min</Text>
+              <Text style={styles.movieDetails}>{new Date(movie.release_date).getFullYear()} • {movie.runtime} min</Text>
             </View>
             <Image
               source={{ uri: posterUri }}
@@ -219,8 +220,19 @@ const MovieScreen = () => {
           </View>
 
           <View style={styles.rateButtonContainer}>
-            <TouchableOpacity style={styles.rateButton} onPress={() => route.push('movieReview')} >
-              <Text style={styles.rateButtonText}>Add this movie</Text>
+            <TouchableOpacity style={styles.rateButton} onPress={() => {
+                // Pasa la película como parámetro a la pantalla de creación de reseñas
+                route.push({
+                  pathname: '/movieReview',
+                  params: {
+                    title: movie.title,
+                    year: new Date(movie.release_date).getFullYear(),
+                    posterUrl: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+                    movieId: movie.id,
+                  },
+                });
+              }} >
+              <Text style={styles.rateButtonText}>Add movie to a post</Text>
             </TouchableOpacity>
           </View>
 
@@ -240,11 +252,14 @@ const MovieScreen = () => {
           ) : (
             posts.map((post) => (
               <Pressable key={post.post_id}
-              onPress={() => route.push(`/post/${post.post_id}`)}>
-              <View style={styles.postContent1}>
-              
-              </View>
-          <View style={styles.postContainer}>
+              onPress={() => route.push({ pathname: '/post', params: { postId: post.post_id } })}>
+              <View style={styles.postContainer}>
+                <View style={styles.test} onPress={() => route.push({ pathname: '/other_user_information', params: { userId: post.user_id } })} >
+                  <Image
+                    source={{ uri: post.profile_picture || 'https://via.placeholder.com/48' }}
+                    style={styles.profilePicture}
+                  />
+                </View>
           
           
 
@@ -276,7 +291,18 @@ const MovieScreen = () => {
       </Animated.ScrollView>
 
       {/* Botón flotante */}
-      <TouchableOpacity style={styles.floatingButton} onPress={() => route.push('movieReview')}>
+      <TouchableOpacity style={styles.floatingButton} onPress={() => {
+                // Pasa la película como parámetro a la pantalla de creación de reseñas
+                route.push({
+                  pathname: '/movieReview',
+                  params: {
+                    title: movie.title,
+                    year: new Date(movie.release_date).getFullYear(),
+                    posterUrl: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+                    movieId: movie.id,
+                  },
+                });
+              }}>
         <AntDesign name="plus" size={24} color="white" />
       </TouchableOpacity>
     </View>
@@ -304,6 +330,13 @@ const styles = StyleSheet.create({
   },
   test: {
     alignSelf: 'flex-start',
+  },
+  profilePicture: {
+    width: 32,
+    height: 32,
+    borderRadius: 16, // Circular
+    borderWidth: 1,
+    borderColor: Themes.colors.purpleStrong,
   },
   headerImage: {
     width: '100%',
@@ -341,7 +374,7 @@ const styles = StyleSheet.create({
   },
   movieDetails: {
     color: 'white',
-    fontSize: 14,
+    fontSize: 16,
     marginBottom: 10,
   },
   synopsisContainer: {

@@ -10,11 +10,38 @@ import { useColorScheme } from 'react-native';
 const MovieGenreList = () => {
   const [movies, setMovies] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages] = useState(3); // Ajusta el valor inicial según sea necesario
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const router = useRouter();
   const { genreId, genreName } = useLocalSearchParams(); // Usar los parámetros pasados
   const themeColors = Colors[useColorScheme()] || Colors.light;
   const [error, setError] = useState(null);
+
+  const loadMovies = async () => {
+    if (loading || !hasMore) return; // Evitar llamadas múltiples o cuando no hay más datos
+
+    setLoading(true);
+    try {
+      const genreMovies = await getMoviesByGenre(genreId, currentPage);
+
+      setMovies((prevMovies) => {
+        const uniqueMovies = new Map();
+        [...prevMovies, ...genreMovies].forEach((movie) =>
+          uniqueMovies.set(movie.id, movie)
+        );
+        return Array.from(uniqueMovies.values());
+      });
+
+      setHasMore(genreMovies.length > 0); // Detener la carga si no hay más datos
+      setCurrentPage((prevPage) => prevPage + 1); // Incrementar la página
+    } catch (error) {
+      console.error('Error fetching movies by year:', error);
+      setError('Failed to fetch movies. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
   useEffect(() => {
     if (!genreId) {
@@ -22,17 +49,7 @@ const MovieGenreList = () => {
       return;
     }
   
-    const fetchMovies = async () => {
-      try {
-        const genreMovies = await getMoviesByGenre(genreId);
-        setMovies(genreMovies);
-      } catch (error) {
-        console.error('Error fetching movies by genre:', error);
-        setError('Failed to fetch movies. Please try again.');
-      }
-    };
-  
-    fetchMovies();
+    loadMovies();
   }, [genreId]);
   
   if (error) {
@@ -57,19 +74,6 @@ const MovieGenreList = () => {
     </TouchableOpacity>
   );
 
-  const fetchMoviesByPage = async (page) => {
-    try {
-      const genreMovies = await getMoviesByGenre(genreId, page);
-      setMovies(genreMovies);
-    } catch (error) {
-      console.error('Error fetching movies for page:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchMoviesByPage(currentPage);
-  }, [currentPage]);  
-
   return (
     <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
@@ -78,33 +82,23 @@ const MovieGenreList = () => {
         leftIconName="arrow-back" 
         leftIconRoute="/searchMovieGenre" 
       />
+      {/* Lista de películas */}
       <FlatList
         data={movies}
         keyExtractor={(item) => item.id.toString()}
         numColumns={3}
         renderItem={renderMovieItem}
         contentContainerStyle={styles.grid}
+        onEndReached={loadMovies}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          loading && (
+            <Text style={{ color: 'white', textAlign: 'center', marginVertical: 20 }}>
+              Loading...
+            </Text>
+          )
+        }
       />
-
-<View style={styles.pagination}>
-  <TouchableOpacity
-    onPress={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-    disabled={currentPage === 1} // Desactiva el botón si estás en la primera página
-  >
-    <Text style={styles.paginationText}>Previous</Text>
-  </TouchableOpacity>
-
-  <Text style={styles.paginationText}>
-    Page {currentPage} of {totalPages}
-  </Text>
-
-  <TouchableOpacity
-    onPress={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-    disabled={currentPage === totalPages} // Desactiva el botón si estás en la última página
-  >
-    <Text style={styles.paginationText}>Next</Text>
-  </TouchableOpacity>
-</View>
 
 
     </View>

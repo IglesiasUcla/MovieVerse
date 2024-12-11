@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Themes } from "../constants/Themes";
-import { useRouter } from "expo-router";
+import { useRouter, useNavigation } from "expo-router";
 import { loginUser } from "../helpers/movieverseApi.js"; // Importa la función centralizada
 
 const Login = () => {
@@ -20,6 +20,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const navigation = useNavigation();
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -31,7 +32,10 @@ const Login = () => {
       const response = await loginUser({ email, password });
 
       if (response.success) {
-        route.push("homePage");
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'homePage' }], // your stack screen name
+      });
       } else {
         Alert.alert("Error al iniciar sesión", response.message);
         console.log("Error al iniciar sesión:", response.message);

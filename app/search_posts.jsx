@@ -124,7 +124,7 @@ const SearchPosts = () => {
                 <View style={styles.postContent}>
                     <View style={styles.userInfo}>
                         <Image
-                            source={{ uri: post.user_avatar || 'https://via.placeholder.com/40' }}
+                            source={{ uri: post.profile_picture || 'https://via.placeholder.com/40' }}
                             style={styles.avatar}
                         />
                         <Text style={styles.username}>{post.username}</Text>
@@ -135,15 +135,7 @@ const SearchPosts = () => {
                         rating={typeof post.rating === 'number' && post.rating >= 0 ? post.rating : 0}
                         showFavorite={false}
                         starSize={16}    // Ajusta el tamaño si es necesario
-                    />{/** 
-                    {post.favorite && (
-                        <Icon
-                            name="star"
-                            size={16}
-                            color="#b39ddb"
-                            style={styles.favoriteIcon}
-                        />
-                    )}*/}
+                    />
                     <Text style={styles.review}>{post.review}</Text>
                 </View>
             </TouchableOpacity>
@@ -203,10 +195,12 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    marginRight: 8,
+    borderWidth: 1,
+    borderColor: Themes.colors.purpleStrong,
   },
   username: {
     fontSize: 16,
