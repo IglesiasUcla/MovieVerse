@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Themes } from '../constants/Themes';
 import Header from '../components/Header';
 import { StatusBar } from 'expo-status-bar';
-import { getUser } from '../helpers/movieverseApi';
+import { getUser, createTopMovies } from '../helpers/movieverseApi';
 import { useState, useEffect } from 'react';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useRouter } from 'expo-router';
@@ -16,6 +16,26 @@ const Profile_user = () => {
   const [bio, setBio] = useState('');
   const [profilePicture, setProfilePicture] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
+  const [topMoviesCreated, setTopMoviesCreated] = useState(false);
+
+  useEffect(() => {
+    const createInitialTopMovies = async () => {
+        if (!topMoviesCreated) {
+            try {
+                const topMovies = ["placeholder1", "placeholder2", "placeholder3"];
+                const response = await createTopMovies(topMovies);
+                if (response.message === "Top movies created successfully.") {
+                    setTopMoviesCreated(true); // Evita que vuelva a ejecutarse
+                }
+            } catch (error) {
+                console.error("Error creating top movies:", error);
+            }
+        }
+    };
+
+    createInitialTopMovies();
+  }, [topMoviesCreated]);
+
 
   // Assuming you have a function to fetch the user data (replace with your actual implementation)
   useEffect(() => {

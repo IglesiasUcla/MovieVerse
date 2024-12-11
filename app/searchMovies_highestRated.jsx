@@ -9,42 +9,36 @@ import { getTopRatedMovies } from '../helpers/tmdbApi';
 const SearchMovies_highestRated = () => {
   const [movies, setMovies] = useState([]); // Estado para almacenar las películas
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  const [totalPages] = useState(3); // Ajusta el valor inicial según sea necesario
   const route = useRouter();
   const colorScheme = useColorScheme();
   const themeColors = Colors[colorScheme] || Colors.light;
 
-  const loadMovies = async () => {
-    if (loading || !hasMore) return; // Evitar llamadas múltiples o cuando no hay más datos
-
-    setLoading(true);
-    try {
-      const topRatedMovies = await getTopRatedMovies(currentPage);
-
-      setMovies((prevMovies) => {
-        const uniqueMovies = new Map();
-        [...prevMovies, ...topRatedMovies].forEach((movie) =>
-          uniqueMovies.set(movie.id, movie)
-        );
-        return Array.from(uniqueMovies.values());
-      });
-
-      setHasMore(topRatedMovies.length > 0); // Detener la carga si no hay más datos
-      setCurrentPage((prevPage) => prevPage + 1); // Incrementar la página
-    } catch (error) {
-      console.error('Error fetching movies by year:', error);
-      setError('Failed to fetch movies. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const topRatedMovies = await getTopRatedMovies();
+        setMovies(topRatedMovies);
+      } catch (error) {
+        console.error('Error fetching top-rated movies:', error);
+      }
+    };
 
-    loadMovies();
+    fetchMovies();
   }, []);
 
+  const fetchMoviesByPage = async (page) => {
+    try {
+      const topRatedMovies = await getTopRatedMovies(page);
+      setMovies(topRatedMovies);
+    } catch (error) {
+      console.error('Error fetching movies for page:', error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchMoviesByPage(currentPage); // Cargar las películas al inicio o cuando cambie la página
+  }, [currentPage]);
 
   const renderMovieItem = ({ item }) => (
     <TouchableOpacity
@@ -70,23 +64,34 @@ const SearchMovies_highestRated = () => {
         leftIconRoute="/search_movies" 
       />
 
-      {/* Lista de películas */}
+      {/* Movie Grid */}
       <FlatList
         data={movies}
         keyExtractor={(item) => item.id.toString()}
         numColumns={3}
         renderItem={renderMovieItem}
         contentContainerStyle={styles.grid}
-        onEndReached={loadMovies}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={
-          loading && (
-            <Text style={{ color: 'white', textAlign: 'center', marginVertical: 20 }}>
-              Loading...
-            </Text>
-          )
-        }
       />
+
+<View style={styles.pagination}>
+  <TouchableOpacity
+    onPress={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+    disabled={currentPage === 1} // Desactiva el botón si estás en la primera página
+  >
+    <Text style={styles.paginationText}>Previous</Text>
+  </TouchableOpacity>
+
+  <Text style={styles.paginationText}>
+    Page {currentPage} of {totalPages}
+  </Text>
+
+  <TouchableOpacity
+    onPress={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+    disabled={currentPage === totalPages} // Desactiva el botón si estás en la última página
+  >
+    <Text style={styles.paginationText}>Next</Text>
+  </TouchableOpacity>
+</View>
 
     </View>
 
