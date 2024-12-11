@@ -82,7 +82,10 @@ const MovieScreen = () => {
     fetchMoviePosts();
   }, [movieId]);
 
-  console.log("response:", posts);
+  console.log('response:', posts);
+  
+
+
 
   // Verificación de errores o datos vacíos
   if (loading) {
@@ -175,9 +178,7 @@ const MovieScreen = () => {
               <Text style={styles.movieTitle}>{movie.title}</Text>
               <Text style={styles.movieDirector}>Directed by</Text>
               <Text style={styles.bold}>{director}</Text>
-              <Text style={styles.movieDetails}>
-                {movie.release_date} • {movie.runtime} min
-              </Text>
+              <Text style={styles.movieDetails}>{new Date(movie.release_date).getFullYear()} • {movie.runtime} min</Text>
             </View>
             <Image source={{ uri: posterUri }} style={styles.movieThumbnail} />
           </View>
@@ -243,78 +244,98 @@ const MovieScreen = () => {
               </View>
             </View>
 
-            <View style={styles.rateButtonContainer}>
-              <TouchableOpacity
-                style={styles.rateButton}
-                onPress={() => route.push("movieReview")}
-              >
-                <Text style={styles.rateButtonText}>Add this movie</Text>
-              </TouchableOpacity>
-            </View>
+          <View style={styles.rateButtonContainer}>
+            <TouchableOpacity style={styles.rateButton} onPress={() => {
+                // Pasa la película como parámetro a la pantalla de creación de reseñas
+                route.push({
+                  pathname: '/movieReview',
+                  params: {
+                    title: movie.title,
+                    year: new Date(movie.release_date).getFullYear(),
+                    posterUrl: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+                    movieId: movie.id,
+                  },
+                });
+              }} >
+              <Text style={styles.rateButtonText}>Add movie to a post</Text>
+            </TouchableOpacity>
+          </View>
+
           </View>
 
           <View style={styles.divider} />
 
           {/* Posts de los usuarios */}
-          <Text style={styles.postsTitle}>Posts</Text>
-          {/* Manejo de errores y carga */}
-          {loadingPosts ? (
-            <ActivityIndicator size="large" color="#6200EE" />
-          ) : errorPosts ? (
-            <Text style={styles.errorText}>{errorPosts}</Text>
-          ) : posts.length === 0 ? (
-            <Text style={styles.noPostsText}>
-              No posts available for this movie.
-            </Text>
-          ) : (
-            posts.map((post) => (
-              <Pressable
-                key={post.post_id}
-                onPress={() => route.push(`/post/${post.post_id}`)}
-              >
-                <View style={styles.postContent1}></View>
+<Text style={styles.postsTitle}>Posts</Text>
+{/* Manejo de errores y carga */}
+{loadingPosts ? (
+  <ActivityIndicator size="large" color="#6200EE" />
+) : errorPosts ? (
+  <Text style={styles.errorText}>{errorPosts}</Text>
+) : posts.length === 0 ? (
+  <Text style={styles.noPostsText}>
+    No posts available for this movie.
+  </Text>
+) : (
+  posts.map((post) => (
+    <Pressable
+      key={post.post_id}
+      onPress={() =>
+        route.push({ pathname: '/post', params: { postId: post.post_id } })
+      }
+    >
+      <View style={styles.postContainer}>
+        <Pressable
+          key={post.user_id} // Unique key for nested Pressable
+          onPress={() =>
+            route.push({
+              pathname: '/other_user_information',
+              params: { userId: post.user_id },
+            })
+          }
+        >
+          <Image
+            source={{ uri: post.profile_picture || 'https://via.placeholder.com/48' }}
+            style={styles.profilePicture}
+            // Consider adding an ARIA attribute like `aria-label="User profile picture"`
+          />
+        </Pressable>
 
-                <View style={styles.postContent}>
-                  <View style={styles.usernameContainer}>
-                    <Text style={styles.postUser}>{post.username}</Text>
-                    <View style={styles.userRating}>
-                      <RatingFavorite
-                        rating={post.rating}
-                        showFavorite={false}
-                        isFavorite={false}
-                        starSize={16} // Ajusta el tamaño si es necesario
-                        iconSize={12} // Ajusta el tamaño si es necesario
-                      />
-                    </View>
-                    <Text style={styles.postText}>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Vestibulum auctor magna ipsum, et egestas magna dapibus
-                      ac.
-                    </Text>
-                  </View>
-                  <Text style={styles.postText}>{post.review}</Text>
-                </View>
-              </Pressable>
-            ))
-          )}
+        <View style={styles.postContent}>
+          <View style={styles.usernameContainer}>
+            <Text style={styles.postUser}>{post.username}</Text>
+            <View style={styles.userRating}>
+              <RatingFavorite
+                rating={post.rating}
+                showFavorite={false}
+                isFavorite={false}
+                starSize={16}
+                iconSize={12}
+              />
+            </View>
+          </View>
+          <Text style={styles.postText}>{post.review}</Text>
+        </View>
+      </View>
+    </Pressable>
+  ))
+)}
         </View>
       </Animated.ScrollView>
 
       {/* Botón flotante */}
-      <TouchableOpacity
-        style={styles.floatingButton}
-        onPress={() =>
-          route.push({
-            pathname: "movieReview",
-            params: {
-              movieId: movieId,
-              title: movie.title,
-              year: movie.release_date,
-              posterUrl: movie.poster_path,
-            },
-          })
-        }
-      >
+      <TouchableOpacity style={styles.floatingButton} onPress={() => {
+                // Pasa la película como parámetro a la pantalla de creación de reseñas
+                route.push({
+                  pathname: '/movieReview',
+                  params: {
+                    title: movie.title,
+                    year: new Date(movie.release_date).getFullYear(),
+                    posterUrl: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+                    movieId: movie.id,
+                  },
+                });
+              }}>
         <AntDesign name="plus" size={24} color="white" />
       </TouchableOpacity>
     </View>
@@ -341,7 +362,21 @@ const styles = StyleSheet.create({
     backgroundColor: Themes.colors.grayLight,
   },
   test: {
-    alignSelf: "flex-start",
+    alignSelf:'flex-start',
+  },
+  profilePicture: {
+    width: 32,
+    height: 32,
+    borderRadius: 16, // Circular
+    borderWidth: 1,
+    borderColor: Themes.colors.purpleStrong,
+  },
+  profilePicture: {
+    width: 32,
+    height: 32,
+    borderRadius: 16, // Circular
+    borderWidth: 1,
+    borderColor: Themes.colors.purpleStrong,
   },
   headerImage: {
     width: "100%",
@@ -378,8 +413,8 @@ const styles = StyleSheet.create({
     marginBottom: 8 + 4,
   },
   movieDetails: {
-    color: "white",
-    fontSize: 14,
+    color: 'white',
+    fontSize: 16,
     marginBottom: 10,
   },
   synopsisContainer: {

@@ -41,6 +41,7 @@ movieverseApi.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
 // Endpoint para registrar un usuario
 export const registerUser = async (userData) => {
   try {
@@ -48,12 +49,18 @@ export const registerUser = async (userData) => {
     if (response.data.token) {
       await saveToken(response.data.token);
     }
+    // Guardar el user_id en SecureStore
+    if (response.data.user_id) {
+      await SecureStore.setItemAsync("user_id", response.data.user_id.toString());
+      console.log("User ID saved successfully:", response.data.user_id);
+    }
     return response.data;
   } catch (error) {
     console.error("Register error:", error.response?.data || error.message);
     throw error.response?.data || error;
   }
 };
+
 
 // Endpoint para loguear un usuario
 export const loginUser = async (credentials) => {

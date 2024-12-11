@@ -27,7 +27,7 @@ const DiscardChangesPopup = ({ visible, onCancel, onDiscard,
   </Modal>
 );
 
-const DiscardChangesPopup1 = ({ visible, onDiscard,
+const DiscardChangesPopup1 = ({ visible, onCancel, onDiscard,
   title = 'Discard Changes', 
   text = 'Are you sure you want to Discard Changes?', 
   purpleButton = 'Discard', 
@@ -38,6 +38,9 @@ const DiscardChangesPopup1 = ({ visible, onDiscard,
        <Text style={styles.title}>{title}</Text>
        <Text style={styles.message}>{text}</Text>
        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={onCancel} style={styles.cancelButton}>
+            <Text style={styles.cancelText}>Cancel</Text>
+          </TouchableOpacity>
          <TouchableOpacity onPress={onDiscard} style={styles.discardButton}>
            <Text style={styles.discardText}>{purpleButton}</Text>
          </TouchableOpacity>
