@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, StatusBar, TextInput, ScrollView, BackHandler  } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Image, StyleSheet, StatusBar, TextInput, ScrollView  } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from '../components/Header';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -24,22 +24,6 @@ const MovieReview = ({  }) => {
   const [spoiler, setSpoiler] = useState(false);
   const route = useRouter();
   const { title, year, posterUrl, movieId } = useLocalSearchParams();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    // Interceptar el botón de retroceso
-    const backAction = () => {
-      setShowDiscardPopup(true); // Muestra el popup
-      return true; // Bloquea el retroceso mientras el popup está visible
-    };
-
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
-
-    // Limpieza del evento al desmontar el componente
-    return () => backHandler.remove();
-  }, []);
-
-  
 
   // Función para tomar una foto 
   const takePhotoFunction = async () => {
@@ -110,7 +94,6 @@ setShowPhotoSelectionPopup(false);
       Alert.alert('Error', 'Please add at least one tag before publishing.');
       return;
     }
-  
     const formData = new FormData();
     formData.append('movie_id', movieId);
     formData.append('review', postDetails.review);
@@ -126,15 +109,6 @@ setShowPhotoSelectionPopup(false);
       });
     }
     console.log('Post Data to send:', Array.from(formData));
-  
-    // New line to check and set the flag
-    if (!isSubmitting) {
-      setIsSubmitting(true);
-    } else {
-      console.warn('Post submission already in progress.');
-      return; // Exit the function if already submitting
-    }
-  
     try {
       // Guardar el post primero
       const response = await createPost(formData);
@@ -157,19 +131,14 @@ setShowPhotoSelectionPopup(false);
     } catch (error) {
       console.error('Error saving post:', error);
       Alert.alert('Error', 'Failed to save the post. Please try again.');
-    } finally {
-      // Reset the flag regardless of success or failure
-      setIsSubmitting(false);
     }
-  
-    setShowDiscardPopup1(false);
   };
 
   return (
     <ScrollView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={Themes.colors.purpleStrong} />
       {/* Header */}
-      <Header leftIconModule="close" title="I watched"  rightIconModule="check" onLeftPress={() => setShowDiscardPopup(true)} onRightPress={() => setShowDiscardPopup1(true)} />
+      <Header leftIconModule="close" title="I watched"  rightIconModule="check" onLeftPress={() => setShowDiscardPopup(true)} onRightPress={handleSavePost} />
       
       <DiscardChangesPopup
         visible={showDiscardPopup}
@@ -179,11 +148,10 @@ setShowPhotoSelectionPopup(false);
 
       <DiscardChangesPopup1
         visible={showDiscardPopup1}
-        onCancel={() => setShowDiscardPopup1(false)}
-        onDiscard={handleSavePost}
-        title={'Create Post?'}
-        text={'Do you want to create your post?'}
-        purpleButton={'Yes'}
+        onDiscard={() => {route.push('homePage')}}
+        title={'Success'}
+        text={'Your post has been published and added to my posts'}
+        purpleButton={'Okay'}
       />
       
       {/* Movie Info */}

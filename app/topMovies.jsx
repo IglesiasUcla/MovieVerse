@@ -70,7 +70,7 @@ const TopMovies = () => {
                   style={styles.poster}
                 />
               ) : (
-                <Text style={styles.placeholderText}>Pick your top movie</Text>
+                <Text style={styles.placeholderText}>Loading Poster...</Text>
               )
             ) : (
               <Text style={styles.placeholderText}>Select a movie for Rank {index + 1}</Text>

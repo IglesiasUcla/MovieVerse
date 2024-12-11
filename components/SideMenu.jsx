@@ -1,37 +1,15 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { View, Text, Pressable, StyleSheet, Animated, TouchableOpacity, Image } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Animated, TouchableOpacity } from 'react-native';
 import { Themes } from '../constants/Themes';
 import { Ionicons } from '@expo/vector-icons';
 import { widthPercentage, heightPercentage } from '../helpers/commons';
-import { useRouter, useNavigation } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { DiscardChangesPopup } from './Popup';
-import { getUser } from '../helpers/movieverseApi';
 
 const SideMenu = ({ visible, onClose, onSelectOption, activeOption = 'Popular' }) => {
   const route = useRouter();
   const slideAnim = useRef(new Animated.Value(-widthPercentage(60))).current;
   const [showDiscardPopup, setShowDiscardPopup] = useState(false);
-  const navigation = useNavigation();
-  const [username, setUsername] = useState('');
-  const [profilePicture, setProfilePicture] = useState(null);
-  const [userProfile, setUserProfile] = useState(null);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-        try {
-            const data = await getUser();
-            setUserProfile(data.user); // Cargar datos del usuario
-            setUsername(data.user.username || '');
-            setProfilePicture(data.user.profile_picture || null); // Establecer foto de perfil
-        } catch (error) {
-            console.error('Error fetching user data:', error);
-            alert('Failed to load user data.');
-        } finally {
-            setLoading(false);
-        }
-    };
-    fetchUserData();
-}, []);
 
   useEffect(() => {
     Animated.timing(slideAnim, {
@@ -54,15 +32,8 @@ const SideMenu = ({ visible, onClose, onSelectOption, activeOption = 'Popular' }
       {/* Menú animado */}
       <Animated.View style={[styles.menuContainer, { transform: [{ translateX: slideAnim }] }]}>
         <View style={styles.menuHeader}>
-        {profilePicture ? (
-              <Image
-                source={{ uri: profilePicture }}
-                style={styles.profilePicture}
-              />
-            ) : (
-              <Ionicons name="person-circle-outline" size={80} color="#6200EE" />
-            )}
-          <Text style={styles.menuTitle}>{username}</Text>
+          <Ionicons name="person-circle-outline" size={80} color="#6200EE" />
+          <Text style={styles.menuTitle}>Username</Text>
         </View>
 
         {/* Opciones del menú */}
@@ -95,10 +66,7 @@ const SideMenu = ({ visible, onClose, onSelectOption, activeOption = 'Popular' }
       <DiscardChangesPopup
         visible={showDiscardPopup}
         onCancel={() => setShowDiscardPopup(false)} // Cierra el popup al cancelar
-        onDiscard={() => {navigation.reset({
-          index: 0,
-          routes: [{ name: 'welcome' }], // your stack screen name
-          })}}
+        onDiscard={() => {route.push('welcome')}}
         title={'Log Out'}
         text={'Are you sure you want to Log Out?'}
         purpleButton={'Log Out'}
@@ -112,13 +80,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-  },
-  profilePicture: {
-    width: 80,
-    height: 80,
-    borderRadius: 40, // Circular
-    borderWidth: 1,
-    borderColor: Themes.colors.purpleStrong,
   },
   backgroundOverlay: {
     flex: 1,

@@ -12,7 +12,7 @@ import ScreamWrapper from "../components/ScreenWrapper.jsx";
 import { StatusBar } from "expo-status-bar";
 import { Themes } from "../constants/Themes.js";
 import { heightPercentage, widthPercentage } from "../helpers/commons.js";
-import { useRouter, useNavigation } from "expo-router";
+import { useRouter } from "expo-router";
 import Input from "../components/Input.jsx";
 import Button from "../components/Button.jsx";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -27,7 +27,6 @@ const Create_account = () => {
   const [username, setUsername] = useState("");
   const [confPassword, setConfPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const navigation = useNavigation();
 
   const handleRegister = async () => {
     if (password !== confPassword) {
@@ -39,10 +38,7 @@ const Create_account = () => {
       const response = await registerUser({ username, email, password, confPassword }); // Usamos la nueva función
       if (response.success) {
         Alert.alert("Usuario registrado exitosamente");
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'homePage' }], // your stack screen name
-      });
+        route.push("homePage");
       } else {
         Alert.alert("Error al crear usuario:", response.message);
         console.log("error la crear usuario", response.message);
