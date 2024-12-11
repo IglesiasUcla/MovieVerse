@@ -4,6 +4,7 @@ import * as SecureStore from "expo-secure-store";
 // URL base de tu backend
 const BASE_URL = "http://192.168.68.106:3000"; // Cambia según la URL de tu backend
 
+
 // Instancia de la API de MovieVerse
 const movieverseApi = createApiInstance(BASE_URL);
 
